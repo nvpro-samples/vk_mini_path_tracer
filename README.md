@@ -33,36 +33,36 @@ The final program uses less than 300 lines of C++ and less than 250 lines of GLS
 
 Here are all the Vulkan functions, and NVVK functions and objects, that we'll use in the main tutorial:
 
-Vulkan Functions               |                                |                          
--------------------------------|--------------------------------|-------------------------------
-vkAllocateCommandBuffers       | vkBeginCommandBuffer           | vkCmdBindDescriptorSets
-vkCmdBindPipeline              | vkCmdDispatch                  | vkCmdFillBuffer
-vkCmdPipelineBarrier           | vkCreateCommandPool            | vkCreateComputePipelines
-vkDestroyCommandPool           | vkDestroyPipeline              | vkDestroyShaderModule
-vkFreeCommandBuffers           | vkGetBufferDeviceAddress       | vkQueueSubmit
-vkQueueWaitIdle                | vkUpdateDescriptorSets
+| **Vulkan Functions**     |                          |                          |
+| ------------------------ | ------------------------ | ------------------------ |
+| vkAllocateCommandBuffers | vkBeginCommandBuffer     | vkCmdBindDescriptorSets  |
+| vkCmdBindPipeline        | vkCmdDispatch            | vkCmdFillBuffer          |
+| vkCmdPipelineBarrier     | vkCreateCommandPool      | vkCreateComputePipelines |
+| vkDestroyCommandPool     | vkDestroyPipeline        | vkDestroyShaderModule    |
+| vkFreeCommandBuffers     | vkGetBufferDeviceAddress | vkQueueSubmit            |
+| vkQueueWaitIdle          | vkUpdateDescriptorSets   |                          |
 
-NVVK Functions and Objects   |                              |
------------------------------|------------------------------|----------------------------
-nvvk::AllocatorDedicated     | nvvk::BufferDedicated        | NVVK_CHECK
-nvvk::Context                | nvvk::ContextCreateInfo      | nvvk::createShaderModule
-nvvk::DescriptorSetContainer | nvvk::make                   | nvvk::RayTracingBuilderKHR
+| **NVVK Functions and Objects** |                         |                            |
+| ------------------------------ | ----------------------- | -------------------------- |
+| nvvk::AllocatorDedicated       | nvvk::BufferDedicated   | NVVK_CHECK                 |
+| nvvk::Context                  | nvvk::ContextCreateInfo | nvvk::createShaderModule   |
+| nvvk::DescriptorSetContainer   | nvvk::make              | nvvk::RayTracingBuilderKHR |
 
 -------
 
 ## Chapters
 
-Chapter                                         |     |     |
-------------------------------------------------|-----|-----|---------
-![small](images/1-thumbnail.png)<br/>[Hello, Vulkan!](docs/index.html#hello,vulkan!) | ![small](images/2-thumbnail.png)<br/>[Device Extensions and Vulkan Objects](docs/index.html#deviceextensionsandvulkanobjects) | ![small](images/3-thumbnail.png)<br/>[Memory and Commands](docs/index.html#memory) | ![small](images/4-gray.png)<br/>[Writing an Image](docs/index.html#writinganimage)
-![small](images/5-thumbnail.png)<br/>[Compute Shaders](docs/index.html#computeshaders) | ![small](images/6-descriptors.png)<br/>[Descriptors](docs/index.html#descriptors) | ![small](images/7-depthMap.png)<br/>[Acceleration Structures and Ray Tracing](docs/index.html#descriptors) | ![small](images/8-barycentricCoordinates.png)<br/>[Four Uses of Intersection Data](docs/index.html#fourusesofintersectiondata)
-![small](images/9-normals.png)<br/>[Accessing Mesh Data](docs/index.html#accessingmeshdata) | ![small](images/10-reflectionPt3.png)<br/>[Perfectly Specular Reflections](docs/index.html#perfectlyspecularreflections) | ![small](images/11-randomNoise.png)<br/>[Antialiasing and Pseudorandom Number Generation](docs/index.html#antialiasingandpseudorandomnumbergeneration) | ![small](images/12-vk_mini_path_tracer.png)<br/>[Diffuse Reflection](docs/index.html#diffusereflection)
+| **Chapter**                                                  |                                                              |                                                              |                                                              |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![small](images/1-thumbnail.png)<br/>[Hello, Vulkan!](docs/index.html#hello,vulkan!) | ![small](images/2-thumbnail.png)<br/>[Device Extensions and Vulkan Objects](docs/index.html#deviceextensionsandvulkanobjects) | ![small](images/3-thumbnail.png)<br/>[Memory and Commands](docs/index.html#memory) | ![small](images/4-gray.png)<br/>[Writing an Image](docs/index.html#writinganimage) |
+| ![small](images/5-thumbnail.png)<br/>[Compute Shaders](docs/index.html#computeshaders) | ![small](images/6-descriptors.png)<br/>[Descriptors](docs/index.html#descriptors) | ![small](images/7-depthMap.png)<br/>[Acceleration Structures and Ray Tracing](docs/index.html#descriptors) | ![small](images/8-barycentricCoordinates.png)<br/>[Four Uses of Intersection Data](docs/index.html#fourusesofintersectiondata) |
+| ![small](images/9-normals.png)<br/>[Accessing Mesh Data](docs/index.html#accessingmeshdata) | ![small](images/10-reflectionPt3.png)<br/>[Perfectly Specular Reflections](docs/index.html#perfectlyspecularreflections) | ![small](images/11-randomNoise.png)<br/>[Antialiasing and Pseudorandom Number Generation](docs/index.html#antialiasingandpseudorandomnumbergeneration) | ![small](images/12-vk_mini_path_tracer.png)<br/>[Diffuse Reflection](docs/index.html#diffusereflection) |
 
 ## Extra Chapters
 
 These are optional, extra tutorials that show how to polish and add new features to the main tutorial's path tracer. Make sure to check out the [list of further Vulkan and ray tracing resources](docs/index.html#pnext:goingfurther/furtherreading) at the end of the main tutorial as well!
 
-| Extra Chapter                                                |                                                              |                                                              |                                                              |
+| **Extra Chapter**                                            |                                                              |                                                              |                                                              |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | ![](images/e1-gaussianBlur.png)<br/> [Gaussian Filter Antialiasing](docs/extras.html#gaussianfilterantialiasing) | ![](images/e2-zoomRange.png)<br/>[Measuring Performance](docs/extras.html#measuringperformance) | ![](images/e3-thumbnail.png)<br/>[Compaction](docs/extras.html#compaction) | ![](images/e4-thumbnail.png)<br/>[Including Files and Matching Values Between C++ And GLSL](docs/extras.html#includingfilesandmatchingvaluesbetweenc++andglsl) |
 | ![](images/e5-1024-600.png)<br/> [Push Constants](docs/extras.html#pushconstants) | ![](images/e6-output.png)<br/>[More Samples](docs/extras.html#moresamples) | ![](images/e7-sparse.png)<br/>[Images](docs/extras.html#images) | ![](images/e8-thumbnail.png)<br/>[Debug Names](docs/extras.html#debugnames) |
