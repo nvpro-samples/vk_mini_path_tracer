@@ -1,0 +1,1 @@
+This chapter is entirely about using Nsight Systems to measure performance in applications, so there's no new code in this chapter. It's the same as the previous chapter (e1_gaussian).

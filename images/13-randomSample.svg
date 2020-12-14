@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 768 559" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,0,-104)">
+        <g id="Layer1">
+            <g transform="matrix(1.18182,0,0,1,-59.467,0)">
+                <path d="M29.83,654.194L720.652,654.194" style="fill:none;stroke:rgb(82,82,82);stroke-width:9.14px;"/>
+            </g>
+            <g transform="matrix(4.67875e-17,-0.764098,1,6.12323e-17,-69.0518,945.405)">
+                <path d="M384,461.519L384,444.584L662.457,444.584L662.457,416.237L734.729,453.052L662.457,489.867L662.457,461.519L384,461.519Z" style="fill:rgb(0,167,17);"/>
+            </g>
+            <g transform="matrix(1,0,0,1,-24.2667,21.3613)">
+                <circle cx="408.267" cy="362.639" r="267.991" style="fill:none;stroke:rgb(246,175,26);stroke-width:10.17px;"/>
+            </g>
+            <g transform="matrix(1,0,0,1,91.6995,31.7564)">
+                <text x="260.465px" y="351.269px" style="font-family:'TrebuchetMS', 'Trebuchet MS', sans-serif;font-size:99.768px;fill:rgb(0,167,17);">N</text>
+            </g>
+        </g>
+    </g>
+</svg>
