@@ -146,7 +146,7 @@ These are available for Windows and Linux operating systems.
 nvpro-samples `build_all` script.
 
 In a command line, clone the `nvpro-samples/build_all` repository from
-https://github.com/nvpro-samples/build_all:
+[https://github.com/nvpro-samples/build_all](https://github.com/nvpro-samples/build_all):
 
 ~~~~~
 git clone https://github.com/nvpro-samples/build_all.git
@@ -2988,10 +2988,10 @@ Finally, change the three lines that write `imageData` to the following line:
     every three `floats`. Normally, accessing out-of-bounds memory is
     undefined behavior, and can even result in ["device lost"](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#devsandqueues-lost-device) errors,
     which are bad (they require recreating the `VkDevice` at least).
-    However, if [VkPhysicalDeviceFeatures::robustBufferAccess](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceFeatures.html])
+    However, if [VkPhysicalDeviceFeatures::robustBufferAccess](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceFeatures.html)
     was enabled (`nvvk::Context` turns this off),
     then out-of-bounds accesses can't terminate the application, and
-    instead follow [a set of rules](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceFeatures.html]) with some choices made by the driver.
+    instead follow [a set of rules](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceFeatures.html) with some choices made by the driver.
 
 ## Summary
 
@@ -4055,8 +4055,11 @@ things like **any hit shaders**: pieces of code that the GPU runs for any inters
 For instance, imagine someone wants to make parts of a triangle opaque, and others invisible. They could
 use `rayQueryConfirmIntersectionEXT` inside this `while` loop to accept any intersection where the
 triangle is opaque. This body could also be used with AABB instances to report intersections with non-triangle-mesh
-geometry using `rayQueryGenerateIntersectionEXT`. For an example, please see the Ray Query Example in https://www.khronos.org/blog/ray-tracing-in-vulkan. See [https://nvpro-samples.github.io/vk&shy;_raytracing&shy;_tutorial&shy;_KHR/vkrt&shy;_tuto&shy;_anyhit.md.htm](https://nvpro-samples.github.io/vk_raytracing_tutorial_KHR/vkrt_tuto_anyhit.md.htm)
-for more information about any hit shaders when not using ray queries.
+geometry using `rayQueryGenerateIntersectionEXT`. For an example, please see the Ray Query Example in https://www.khronos.org/blog/ray-tracing-in-vulkan.
+
+!!! Tip
+    See [https://nvpro-samples.github.io/vk_raytracing_tutorial_KHR/vkrt_tuto_anyhit.md.htm](https://nvpro-samples.github.io/vk_raytracing_tutorial_KHR/vkrt_tuto_anyhit.md.htm)
+    for more information about any hit shaders when not using ray queries.
 
 However, tracing non-opaque meshes can be quite slow, as the shader might have to iterate through every
 ray-scene intersection. In scenes where there are lots of overlapping objects, this can be relatively expensive.
@@ -4376,7 +4379,7 @@ You can now build and run the application and get the following result:
 ## Triangle Normals
 
 In the next chapter, we'll describe how light reflects off a triangle. To do this, we'll need to compute a
-particular `vec3` that is perpendicular to the plane of the triangle, called the triangle's [**normal**](https://en.wikipedia.org/wiki/Normal_(geometry)).
+particular `vec3` that is perpendicular to the plane of the triangle, called the triangle's [**normal**](https://en.wikipedia.org/wiki/Normal_%28geometry%29).
 
 To do this, consider the triangle shown below:
 

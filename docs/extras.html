@@ -34,7 +34,7 @@ In contrast to the main tutorial, where each chapter built on the previous one, 
 With that in mind, let's get started!
 
 !!! Tip Link to Code and Chapter Checkpoints on GitHub
-    This tutorial's text and code (including chapter checkpoints -- see *Debugging Help* in the [main tutorial](main.html))
+    This tutorial's text and code (including chapter checkpoints -- see *Debugging Help* in the [main tutorial](index.html))
     are available here: https://github.com/nvpro-samples/vk_mini_path_tracer
 
 # Gaussian Filter Antialiasing
@@ -1009,7 +1009,7 @@ with
 
 You should now be able to build and run the program, and get a path traced 1024 x 600 image! The command buffer wrote the `pushConstants` struct to the push constants, which was then read by the compute shader.
 
-![The Cornell box rendered at a resolution of 1024 x 600.](..\images\e5-1024-600.png)
+![The Cornell box rendered at a resolution of 1024 x 600.](images/e5-1024-600.png)
 
 
 
@@ -3128,7 +3128,7 @@ In hardware, RT Cores implement ray traversal using a model like the one in the 
 
 ### Shader Binding Tables
 
-A [shader binding table](chap38.html#shader-binding-table) (SBT) is an array in
+A [shader binding table](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/html/chap38.html#shader-binding-table) (SBT) is an array in
 memory, stored inside a `VkBuffer`.
 The stride between elements (called **records**) in each SBT can be chosen by
 the application within limits (see Section [Calculating SBT Stride])
