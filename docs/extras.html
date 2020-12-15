@@ -4167,7 +4167,7 @@ In this chapter, we'll add the other eight closest hit shaders, and make each in
 
 ### Get Materials 1 Through 8
 
-As before, I've written nine total closest hit shaders, each representing a different material. Since these are similar to the ones in previous chapters, download the files `material1.rchit.glsl` through `material8.rchit.glsl` from `https://github.com/nvpro-samples/vk_mini_path_tracer/tree/main/e11_rt_pipeline_3/shaders` and place them in the project's `shaders` subdirectory next to `material0.rchit.glsl`.
+As before, I've written nine total closest hit shaders, each representing a different material. Since these are similar to the ones in previous chapters, download the files `material1.rchit.glsl` through `material8.rchit.glsl` from [the section's Checkpoints folder](https://github.com/nvpro-samples/vk_mini_path_tracer/tree/main/checkpoints/e11_rt_pipeline_3/shaders) and place them in the project's `shaders` subdirectory next to `material0.rchit.glsl`.
 
 !!! Tip Why Does This Use a Different GLSL and SPIR-V File per Material?
     GLSL requires that each file have only one entry point, named `main`. There are a few other things this chapter could do, but I held off on them because I didn't want to introduce more new things than necessary in this chapter:
