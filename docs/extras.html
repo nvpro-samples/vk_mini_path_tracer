@@ -131,7 +131,7 @@ It turns out that switching to a Gaussian filter instead of a box filter uses on
 
 !!! Tip Troubleshooting
     If you run into any issues during this chapter, you can compare your code
-    against the reference code at the end of this chapter provided in the `e1_gaussian` folder. For instance,
+    against the reference code at the end of this chapter provided in the `checkpoints/e1_gaussian` folder. For instance,
     you can use a diff tool such as [Meld](https://meldmerge.org/) or [Diffchecker](https://www.diffchecker.com/) to automatically find any differences between
     your code and the reference code.
 
@@ -223,7 +223,7 @@ When working with a new app, we usually recommend starting analysis with Nsight 
 Because of the way this application works, we won't get as much information from Nsight Systems as we would for a more typical app (with a swapchain, for instance) -- but we'll be able to infer the information we'll need for this tutorial. This chapter will be updated as the capabilities of Nsight Systems and Nsight Graphics change.
 
 !!! Tip
-    This chapter has no new code -- it's entirely about analyzing the code we have using Nsight Systems! You can use the code checkpoint in the `e1_gaussian` folder.
+    This chapter has no new code -- it's entirely about analyzing the code we have using Nsight Systems! You can use the code checkpoint in the `checkpoints/e1_gaussian` folder.
 
 ## Preparing for Analysis
 
@@ -383,7 +383,7 @@ We'll return to this topic and make more performance analyses in future chapters
 After being built, a BLAS can be **compacted**, making it use much less memory, with no performance downside. Compaction is fast, and we recommend compacting all BLASes that are static (whose geometry doesn't change each frame) in our [RTX Best Practices](https://developer.nvidia.com/blog/rtx-best-practices/).
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `e3_compaction` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/e3_compaction` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -567,7 +567,7 @@ These must match; otherwise, we could get an error from the validation layer, ca
 However, both C++ and GLSL can include files -- so in this chapter, we'll show how to write a file that can be included from both C++ and GLSL, and can define these constants in one place instead of two. In future chapters, we'll also use this file to share structures between the two languages.
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `e4_include` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/e4_include` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -848,7 +848,7 @@ So, in this chapter, we'll:
 This winds up being similar to how we added descriptors in [the main tutorial](index.html#descriptors/listingandallocatingdescriptors). Let's get started!
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `e5_push_constants` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/e5_push_constants` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -1056,7 +1056,7 @@ Here's some additional information on TDR, noise, and command buffer lengths:
 ## Adding the Sample Batch Index to the Push Constants
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `e6_more_samples` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/e6_more_samples` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -1326,7 +1326,7 @@ In the GLSL code, we'll:
 Let's get started!
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `e7_image` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/e7_image` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -1871,7 +1871,7 @@ reduces creating a `VkDebugUtilsObjectNameInfoEXT` struct and calling `vkSetDebu
 but one can also create their own version of `DebugUtil` or call `vkSetDebugUtilsObjectNameEXT` directly.
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `e8_debug_names` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/e8_debug_names` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -1959,7 +1959,7 @@ In this chapter, we'll add multiple instances of the Cornell box BLAS to the TLA
 This scene represents 32 x 441 = 14112 triangles, although we only need space in the AS to store 32 triangles for the Cornell box BLAS and data for 441 instances in the TLAS.
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `e9_instances` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/e9_instances` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -2430,7 +2430,7 @@ Here's what we'll render at the end of this chapter. One might recognize some of
 To start, let's give each instance a random `hitGroupId` between 0 and 8, holding the index of their material.
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `e10_materials` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/e10_materials` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -3246,7 +3246,7 @@ add more shaders to the ray tracing pipeline.
 
 !!! Tip
     This chapter has a folder with reference code for each of three sections.
-    You can find the reference code at the end of this section in the `e11_rt_pipeline_1` directory.
+    You can find the reference code at the end of this section in the `checkpoints/e11_rt_pipeline_1` directory.
     If you run into any problems with the code in this section, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -3654,7 +3654,7 @@ In this section, we'll add a closest hit shader, which will act like `material0`
 
 !!! Tip
     This chapter has a folder with reference code for each of three sections.
-    You can find the reference code at the end of this section in the `e11_rt_pipeline_2` directory.
+    You can find the reference code at the end of this section in the `checkpoints/e11_rt_pipeline_2` directory.
     If you run into any problems with the code in this section, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -4161,7 +4161,7 @@ In this chapter, we'll add the other eight closest hit shaders, and make each in
 
 !!! Tip
     This chapter has a folder with reference code for each of three sections.
-    You can find the reference code at the end of this section in the `e11_rt_pipeline_3` directory.
+    You can find the reference code at the end of this section in the `checkpoints/e11_rt_pipeline_3` directory.
     If you run into any problems with the code in this section, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -4261,7 +4261,7 @@ If all went well, you should now be able to build and run the application and se
 
 ![441 instances with 9 different materials rendered using ray tracing pipelines.](images/e11-output-3.png)
 
-Measuring performance using Nsight Systems (see Section [Measuring Performance] for an Nsight Systems tutorial) on an RTX 3090, I measured that this chapter's code rendered this scene in 761ms, while Chapter [Multiple Materials]'s ray query-based code took 811ms, using the code from the `e11_rt_pipeline_3` and `e10_materials`. In other words, without changing the structure of the path tracer, using ray tracing pipelines resulted in a 6% performance increase!
+Measuring performance using Nsight Systems (see Section [Measuring Performance] for an Nsight Systems tutorial) on an RTX 3090, I measured that this chapter's code rendered this scene in 761ms, while Chapter [Multiple Materials]'s ray query-based code took 811ms, using the code from the `e11_rt_pipeline_3` and `e10_materials` folders. In other words, without changing the structure of the path tracer, using ray tracing pipelines resulted in a 6% performance increase!
 
 ## Conclusion
 

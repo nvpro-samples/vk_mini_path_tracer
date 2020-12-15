@@ -82,7 +82,8 @@ please see section [Install Dependencies].
 
 At the end of each chapter, you'll have a program that you can run and
 observe. In addition, we
-include versions of the project at the end of each chapter. You can compute a
+include versions of the project at the end of each chapter (see the `checkpoints` folder).
+You can compute a
 file comparison between your project and the reference project, to see if
 you've made any typos when copying the code, using a diff tool such as
 [Diffchecker](https://www.diffchecker.com/), [Meld](https://meldmerge.org/),
@@ -544,7 +545,7 @@ In this chapter, we'll show how to:
 
 !!! Tip Troubleshooting
     If you run into any issues during this chapter, you can compare your code
-    against the reference code at the end of this chapter provided in the `2_extensions` folder. For instance,
+    against the reference code at the end of this chapter provided in the `checkpoints/2_extensions` folder. For instance,
     you can use a diff tool such as [Meld](https://meldmerge.org/) or [Diffchecker](https://www.diffchecker.com/) to automatically find any differences between
     your code and the reference code.
         
@@ -801,7 +802,7 @@ In this chapter, we'll:
 * Map the (uninitialized) `VkBuffer` data back to the CPU and print out the first few values.
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `3_memory` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/3_memory` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -1096,7 +1097,7 @@ to fill the buffer with the value `0.5`, submit the command bufer, and wait
 for the GPU to finish.
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `4_commands` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/4_commands` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -1582,7 +1583,7 @@ a format that other programs can read. That way, you can visualize
 what your program renders.
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `5_write_image` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/5_write_image` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
     
@@ -1697,7 +1698,7 @@ void main()
 ~~~
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `6_compute_shader` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/6_compute_shader` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -2452,7 +2453,7 @@ In this chapter, we'll show how to program the GPU to write colors into `buffer`
 The next chapter will show how to combine this with ray tracing.
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `7_descriptors` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/7_descriptors` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -3019,7 +3020,7 @@ We'll show how to:
 * Modify the compute shader to use **ray queries** and ray trace a mesh.
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `8_ray_tracing` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/8_ray_tracing` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -3992,7 +3993,7 @@ To make a path tracer, we'll need to compute how light interacts with each part 
 <!-- Specifically, one could use additional ray queries to estimate the normal of the intersected polygon, potentially with numerical issues.-->
 
 !!! Tip
-    You can find the reference code for the last section of this chapter in the `9_intersection` directory.
+    You can find the reference code for the last section of this chapter in the `checkpoints/9_intersection` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -4205,7 +4206,7 @@ In the next chapter, we'll make the vertex and index buffers accessible to the c
 In this chapter, we'll modify our code to support reading mesh data from triangle intersections. We'll look up triangle vertices, and then use them to compute **triangle normals** (which we'll later use to compute how light bounces off the triangle).
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `10_mesh_data` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/10_mesh_data` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -4506,7 +4507,7 @@ surfaces.
 In this chapter, we'll write a path tracer for mirror surfaces.
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `11_specular` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/11_specular` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
@@ -5049,7 +5050,7 @@ There are many ways of thinking about antialiasing, and researchers frequently c
 To solve this, we'll evaluate the incoming light at multiple samples per pixel, then average them to get a smoother image. We'll choose the sample locations -- the places where each pixel evaluates incoming light -- by creating a pseudorandom number generator (PRNG), like a GLSL version of `std::rand()`.
 
 !!! Tip
-    You can find the reference code at the end of this chapter in the `12_antialiasing` directory.
+    You can find the reference code at the end of this chapter in the `checkpoints/12_antialiasing` directory.
     If you run into any problems with the code in this chapter, you can diff your
     files against the reference files to see if there are any differences.
 
