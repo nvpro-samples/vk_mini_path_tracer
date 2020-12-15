@@ -41,13 +41,13 @@ With that in mind, let's get started!
 
 In the [*Antialiasing and Pseudorandom Number Generation*](index.html##antialiasingandpseudorandomnumbergeneration) chapter of the main tutorial, we implemented what is known as a [**box filter**](https://en.wikipedia.org/wiki/Window_function#Rectangular_window) for antialiasing. Informally, every point in a box (of side length 1 pixel) around the pixel's center has an equal chance of being chosen. Here's a plot of the distribution of 20000 randomly chosen antialiasing samples around a pixel center:
 
-![The screen-space origins of 20000 samples around a pixel center chosen to follow a box filter. Axes are marked in units of pixels.](../images/e1-boxFilter.png)
+![The screen-space origins of 20000 samples around a pixel center chosen to follow a box filter. Axes are marked in units of pixels.](images/e1-boxFilter.png)
 
 Although a box filter is a major improvement over no antialiasing at all, Gaussian filters -- which place more samples near the pixel center according to a [Gaussian distribution](https://en.wikipedia.org/wiki/Normal_distribution) -- are usually better for antialiasing, reducing [Moiré artifacts](https://en.wikipedia.org/wiki/Moir%C3%A9_pattern) as well as providing higher theoretical quality. Informally, this is because a Gaussian filter is generally a better low-pass filter than a box filter (see the *What is the Perfect Antialiasing Filter?* sidebar in [the main tutorial](index.html#antialiasingandpseudorandomnumbergeneration/antialiasing) for more information).
 
 Here's a plot of the distribution of 20000 randomly chosen antialiasing samples using this chapter's Gaussian filter:
 
-![The screen-space origins of 20000 samples around a pixel center chosen to follow a Gaussian filter. Axes are marked in units of pixels.](../images/e1-gaussianFilter.png)
+![The screen-space origins of 20000 samples around a pixel center chosen to follow a Gaussian filter. Axes are marked in units of pixels.](images/e1-gaussianFilter.png)
 
 <!-- These images were generated using the following p5.js code:
 lineWidth = 0.01/2;
@@ -188,13 +188,13 @@ with
 
 You should now be able to build and run the code, generating a new antialiased image. The differences will probably be relatively subtle for this scene -- look closely at edges of meshes and at the horizon -- but this Gaussian filter will avoid artifacts for scenes with finer detail later.
 
-![The path traced image from the main tutorial.](../images/12-vk_mini_path_tracer.png)
+![The path traced image from the main tutorial.](images/12-vk_mini_path_tracer.png)
 
-![This chapter's image with Gaussian filter antialiasing.](../images/e1-gaussianPT.png)
+![This chapter's image with Gaussian filter antialiasing.](images/e1-gaussianPT.png)
 
-![Difference between the last two images in sRGB space, times 2.](../images/e1-gaussianDiff.png)
+![Difference between the last two images in sRGB space, times 2.](images/e1-gaussianDiff.png)
 
-![Cropped and scaled look at the horizon in these two images; the Gaussian filter's larger sampling range can be seen on the left.](../images/e1-gaussianScale.png)
+![Cropped and scaled look at the horizon in these two images; the Gaussian filter's larger sampling range can be seen on the left.](images/e1-gaussianScale.png)
 
 To see the effect more clearly, we can turn this into more of a Gaussian blur than an antialiasing filter by scaling `randomGaussian` up by a factor of 100:
 
@@ -204,7 +204,7 @@ To see the effect more clearly, we can turn this into more of a Gaussian blur th
     const vec2 randomPixelCenter = vec2(pixel) + vec2(0.5) + 37.5 * randomGaussian(rngState);
 ~~~
 
-![The image with a Monte Carlo Gaussian blur of standard deviation 37.5.](../images/e1-gaussianBlur.png)
+![The image with a Monte Carlo Gaussian blur of standard deviation 37.5.](images/e1-gaussianBlur.png)
 
 Make sure to revert this change by changing `37.5` back to `0.375` before continuing.
 
@@ -218,7 +218,7 @@ In this chapter, we'll visualize where the path tracer spends its time using [NV
 
 When working with a new app, we usually recommend starting analysis with Nsight Systems to get a view of how the application uses the entire system. (It often turns out that an application could run faster if it moved some of its work on the CPU to the GPU, could run faster if it used the CPU and GPU in parallel instead of sequentially, or is bottlenecked by system calls.) Depending on where the app's performance is bottlenecked, we might then suggest using Nsight Graphics (for graphics APIs such as DirectX and Vulkan), Nsight Compute (for CUDA), or a CPU performance analysis tool.
 
-![](../images/e2-triangle.png)
+![](images/e2-triangle.png)
 
 Because of the way this application works, we won't get as much information from Nsight Systems as we would for a more typical app (with a swapchain, for instance) -- but we'll be able to infer the information we'll need for this tutorial. This chapter will be updated as the capabilities of Nsight Systems and Nsight Graphics change.
 
@@ -233,29 +233,29 @@ Make sure to download and install the latest version of Nsight Systems from http
 
 At launch, Nsight Systems will ask whether you want to view GPU or CPU rows on top. I've chosen the "GPU Rows on Top (new)" mode.
 
-![A screenshot of the Nsight Systems "Options Preset" window.](../images/e2-optionsPreset.png)
+![A screenshot of the Nsight Systems "Options Preset" window.](images/e2-optionsPreset.png)
 
 ## Profiling an Application
 
 In the main window, one should see the Project Explorer with a list of projects (like folders that can contain multiple performance captures) on the left, and a tab on the right. By right-clicking on the project and selecting "Rename...", one can give the project a useful name; I've named it "Vk_mini_path_tracer Analysis".
 
-![The main Nsight Systems window.](../images/e2-mainWindow.png)
+![The main Nsight Systems window.](images/e2-mainWindow.png)
 
 Next, tell Nsight Systems to launch the application and collect performance data on the current machine by clicking the "Select" link in the center, or selecting the current machine from the "Select target for profiling..." dropdown. You may need to accept the User Account Control dialog (on Windows) to initialize the Nsight Systems tools app.
 
 The main window should now look like this:
 
-![The main window displaying trace options.](../images/e2-traceOptions.png)
+![The main window displaying trace options.](images/e2-traceOptions.png)
 
 Here, we'll set the analysis options, choosing the application to profile, how to collect CPU-side performance data, and which APIs to trace (since Nsight Systems can show how an app uses multiple APIs at once).
 
 For this application, set "Command line with arguments" to the path to your release-mode application. Check "Collect Vulkan trace", and uncheck "Collect WDDM trace" if you see it (since we won't look at Windows Display Driver Model events in this tutorial). I've also expanded the "Collect Vulkan trace" section so that you can see what options are available.
 
-![The main window with all trace options set.](../images/e2-setSettings.png)
+![The main window with all trace options set.](images/e2-setSettings.png)
 
 Then press Start! You should see the console window for the path tracer pop up; once it finishes, Nsight Systems will collect and analyze performance data to produce a report.
 
-![Nsight Systems processing samples.](../images/e2-analysis.png)
+![Nsight Systems processing samples.](images/e2-analysis.png)
 
 
 ## Examining the Report
@@ -265,19 +265,19 @@ Then press Start! You should see the console window for the path tracer pop up; 
 
 By default, Nsight Systems will show the Timeline View and the Events View, which will look like this:
 
-![The Timeline View and Events View.](../images/e2-timelineEvents.png)
+![The Timeline View and Events View.](images/e2-timelineEvents.png)
 
 The Timeline View charts system usage and traced API calls over time.
 
 We can also click on the combo box at the top left of the report tab to switch between the Timeline View and the Diagnostics Summary (which shows messages from performance measurement), the Analysis Summary (which shows information about the system and collected samples), the Symbol Resolution Logs, and Files.
 
-![The Diagnostics Summary shows 92 collected Vulkan events.](../images/e2-diagnostics.png)
+![The Diagnostics Summary shows 92 collected Vulkan events.](images/e2-diagnostics.png)
 
-![The Files tab can show the captured stderr and stdout logs.](../images/e2-logs.png)
+![The Files tab can show the captured stderr and stdout logs.](images/e2-logs.png)
 
 Here, we'll look at the Timeline View to get an idea of where the application is spending its time. This view has dropdowns for overall CPU utilization (which can be expanded to see utilization by core), GPU utilization (which can be expanded to see VSYNC events), and then rows for each of the processes and their threads. In this case, we'll look at the first thread in the `vk_mini_path_tracer_e1_gaussian.exe` process.
 
-![A closer look at the `vk_mini_path_tracer_e1_gaussian.exe` process.](../images/e2-process.png)
+![A closer look at the `vk_mini_path_tracer_e1_gaussian.exe` process.](images/e2-process.png)
 
 !!! Tip
     Note that this only shows CPU behavior for the process, not GPU behavior (due to how this application works)! However, we'll be able to infer the performance characteristics we need because of the way the CPU waits on the GPU in this application.
@@ -286,15 +286,15 @@ Looking at the "Vulkan API" row for the first thread, we can immediately see tha
 
 To make these measurements more precise, we can right-click on the "Vulkan API" row, then click "Show in Events View".
 
-![](../images/e2-showEvents.png)
+![](images/e2-showEvents.png)
 
 This will list all 66 Vulkan API events in the Events View below. We can also see when each event started, the duration of the event, and can often get a stack trace as well. In this case, we can see that the call to `vkCreateDevice` took 989.632 ms -- nearly a second.
 
-![The Events View with the call to `vkCreateDevice` selected.](../images/e2-vkCreateDevice.png)
+![The Events View with the call to `vkCreateDevice` selected.](images/e2-vkCreateDevice.png)
 
 We can see that this thread is performing a good amount of work during `vkCreateDevice`, and we can get an idea of where it's spending this time by clicking on the thread's row, then hovering over one of the golden sampling points.
 
-![Hovering over one of the sampling points in the first half of the call to `vkCreateDevice`.](../images/e2-samplingPoint.png)
+![Hovering over one of the sampling points in the first half of the call to `vkCreateDevice`.](images/e2-samplingPoint.png)
 
 We can also show the information from these sampling points in the Events View by right-clicking on the thread and selecting "Show in Events View".
 
@@ -317,19 +317,19 @@ We can also show the information from these sampling points in the Events View b
 
 Let's get a better idea of what's happening in most of the Vulkan code we wrote by zooming in on the section between `vkCreateDevice` and `vkDestroyDevice`! To do this, select the range to zoom into by clicking and dragging over the Timeline View:
 
-![Selecting a range (light green) by clicking and dragging.](../images/e2-zoom1.png)
+![Selecting a range (light green) by clicking and dragging.](images/e2-zoom1.png)
 
 Then right-click the highlighted range and select "Filter and Zoom in".
 
-![Filtering or zooming into a region.](../images/e2-zoom2.png)
+![Filtering or zooming into a region.](images/e2-zoom2.png)
 
 This will both zoom into the region, and filter events in the Events View to only those events within the filtered region.
 
-![The Timeline View after zooming and filtering.](../images/e2-zoom3.png)
+![The Timeline View after zooming and filtering.](images/e2-zoom3.png)
 
 We can see that there are a few Vulkan calls at the beginning of this region (which we'll look at shortly), followed by a long period of CPU work from about 1.430s (seconds) to 1.455s. To figure out what this work could be, we look at events 61 and 62 in the Events View:
 
-![Examining two events in the Events View to determine where CPU time is being spent.](../images/e2-eventsHDR.png)
+![Examining two events in the Events View to determine where CPU time is being spent.](images/e2-eventsHDR.png)
 
 We can see that this work is occurring between `vkMapMemory`, which ends at 1.43033s, and `vkUnmapMemory`, which starts at 1.45449s, and occurs just before we destroy the acceleration structures. This corresponds to the call to `stbi_write_hdr`, which means that (at the moment) `stbi_write_hdr` is taking up most of the time between creating and destroying the device!
 
@@ -345,9 +345,9 @@ We could confirm this and investigate this further using a CPU profiler.
 
 For now, let's look at this section of time, containing most of the Vulkan API calls:
 
-![Zooming into a smaller range of time containing most of the Vulkan API calls.](../images/e2-zoomRange.png)
+![Zooming into a smaller range of time containing most of the Vulkan API calls.](images/e2-zoomRange.png)
 
-![The time range from 1.369s to 1.431s after zooming and filtering.](../images/e2-apiCalls.png)
+![The time range from 1.369s to 1.431s after zooming and filtering.](images/e2-apiCalls.png)
 
 Here, we can see the effects of most of the Vulkan code we've written. You'll also notice that the "Vulkan API Command Creation" row above shows the time from beginning to ending each of this application's four command buffers (and that the first command buffer takes longer to create than the other three). Here, I've zoomed into the region around the fourth command buffer.
 
@@ -358,7 +358,7 @@ Recording this small command buffer takes 33.116 us (microseconds, millionths of
 - `vkCmdBindDescriptorSets` (1.551 us); and
 - `vkEndCommandBuffer` (2.689 us; all timings from the Events View for the Vulkan API row).
 
-![A view of the timeline around the fourth command buffer.](../images/e2-cb4.png)
+![A view of the timeline around the fourth command buffer.](images/e2-cb4.png)
 
 Examining these command buffers more closely, we can see that
 
@@ -372,7 +372,7 @@ Examining these command buffers more closely, we can see that
 
 Zooming out, we can see two larger ranges of time when the main thread is blocked (has an item on the "Blocked State" row) and is waiting for something to complete: for 9.5ms starting at 1.393s, and for a total of 23.745ms starting at 1.406s. From the Vulkan API row, we can see that in both of these cases, the thread is blocked from continuing by a `vkQueueWaitIdle` (i.e. the thread is waiting for the GPU's GCT queue to finish its work) -- and these correspond to building the BLAS, and the ray tracing compute shader (performing 64 samples per pixel with a ray depth of 32). Normally, these would be excellent times for the CPU to perform other work.
 
-![The time range from 1.369s to 1.431s ms.](../images/e2-apiCalls.png)
+![The time range from 1.369s to 1.431s ms.](images/e2-apiCalls.png)
 
 We'll return to this topic and make more performance analyses in future chapters as we add new features.
 
@@ -1017,11 +1017,11 @@ You should now be able to build and run the program, and get a path traced 1024 
 
 Averaging more samples per pixel will generally reduce the level of noise in a path traced image.
 
-![1 sample per pixel.](../images/e6-1spp.png)
+![1 sample per pixel.](images/e6-1spp.png)
 
-![64 samples per pixel.](../images/e6-64spp.png)
+![64 samples per pixel.](images/e6-64spp.png)
 
-![2048 samples per pixel.](../images/e6-2048spp.png)
+![2048 samples per pixel.](images/e6-2048spp.png)
 
 However, on Windows systems, setting `NUM_SAMPLES` to a number that's too high and thus causes the command buffer to take too long to complete (usually two seconds) can cause Windows' [**Timeout Detection and Recovery (TDR)**](https://docs.microsoft.com/en-us/windows-hardware/drivers/display/timeout-detection-and-recovery) system to reset the graphics driver and make the command buffer terminate early!
 
@@ -1224,7 +1224,7 @@ Rendered sample batch index 31.
 
 and `out.hdr` should now contain significantly less noise:
 
-![`out.hdr` generated from this chapter's code.](../images/e6-output.png)
+![`out.hdr` generated from this chapter's code.](images/e6-output.png)
 
 If one analyzes the project in [Nsight Systems](https://developer.nvidia.com/nsight-systems) (see Section [Measuring Performance] for an Nsight Systems tutorial), the Timeline View should show each of the `vkQueueWaitIdle` events corresponding to a sample batch on a successful capture. On an RTX 3090, tracing all 2048 samples per pixel with a maximum ray depth of 32 at 800 x 600 takes about 640.87 ms, or about 0.313 ms per sample. (And as mentioned above, there are many ways to speed this up.)
 
@@ -1241,21 +1241,21 @@ In Vulkan, an image can be much more than a two-dimensional, rectangular array o
 
 - Images can have different [`VkFormat`s](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkFormat.html) describing what data each pixel has and how it's stored. For instance, a texture can use the `VK_FORMAT_R8_UNORM` format to store a single 8-bit value per pixel, which can be one of the values {0, 1/255, 2/255, ..., 255/255} and is interpreted as the red channel. We'll use `VK_FORMAT_R32G32B32A32_SFLOAT` to store four (red, green, blue, and alpha) 32-bit signed floating-point values per pixel (16-bit floating-point is smaller, faster, and recommended, but this way we don't have to convert between the two when passing the data to `stbi_write_hdr`). There are many other types; for instance, compressed formats such as `VK_FORMAT_BC7_SRGB_BLOCK` can hold compressed images in GPU memory at full performance without ever having to compress them.
 
-![A comparison of the memory requirements of an 8-bit per channel, 3-channel image, and an image compressed with BC7.](../images/e7-compressimg-1536-montage.png)
+![A comparison of the memory requirements of an 8-bit per channel, 3-channel image, and an image compressed with BC7.](images/e7-compressimg-1536-montage.png)
 
 - This means in particular that images can not only contain color data, but can also contain things like depth and stencil data, which are used in Z-buffers. Color data, depth data, and stencil data are some of the possible **aspects** of an image.
 
 - Images can have [**mipmaps**](https://en.wikipedia.org/wiki/Mipmap) - a chain of smaller regions of memory for each image, each half the width and height of the next larger one. Usually, these are used to store lower-resolution filtered versions of a higher-resolution image. Using mipmaps in this way and blending between lower-resolution images when possible can both improve quality (by reducing aliasing) and improve performance.
 
-![The level 0 mipmap of an image, followed by its level 1, 2, ... mipmaps correctly filtered, showing transparency over a checkerboard background. If the cube at the top-left isn't visible, click on the image to see it at full resolution. The total memory usage is about 4/3x the memory usage of the image without mipmapping.](../images/e7-mipmapping-montage.png)
+![The level 0 mipmap of an image, followed by its level 1, 2, ... mipmaps correctly filtered, showing transparency over a checkerboard background. If the cube at the top-left isn't visible, click on the image to see it at full resolution. The total memory usage is about 4/3x the memory usage of the image without mipmapping.](images/e7-mipmapping-montage.png)
 
-![Using mipmaps to avoid aliasing using one sample per pixel. Top: Sampling using only mip level 0. Middle: Using isotropic filtering, which can sample higher mip levels. Bottom: Using anisotropic filtering, which can also sample higher mip levels, but can average multiple samples. All filtering modes have hardware acceleration. From [Real-Time Rendering, 4th Edition](https://www.realtimerendering.com/), courtesy of [this page](https://www.realtimerendering.com/figures.html).](../images/e7-RTR4.06.14.png)
+![Using mipmaps to avoid aliasing using one sample per pixel. Top: Sampling using only mip level 0. Middle: Using isotropic filtering, which can sample higher mip levels. Bottom: Using anisotropic filtering, which can also sample higher mip levels, but can average multiple samples. All filtering modes have hardware acceleration. From [Real-Time Rendering, 4th Edition](https://www.realtimerendering.com/), courtesy of [this page](https://www.realtimerendering.com/figures.html).](images/e7-RTR4.06.14.png)
 
 - An image can be an **array** of multiple **layers**; each layer can have its own 1D, 2D, or 3D mipmapped data (although each layer must have the same number of mips). A mip of a layer of an image is called a **subresource** (of the image resource).
 
 - Using **sparse images**, not all of an image and each of its subresources has to exist in memory at one time. This can be used to work with virtual textures hypothetically extending over many thousands of pixels in each direction, where only a subset of these pixels at each mip level contain data and take up space in memory.
 
-![A sparse texture and four of its higher-level mips. From Cem Cebenoyan, [*Real Virtual Texturing - Taking Advantage of DirectX11.2 Tiled Resources*](https://developer.nvidia.com/sites/default/files/akamai/gameworks/events/gdc14/GDC_14_Real%20Virtual%20Texturing%20-%20Taking%20Advantage%20of%20DirectX%2011.2%20Tiled%20Resources.pdf).](../images/e7-sparse.png)
+![A sparse texture and four of its higher-level mips. From Cem Cebenoyan, [*Real Virtual Texturing - Taking Advantage of DirectX11.2 Tiled Resources*](https://developer.nvidia.com/sites/default/files/akamai/gameworks/events/gdc14/GDC_14_Real%20Virtual%20Texturing%20-%20Taking%20Advantage%20of%20DirectX%2011.2%20Tiled%20Resources.pdf).](images/e7-sparse.png)
 
 - Images can be **multisampled**: each texel (texture element) in an image can contain color information for not just 1, but multiple samples.
 
@@ -1269,9 +1269,9 @@ In Vulkan, an image can be much more than a two-dimensional, rectangular array o
 
 - [`VkSampler`s](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSampler.html) won't be discussed further in this tutorial, but we include them for completeness. They specify settings for how images should be read -- including interpolation between pixels, filtering between mips, and wrapping (how to extend the image when a shader samples a texture with a coordinate outside the normal range of the image).
 
-![Interpolating between pixels in an image using a sampler. Left: nearest-neighbor sampling. Middle: Linear sampling. Right: Cubic sampling. From [Real-Time Rendering, 4th Edition](https://www.realtimerendering.com/), courtesy of [this page](https://www.realtimerendering.com/figures.html).](../images/e7-RTR4.06.08.png)
+![Interpolating between pixels in an image using a sampler. Left: nearest-neighbor sampling. Middle: Linear sampling. Right: Cubic sampling. From [Real-Time Rendering, 4th Edition](https://www.realtimerendering.com/), courtesy of [this page](https://www.realtimerendering.com/figures.html).](images/e7-RTR4.06.08.png)
 
-![Different sampler wrap modes. Left: `VK_SAMPLER_ADDRESS_MODE_REPEAT`. Middle left: `VK_SAMPLER_ADDRESS_MIRRORED_REPEAT`. Middle right: `VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE`. Right: `VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER` with a specified `borderColor`. From [Real-Time Rendering, 4th Edition](https://www.realtimerendering.com/), courtesy of [this page](https://www.realtimerendering.com/figures.html).](../images/e7-RTR4.06.07.jpg)
+![Different sampler wrap modes. Left: `VK_SAMPLER_ADDRESS_MODE_REPEAT`. Middle left: `VK_SAMPLER_ADDRESS_MIRRORED_REPEAT`. Middle right: `VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE`. Right: `VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER` with a specified `borderColor`. From [Real-Time Rendering, 4th Edition](https://www.realtimerendering.com/), courtesy of [this page](https://www.realtimerendering.com/figures.html).](images/e7-RTR4.06.07.jpg)
 
 We'll specify many of these settings when creating the images in this chapter. Impressively, the GPU has hardware accelerated support for all these possible combinations!
 
@@ -1954,7 +1954,7 @@ The current code shouldn't print out any validation layer warnings or errors, bu
 
 In this chapter, we'll add multiple instances of the Cornell box BLAS to the TLAS. Each instance will have a different transformation matrix to make it appear at a different position and rotation within the world. Here's what we'll render at the end of this chapter:
 
-![441 Cornell box BLAS instances. We'll add materials in the next chapter.](../images/e9-result.png)
+![441 Cornell box BLAS instances. We'll add materials in the next chapter.](images/e9-result.png)
 
 This scene represents 32 x 441 = 14112 triangles, although we only need space in the AS to store 32 triangles for the Cornell box BLAS and data for 441 instances in the TLAS.
 
@@ -2004,7 +2004,7 @@ The identity matrix doesn't change the locations of things.
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
 
-![Transformation by the identity matrix](../images/e9-identity.png)
+![Transformation by the identity matrix](images/e9-identity.png)
 
 
 ### Translation
@@ -2017,7 +2017,7 @@ Translation by $(1, 0, 0)$:
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & 1 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
 
-![Translation by $(1, 0, 0)$](../images/e9-t1,0,0.png)
+![Translation by $(1, 0, 0)$](images/e9-t1,0,0.png)
 
 
 Translation by $(-1.5, 0, 0)$:
@@ -2028,7 +2028,7 @@ Translation by $(-1.5, 0, 0)$:
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & -1.5 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
 
-![Translation by $(-1.5, 0, 0)$](../images/e9-t-1.5,0,0.png)
+![Translation by $(-1.5, 0, 0)$](images/e9-t-1.5,0,0.png)
 
 
 Translation by $(0, 0.6, 0)$:
@@ -2039,7 +2039,7 @@ Translation by $(0, 0.6, 0)$:
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0.6 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
 
-![Translation by $(0, 0.6, 0)$](../images/e9-t0,0.6,0.png)
+![Translation by $(0, 0.6, 0)$](images/e9-t0,0.6,0.png)
 
 
 Translation by $(0, 0, 1)$:
@@ -2050,7 +2050,7 @@ Translation by $(0, 0, 1)$:
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 1 \end{pmatrix} $$
 
-![Translation by $(0, 0, 1)$](../images/e9-t0,0,1.png)
+![Translation by $(0, 0, 1)$](images/e9-t0,0,1.png)
 
 
 ### Scaling
@@ -2066,7 +2066,7 @@ Scaling by $(2, 2, 2)$:
 
 $$ M = \begin{pmatrix} 2 & 0 & 0 & 0 \\ 0 & 2 & 0 & 0 \\ 0 & 0 & 2 & 0 \end{pmatrix} $$
 
-![Scaling by $(2, 2, 2)$](../images/e9-s2,2,2.png)
+![Scaling by $(2, 2, 2)$](images/e9-s2,2,2.png)
 
 
 Scaling by $(0.4, 0.4, 0.4)$:
@@ -2077,7 +2077,7 @@ Scaling by $(0.4, 0.4, 0.4)$:
 
 $$ M = \begin{pmatrix} 0.4 & 0 & 0 & 0 \\ 0 & 0.4 & 0 & 0 \\ 0 & 0 & 0.4 & 0 \end{pmatrix} $$
 
-![Scaling by $(0.4, 0.4, 0.4)$](../images/e9-s.4,.4,.4.png)
+![Scaling by $(0.4, 0.4, 0.4)$](images/e9-s.4,.4,.4.png)
 
 Scaling by $(0.4, 0.9, 0.1)$:
 
@@ -2087,7 +2087,7 @@ Scaling by $(0.4, 0.9, 0.1)$:
 
 $$ M = \begin{pmatrix} 0.4 & 0 & 0 & 0 \\ 0 & 0.9 & 0 & 0 \\ 0 & 0 & 0.1 & 0 \end{pmatrix} $$
 
-![Scaling by $(0.4, 0.9, 0.1)$](../images/e9-s.4,.9,.1.png)
+![Scaling by $(0.4, 0.9, 0.1)$](images/e9-s.4,.9,.1.png)
 
 !!! Tip
     Some rendering engines don't support non-uniform scaling like $(0.4, 0.9, 0.1)$ or skewing. This allows them to transform normals using the object-to-world matrix, instead of a matrix proportional to the transpose of the inverse. This chapter's path tracer supports all invertible matrix operations.
@@ -2109,7 +2109,7 @@ Rotating by $\pi/6$ radians around the +x axis:
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 0.866025388 & -0.5 & 0 \\ 0 & 0.5 & 0.866025388 & 0 \end{pmatrix} $$
 
-![Rotating around the +x axis](../images/e9-r1,0,0.png)
+![Rotating around the +x axis](images/e9-r1,0,0.png)
 
 
 Rotating by $\pi/6$ radians around the -x axis (the inverse of the above rotation):
@@ -2120,7 +2120,7 @@ Rotating by $\pi/6$ radians around the -x axis (the inverse of the above rotatio
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 0.866025388 & 0.5 & 0 \\ 0 & -0.5 & 0.866025388 & 0 \end{pmatrix} $$
 
-![Rotating around the -x axis](../images/e9-r-1,0,0.png)
+![Rotating around the -x axis](images/e9-r-1,0,0.png)
 
 
 Rotating by $\pi/6$ radians around the +y axis:
@@ -2131,7 +2131,7 @@ Rotating by $\pi/6$ radians around the +y axis:
 
 $$ M = \begin{pmatrix} 0.866025388 & 0 & 0.5 & 0 \\ 0 & 1 & 0 & 0 \\ -0.5 & 0 & 0.866025388 & 0 \end{pmatrix} $$
 
-![Rotating around the +y axis](../images/e9-r0,1,0.png)
+![Rotating around the +y axis](images/e9-r0,1,0.png)
 
 
 Rotating by $\pi/6$ radians around the +z axis:
@@ -2142,7 +2142,7 @@ Rotating by $\pi/6$ radians around the +z axis:
 
 $$ M = \begin{pmatrix} 0.866025388 & -0.5 & 0 & 0 \\ 0.5 & 0.866025388 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
 
-![Rotating around the +z axis](../images/e9-r0,0,1.png)
+![Rotating around the +z axis](images/e9-r0,0,1.png)
 
 
 ### Skewing
@@ -2156,7 +2156,7 @@ $$ M = \begin{pmatrix} 0.866025388 & -0.5 & 0 & 0 \\ 0.5 & 0.866025388 & 0 & 0 \
 
 $$ M = \begin{pmatrix} 1 & 1 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
 
-![A skew transformation.](../images/e9-skew.png)
+![A skew transformation.](images/e9-skew.png)
 
 
 ### Combining Operations
@@ -2168,7 +2168,7 @@ Here's how to write a transformation that represents translating the Cornell box
     instance.transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
 ~~~
 
-![Translation followed by rotation.](../images/e9-otr.png)
+![Translation followed by rotation.](images/e9-otr.png)
 
 If we expressed rotation first, followed by translation, we would get a different transformation:
 
@@ -2177,7 +2177,7 @@ If we expressed rotation first, followed by translation, we would get a differen
     instance.transform.rotate(nv_pi / 6.0f, nvmath::vec3f(0.0f, 0.0f, 1.0f));
 ~~~
 
-![Rotation followed by translation.](../images/e9-ort.png)
+![Rotation followed by translation.](images/e9-ort.png)
 
 
 We'll start with the more technical side of this chapter -- modifying the GLSL code to support arbitrary invertible transformations -- and then set up the transformations for the instances.
@@ -2353,7 +2353,7 @@ with
 
 You can now build and run the program -- but it'll run a bit slowly, since we have 21 x 21 = 441 copies of the Cornell box stacked on top of each other! (Overlapping bounding boxes are not good for ray tracing performance, because the traversal engine must consider each instance instead of only a few.)
 
-![441 stacked instances of the Cornell Box.](../images/e9-i.png)
+![441 stacked instances of the Cornell Box.](images/e9-i.png)
 
 Let's modify the `instance.transform.identity();` line to position each instance. First, translate each instance down by 1 unit, so that all the boxes are centered on $(0, 0, 0)$:
 
@@ -2361,7 +2361,7 @@ Let's modify the `instance.transform.identity();` line to position each instance
       instance.transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
 ~~~
 
-![441 stacked instances of the Cornell Box, translated down 1 unit.](../images/e9-t.png)
+![441 stacked instances of the Cornell Box, translated down 1 unit.](images/e9-t.png)
 
 Then randomly rotate each instance between -0.5 and 0.5 radians around the +x axis, by adding a `rotate` operation before the `translate` operation, as described in Section [Combining Operations] above:
 
@@ -2370,7 +2370,7 @@ Then randomly rotate each instance between -0.5 and 0.5 radians around the +x ax
       instance.transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
 ~~~
 
-![441 instances of the Cornell Box with random +x axis rotations.](../images/e9-tr.png)
+![441 instances of the Cornell Box with random +x axis rotations.](images/e9-tr.png)
 
 Then randomly rotate each instance between -0.5 and 0.5 radians around the +y axis:
 
@@ -2382,7 +2382,7 @@ Then randomly rotate each instance between -0.5 and 0.5 radians around the +y ax
 
 Now we can see that there's a lot of geometry that we're path tracing!
 
-![441 instances of the Cornell Box with random +x, +y axis rotations.](../images/e9-trr.png)
+![441 instances of the Cornell Box with random +x, +y axis rotations.](images/e9-trr.png)
 
 If we translated each instance now, we would get this:
 
@@ -2393,7 +2393,7 @@ If we translated each instance now, we would get this:
       instance.transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
 ~~~
 
-![441 instances centered at $(x, y, 0)$, but without scaling beforehand.](../images/e9-trrt.png)
+![441 instances centered at $(x, y, 0)$, but without scaling beforehand.](images/e9-trrt.png)
 
 Instead of doing that, scale each instance by a factor of 1/2.7x. Then translate the instance with index `(x, y)` to be centered at $(x, y, 0)$:
 
@@ -2405,13 +2405,13 @@ Instead of doing that, scale each instance by a factor of 1/2.7x. Then translate
       instance.transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
 ~~~
 
-![441 instances with scaling before translation.](../images/e9-trrst.png)
+![441 instances with scaling before translation.](images/e9-trrst.png)
 
 We've now transformed all 441 instances -- and if we look closely, we can see that light can bounce between instances and that instances can shadow each other. For instance, the side of each box now has a complex gradient instead of a uniform color that includes both shadows cast onto them by other boxes, and light bouncing off the sides of other boxes (see the close-up below). The performance should now be back to normal, since the objects' bounding boxes don't overlap as much.
 
 In the next chapter, we'll see how to give each instance a random material!
 
-![Close-up of the scene using `const float fovVerticalSlope = 1.0 / 40.0;`. Note how light can bounce between and shadows can be cast by instances.](../images/e9-closeup.png)
+![Close-up of the scene using `const float fovVerticalSlope = 1.0 / 40.0;`. Note how light can bounce between and shadows can be cast by instances.](images/e9-closeup.png)
 
 
 # Multiple Materials
@@ -2420,9 +2420,9 @@ In the main tutorial, we mentioned how `instance.instanceCustomId` and `instance
 
 Here's what we'll render at the end of this chapter. One might recognize some of these materials from earlier, but we've added a few new ones as well.
 
-![441 instances in a grid; each grid has one of 9 different materials chosen randomly](../images/e10-materials.png)
+![441 instances in a grid; each grid has one of 9 different materials chosen randomly](images/e10-materials.png)
 
-![Close-up of the scene showing all 9 materials, generated using `fovVerticalSlope = 1.0 / 24.0`. Observe how different materials overlap, reflect light off, and shadow each other.](../images/e10-closeup.png)
+![Close-up of the scene showing all 9 materials, generated using `fovVerticalSlope = 1.0 / 24.0`. Observe how different materials overlap, reflect light off, and shadow each other.](images/e10-closeup.png)
 
 
 ## Random Material IDs
@@ -2943,11 +2943,11 @@ Luckily, there's a better way to handle this: in the next chapter, we'll introdu
 
 You should now be able to build and run the application and see the 441 instances have 9 different materials:
 
-![](../images/e10-materials.png)
+![](images/e10-materials.png)
 
 As one last image for this chapter, here's what this scene looks like with antialiasing turns off. Because of the higher level of detail, it's now much easier to see how antialiasing helps with visual quality in this scene!
 
-![This scene rendered without antialiasing.](../images/e10-alias.png)
+![This scene rendered without antialiasing.](images/e10-alias.png)
 
 
 
@@ -2982,7 +2982,7 @@ When we introduced shaders, we used the analogy that shaders are like functions 
 
 and so on. But what if shaders could call other shaders, like how functions can call functions using function pointers in C++? This is now possible using Vulkan ray tracing pipelines. This involves storing groups of shader handles in tables (arrays) like this (that we'll describe shortly):
 
-![Four shader binding tables stored consecutively. The last contains three callable shader handles. From the [NVIDIA Vulkan Ray Tracing Callable Shaders - Tutorial](https://github.com/nvpro-samples/vk_raytracing_tutorial_KHR/tree/master/ray_tracing_callable).](../images/e11-sbt.png)
+![Four shader binding tables stored consecutively. The last contains three callable shader handles. From the [NVIDIA Vulkan Ray Tracing Callable Shaders - Tutorial](https://github.com/nvpro-samples/vk_raytracing_tutorial_KHR/tree/master/ray_tracing_callable).](images/e11-sbt.png)
 
 We can pass pointers to these tables to `vkCmdTraceRaysKHR`, and then GLSL shaders can call **callable shaders** like this:
 
@@ -3108,7 +3108,7 @@ In this chapter, we'll use payloads to have each shader implementing a material 
 
 In the previous chapter, each instance used one of 9 materials. In this chapter, each instance will use one of 9 **closest-hit** shaders. Here's how that works.
 
-![Diagram of ray tracing pipeline execution. From the [Ray Tracing Pipeline](https://nvpro-samples.github.io/vk_raytracing_tutorial_KHR/#raytracingpipeline) chapter of the NVIDIA Vulkan Ray Tracing Tutorial.](../images/e11-ShaderPipeline.svg)
+![Diagram of ray tracing pipeline execution. From the [Ray Tracing Pipeline](https://nvpro-samples.github.io/vk_raytracing_tutorial_KHR/#raytracingpipeline) chapter of the NVIDIA Vulkan Ray Tracing Tutorial.](images/e11-ShaderPipeline.svg)
 
 Like the current compute shader, a **ray generation** shader starts by launching ray tracing calls, using `traceRayEXT`. The GPU then traverses the acceleration structure to find where the ray might intersect the scene. Each instance might have data telling the traversal engine to look at a different group of shaders.
 
@@ -3124,7 +3124,7 @@ As described above, traversal can pass a payload to each of these shaders. In th
 
 In hardware, RT Cores implement ray traversal using a model like the one in the bottom half of this figure:
 
-![A block diagram of ray traversal using RT Cores. From the [NVIDIA Turing GPU Architecture whitepaper](https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/technologies/turing-architecture/NVIDIA-Turing-Architecture-Whitepaper.pdf).](../images/e11-rt-core.png)
+![A block diagram of ray traversal using RT Cores. From the [NVIDIA Turing GPU Architecture whitepaper](https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/technologies/turing-architecture/NVIDIA-Turing-Architecture-Whitepaper.pdf).](images/e11-rt-core.png)
 
 ### Shader Binding Tables
 
@@ -3147,7 +3147,7 @@ Although shader binding tables are known for sometimes being complex, I think mo
 
 Here's an example of four shader binding tables stored consecutively: the table of ray generation shaders, the table of miss shaders, the table of hit groups (described below), and the table of callable shaders. These have one record, two records, one record, and three records, respectively.
 
-![Four shader binding tables stored consecutively. From the [NVIDIA Vulkan Ray Tracing Callable Shaders - Tutorial](https://github.com/nvpro-samples/vk_raytracing_tutorial_KHR/tree/master/ray_tracing_callable).](../images/e11-sbt.png)
+![Four shader binding tables stored consecutively. From the [NVIDIA Vulkan Ray Tracing Callable Shaders - Tutorial](https://github.com/nvpro-samples/vk_raytracing_tutorial_KHR/tree/master/ray_tracing_callable).](images/e11-sbt.png)
 
 The shader binding tables for each of the different types of groups don't need
 to be stored consecutively, or even in the same `VkBuffer`.
@@ -3229,7 +3229,7 @@ This helps especially for complex shader networks, since the flexibility given
 to the scheduling system can allow it to avoid some of the divergence from the
 `switch` statement in the previous chapter!
 
-![Thread scheduling for ray tracing pipelines. From the [NVIDIA Turing GPU Architecture whitepaper](https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/technologies/turing-architecture/NVIDIA-Turing-Architecture-Whitepaper.pdf).](../images/e11-rt-scheduling.png)
+![Thread scheduling for ray tracing pipelines. From the [NVIDIA Turing GPU Architecture whitepaper](https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/technologies/turing-architecture/NVIDIA-Turing-Architecture-Whitepaper.pdf).](images/e11-rt-scheduling.png)
 
 Now that we've covered the different aspects of ray tracing pipelines, let's see how to modify the code to use them!
 
@@ -3415,7 +3415,7 @@ Replace the line that sets `instance.hitGroupId` with
 This is important; without it, one might get an image like below, or one might
 get a device lost error.
 
-![An example of a glitchy image where 8/9 instances had SBT offsets that resulted in indexing outside the SBT.](../images/e11-sbtGlitch.png)
+![An example of a glitchy image where 8/9 instances had SBT offsets that resulted in indexing outside the SBT.](images/e11-sbtGlitch.png)
 
 ### Modifying Usage
 
@@ -3644,7 +3644,7 @@ Finally, replace the `vkDestroyPipeline` and `vkDestroyShaderModule` calls with
 
 If all went well, you should now be able to run the program and get the following image, which it renders 32 times:
 
-![The output of this section's ray generation shader, which acts like a compute shader.](../images/e11-output-1.png)
+![The output of this section's ray generation shader, which acts like a compute shader.](images/e11-output-1.png)
 
 
 
@@ -4152,7 +4152,7 @@ Finally, clean up the array of shader modules by replacing the `vkDestroyShaderM
 
 You should now be able to build and run the program and see all 441 instances with the same diffuse gray shader!
 
-![441 instances with their parameters all pointing to the `material0` shader](../images/e11-output-2.png)
+![441 instances with their parameters all pointing to the `material0` shader](images/e11-output-2.png)
 
 
 ## Multiple Materials
@@ -4259,7 +4259,7 @@ This concludes the code! The ray tracing pipeline and SBT will now be created wi
 
 If all went well, you should now be able to build and run the application and see the following:
 
-![441 instances with 9 different materials rendered using ray tracing pipelines.](../images/e11-output-3.png)
+![441 instances with 9 different materials rendered using ray tracing pipelines.](images/e11-output-3.png)
 
 Measuring performance using Nsight Systems (see Section [Measuring Performance] for an Nsight Systems tutorial) on an RTX 3090, I measured that this chapter's code rendered this scene in 761ms, while Chapter [Multiple Materials]'s ray query-based code took 811ms, using the code from the `e11_rt_pipeline_3` and `e10_materials`. In other words, without changing the structure of the path tracer, using ray tracing pipelines resulted in a 6% performance increase!
 

@@ -15,7 +15,7 @@ photorealistic path tracer in less than 300 lines of C++ code and 250 lines of
 GLSL shader code using Vulkan. Here's an example of what you'll render at the
 end of this tutorial!
 
-![A path traced version of a Cornell box with sky lighting.](../images/12-vk_mini_path_tracer.png)
+![A path traced version of a Cornell box with sky lighting.](images/12-vk_mini_path_tracer.png)
 
 Vulkan is a low-level API for programming GPUs -- fast, highly parallel
 processors. It works on a wide variety of platforms -- everything from
@@ -170,18 +170,18 @@ Launch the CMake GUI. In the "Where is the source code" box, enter the path to
 `vk_mini_path_tracer`. Then in "Where to build the binaries", enter a path to
 a temporary build folder, such as `vk_mini_path_tracer`​`/cmake_build`.
 
-![](../images/1-cmakeDirectories.png)
+![](images/1-cmakeDirectories.png)
 
 Click on "Configure", and set your generator. Most of the time, the default
 is fine. Make sure to use the `x64` platform for the generator!
 
-![](../images/1-cmakeGenerator.png)
+![](images/1-cmakeGenerator.png)
 
 Click on "Finish". Then once configuration finishes, click on "Generate", and
 then "Open Project". Your IDE should open. Here's what this looks like in
 Visual Studio:
 
-![](../images/1-vsProjects.png)
+![](images/1-vsProjects.png)
 
 !!! Tip Use Debug Builds for Development
     If you're using Visual Studio, make sure to use the "Debug" solution configuration.
@@ -194,11 +194,11 @@ Visual Studio:
     
     - Otherwise, if you're using the CMake GUI, then before configuration, you can click on "Add Entry".
     
-    ![](../images/1-cmakeDebugAdd.png)
+    ![](images/1-cmakeDebugAdd.png)
     
      - Then set "Name" to `CMAKE_BUILD_TYPE`, "Type" to `STRING`, "Value" to `Debug`, and then click "OK". Then configure the project as usual.
     
-    ![](../images/1-cmakeDebugGUI.png)
+    ![](images/1-cmakeDebugGUI.png)
     
     This and several later chapters make use of the **validation layer**'s messages, which (as of this writing) are only shown in Debug builds. GPU performance will be about the same as in Release builds.
 
@@ -769,7 +769,7 @@ to determine what acceleration structure or ray query functionality your GPU and
 
 ![This device supports acceleration structures, replaying captures of
 acceleration structures, and updating acceleration structure descriptors after
-binding a descriptor set (see Section [Descriptors]).](../images/2-rtFeatures.png)
+binding a descriptor set (see Section [Descriptors]).](images/2-rtFeatures.png)
 
 This tutorial requires a device that supports ray queries and acceleration structures, which are supported by all
 RTX GPUs. Let's check to make sure this is the case!
@@ -1631,7 +1631,7 @@ named `out.hdr` in the CMake directory for the project, which will be something
 like `vk_mini_path_tracer/cmake_build/5_write_image`. If you open the data
 in a supported image viewer, you should be able to see a flat gray image.
 
-![The output of this chapter's program.](../images/4-gray.png)
+![The output of this chapter's program.](images/4-gray.png)
 
 In the next two chapters, we'll show how to write a shader -- an arbitrary program that can
 be run on the GPU -- to render an image, instead of using `vkCmdFillBuffer`!
@@ -1846,11 +1846,11 @@ Each element would check to make sure that it's within the bounds of the array b
     and the "User Shared Memory Per Block (bytes)" to 0 (although it's
     useful we don't use shared memory in this tutorial):
     
-    ![Box 2 settings for this tutorial in the CUDA Occupancy Calculator.](../images/5-occupancyCalculator.png)
+    ![Box 2 settings for this tutorial in the CUDA Occupancy Calculator.](images/5-occupancyCalculator.png)
     
     will show this graph in the top-middle:
     
-    ![Occupancy vs. block size for a compute capability 8.6 GPU](../images/5-oc-cc-8-6.png)
+    ![Occupancy vs. block size for a compute capability 8.6 GPU](images/5-oc-cc-8-6.png)
     
     We can see that for [compute capability](https://developer.nvidia.com/cuda-gpus) 8.6
     GPUs (each compute capability roughly corresponds to a GPU architecture - CC 8.6 includes
@@ -1861,7 +1861,7 @@ Each element would check to make sure that it's within the bounds of the array b
     the "Select Compute Capability (click)" field in Box 1 to 7.5 (the RTX 2070's compute
     capability) gives this graph:
     
-    ![Occupancy vs. block size for a compute capability 7.5 GPU](../images/5-oc-cc-7-5.png)
+    ![Occupancy vs. block size for a compute capability 7.5 GPU](images/5-oc-cc-7-5.png)
     
     This says that block sizes of 64, 128, 256, .. threads are expected to give the
     highest performance. So, a block size of 128 threads should work well across
@@ -1882,7 +1882,7 @@ Now, use CMake to re-configure and re-generate the project. This sets up the
 steps to compile this shader. If you're using Visual Studio,
 you should now see `raytrace.comp.glsl` appear in the `Shader Files` filter:
 
-![](../images/5-vsShader.png)
+![](images/5-vsShader.png)
 
 Open `raytrace.comp.glsl`, and enter in the following code. This
 
@@ -2447,7 +2447,7 @@ In the next chapter, we'll generate image instead of text data -- by adding a **
 
 In this chapter, we'll show how to program the GPU to write colors into `buffer`. To do this, we'll use a **descriptor** to pass a reference to `buffer` to the compute shader. At the end of this chapter, we'll have a multicolor image, like this:
 
-![The output of the program at the end of the chapter.](../images/6-descriptors.png)
+![The output of the program at the end of the chapter.](images/6-descriptors.png)
 
 The next chapter will show how to combine this with ray tracing.
 
@@ -2590,7 +2590,7 @@ Let's get started!
 
 This chapter's compute shader will generate this image:
 
-![](../images/6-descriptors.png)
+![](images/6-descriptors.png)
 
 For each $(x, y)$ pixel in the 800 x 600 image, it writes the linear RGB color $(x/800, y/600, 0)$.
 
@@ -2936,7 +2936,7 @@ Finally, replace the `vkDestroyPipelineLayout` call at the end of `main()` with
 
 You should now be able to build and run the program and see the image change to this!
 
-![](../images/6-descriptors.png)
+![](images/6-descriptors.png)
 
 ## Cleaner Buffer Writing using Scalar Block Layout
 
@@ -2979,7 +2979,7 @@ Finally, change the three lines that write `imageData` to the following line:
     mismatching data layouts. Here's what this chapter's image would look
     like on one GPU if we didn't use `scalar` here (this uses undefined behavior):
     
-    ![](../images/6-noScalar.png)
+    ![](images/6-noScalar.png)
     
     Please note that this accesses out-of-bounds memory,
     because not using the `scalar` layout qualifier here causes the GLSL
@@ -3181,7 +3181,7 @@ The OBJ file format represents meshes using an array of vertices (which are 3D p
 have some other **attributes**, such as a color per vertex, that we won't use), and an array of sets
 of three indices. Each set of three indices corresponds to three vertices, which represent a triangle.
 
-![A wireframe of an octahedron with its six vertices labeled.](../images/8-octahedron.png)
+![A wireframe of an octahedron with its six vertices labeled.](images/8-octahedron.png)
 
 For instance, the three indices `{0, 1, 2}` represent the triangle connecting vertices 0, 1, and 2
 in that order in the octahedron above.
@@ -3227,7 +3227,7 @@ in memory.
 We'll now use `tinyobjloader` to load the OBJ file located at `vk_mini_path_tracer/media/scenes/CornellBox-Original-Merged.obj`.
 This file contains a single triangle mesh, which is a single-color version of the famous [Cornell Box test model](https://www.graphics.cornell.edu/online/box/):
 
-![A multicolor version of the Cornell Box test model. Geometry and colors from Morgan McGuire's [Computer Graphics Archive](https://casual-effects.com/data/), rendered in Blender using clipping for tone mapping.](../images/8-cornellBox.png)
+![A multicolor version of the Cornell Box test model. Geometry and colors from Morgan McGuire's [Computer Graphics Archive](https://casual-effects.com/data/), rendered in Blender using clipping for tone mapping.](images/8-cornellBox.png)
 
 This file comes from Morgan McGuire's [Computer Graphics Archive](https://casual-effects.com/data/) and is
 licensed CC BY 3.0.
@@ -3402,7 +3402,7 @@ scenes usually contain many meshes, including multiple instances of the same mes
 with different scales, rotations, and positions. To ray trace this quickly, Vulkan
 can use an acceleration structure over **instances** of other acceleration structures!
 
-![A diagram of an acceleration structure. There are three bottom-level acceleration structures (BLASes) of triangles, and a top-level acceleration structure containing four instances. Two instances point to the same BLAS; this could be used to include multiple copies of a model (perhaps with variations) at different places in a scene. From the [NVIDIA Vulkan Ray Tracing Tutorial](https://github.com/nvpro-samples/vk_raytracing_tutorial_KHR).](../images/8-AccelerationStructure.svg)
+![A diagram of an acceleration structure. There are three bottom-level acceleration structures (BLASes) of triangles, and a top-level acceleration structure containing four instances. Two instances point to the same BLAS; this could be used to include multiple copies of a model (perhaps with variations) at different places in a scene. From the [NVIDIA Vulkan Ray Tracing Tutorial](https://github.com/nvpro-samples/vk_raytracing_tutorial_KHR).](images/8-AccelerationStructure.svg)
 
 More specifically, Vulkan ray tracing uses a two-level acceleration structure format.
 **Bottom-level acceleration structures** (BLASes) are acceleration structures of
@@ -3800,7 +3800,7 @@ Delete all the code in `main()` starting with the line that defines `const vec3 
 
 In Vulkan ray tracing, a **ray** is defined by its **origin** $\mathbf{o}$ and its **direction** $\mathbf{d}$. (These variables are bolded to signify that they're vectors.)
 
-![A ray with origin o and direction d, with some points marked along it.](../images/8-ray.svg)
+![A ray with origin o and direction d, with some points marked along it.](images/8-ray.svg)
 
 A ray can also be expressed as a function that takes numbers and returns points:
 
@@ -3810,7 +3810,7 @@ Points along a ray are given by their values of $t$. For instance, $\mathbf{o}$ 
 
 Here's a diagram of our scene. This scene uses the **OBJ coordinate system**, where the positive x axis points right, the positive y axis points up, and the positive Z axis points from the Cornell box towards the camera. This is a right-handed Y-up coordinate system.
 
-![A diagram of the scene, showing the camera, its field of view, the Cornell box, and the positive X (red), Y (green), and Z (blue) axes of the coordinate system.](../images/8-sceneDiagram.png)
+![A diagram of the scene, showing the camera, its field of view, the Cornell box, and the positive X (red), Y (green), and Z (blue) axes of the coordinate system.](images/8-sceneDiagram.png)
 
 We'll ray trace this scene using a virtual camera located at (-0.001, 1, 6). (In other words, we'll render the scene from that point of view.) This camera will be a simplified pinhole camera, so all rays will have their origin at (-0.001, 1, 6), and each pixel will have a different direction.
 
@@ -3968,7 +3968,7 @@ You should now be able to build and run the program, and see that it renders a d
 
 If the application fails to build or renders incorrectly, diff your code against `main.cpp` and `raytrace.comp.glsl` to check for any typos.
 
-![A ray traced depth map of the scene. Darker values are closer, and brighter values are further away.](../images/7-depthMap.png)
+![A ray traced depth map of the scene. Darker values are closer, and brighter values are further away.](images/7-depthMap.png)
 
 ## Summary
 
@@ -4033,7 +4033,7 @@ Then replace the code after `rayQueryInitializeEXT` with the following:
 
 Here's what `out.hdr` will look like now:
 
-![](../images/8-countingIntersections.png)
+![](images/8-countingIntersections.png)
 
 Brighter areas correspond to pixels with more ray-scene intersections.
 Note that some pixels have more than two registered intersections, even though the
@@ -4048,7 +4048,7 @@ flag to the `VkAccelerationStructureGeometryKHR` object when building the BLAS i
 
 `out.hdr` would then look like this:
 
-![](../images/8-noDuplicateAnyHit.png)
+![](images/8-noDuplicateAnyHit.png)
 
 In a full rendering engine, the body of the `rayQueryProceedEXT` `while` loop would be used to implement
 things like **any hit shaders**: pieces of code that the GPU runs for any intersection along the ray.
@@ -4107,7 +4107,7 @@ Replace the code after the `while` loop with the following:
 
 Build and run the code. `out.hdr` should now look like this:
 
-![](../images/8-hitType.png)
+![](images/8-hitType.png)
 
 ## Triangle Indices
 
@@ -4137,7 +4137,7 @@ with the following code:
 
 Build and run the code. `out.hdr` should now look like this:
 
-![](../images/8-triangleIndices.png)
+![](images/8-triangleIndices.png)
 
 ## Barycentric Coordinates
 
@@ -4189,7 +4189,7 @@ with the following code:
 
 Build and run the code. `out.hdr` should now look like this:
 
-![](../images/8-barycentricCoordinates.png)
+![](images/8-barycentricCoordinates.png)
 
 We've now explored four ways to get information from ray queries. However, we haven't covered probably
 the most important thing yet: how to get the vertices of the intersected triangle from the ray query.
@@ -4308,7 +4308,7 @@ You should now be able to build and run the application, and get the following i
 we're reading the vertex and index arrays correctly. (Note that each quad of two triangles has the same
 first vertex.)
 
-![](../images/9-firstVertex.png)
+![](images/9-firstVertex.png)
 
 !!! Tip Negative Values in HDR Files
     HDR files can only represent positive values. As it turns out, if some (but not all) values in an
@@ -4349,7 +4349,7 @@ Here's how to do that:
 
 You can now build and run the application and get the following result:
 
-![](../images/9-worldPositions.png)
+![](images/9-worldPositions.png)
 
 !!! Tip World Space and Object Space
     Meshes (objects) specify the locations of their vertices in their own coordinate space, called **object space**.
@@ -4489,7 +4489,7 @@ Replace the code in the first branch of the `if` statement with the following:
 
 This will generate the following image:
 
-![](../images/9-normals.png)
+![](images/9-normals.png)
 
 We've now covered all the API we'll need to write a path tracer.
 In the next chapter, we'll start out by path tracing a scene with only mirror
@@ -4871,7 +4871,7 @@ Otherwise, the ray hit the sky, so get the sky color, multiply it by `accumulate
 
 That's all that's needed here! You should now be able to compile and run it, and see this:
 
-![](../images/10-reflectionBug.png)
+![](images/10-reflectionBug.png)
 
 We have reflections, but most of the surfaces don't look realistic. Let's fix that.
 
@@ -4928,7 +4928,7 @@ For this tutorial, it will suffice to move the ray origin a small distance away 
 
 You should now be able to compile and run it again, and see this:
 
-![](../images/10-reflectionPt2.png)
+![](images/10-reflectionPt2.png)
 
 However, there's one more thing we can do. Recall that non-degenerate triangles have two normals. But what happens if a ray hits a triangle from the wrong side? For instance, this can happen with the rectangle in the center of the top of the box, if a ray bounces off the ceiling and behind the rectangle. With our current method, the new ray will be pushed through the surface, then reflect agains the surface again. (However, this is nearly imperceptible in our image.) Here's a zoomed-in view, showing two bounces:
 
@@ -5026,11 +5026,11 @@ So, `faceforward(N, I, Nref)` returns `N` if `dot(I, Nref) < 0`, and `-N` otherw
 
 You should now have a path tracer that renders reflective surfaces, with a sky in the background! Like a hall of mirrors, you can see many levels of reflections inside reflections -- something that would be difficult to do as concisely and quickly as with a ray tracer.
 
-![](../images/10-reflectionPt3.png)
+![](images/10-reflectionPt3.png)
 
 Here's the difference between the two images:
 
-![Note that this image is relatively dark; look near the top-center to see the differences.](../images/10-reflectionDiff.png)
+![Note that this image is relatively dark; look near the top-center to see the differences.](images/10-reflectionDiff.png)
 
 One may notice that the edges of objects are jagged rather than smooth. (Including the left wall -- the left edge of the mesh is not perfectly vertical.) In the next chapter, we'll explore how to use pseudorandom number generation to smooth out these edges and make the image look as if it was rendered at higher resolution by **antialiasing** the image.
 
@@ -5127,7 +5127,7 @@ Then change the last few lines of `main()` to step, then directly output the PRN
 
 You should now be able to build and run the program, and get an image that looks like this:
 
-![](../images/11-randomNoise.png)
+![](images/11-randomNoise.png)
 
 Remove the `pixelColor = vec3(stepAndOutputRNGFloat(rngState));` line before continuing.
 
@@ -5295,7 +5295,7 @@ Note that we've modified and moved the logic for generating new camera rays into
 
 You should now be able to build and run the project, and see that the edges in the reflections are now much smoother, at the expense of some additional noise!
 
-![](../images/11-antialiased.png)
+![](images/11-antialiased.png)
 
 !!! Tip Why only 64 samples per pixel?
     This image has some noise on the edges instead of aliasing artifacts, and
@@ -5341,7 +5341,7 @@ light source, we see the shading fall off from the point where the normal faces
 most into the directional light, to the ring where the normals are perpendicular
 to the light direction. The surface below that ring is shadowed.
 
-![A sphere with a Lambertian material under unidirectional lighting.](../images/13-lambertSphere.png)
+![A sphere with a Lambertian material under unidirectional lighting.](images/13-lambertSphere.png)
 
 Here's why this happens. Imagine a set of parallel rays of light traveling through space.
 
@@ -5416,7 +5416,7 @@ average than rays closer to the horizon, as depicted below.
 ![Diagram of the distribution of incoming light (yellow) for a Lambertian surface.
 In this context, the blue ray is the vector from the camera to the intersection
 point, and the length of each yellow ray is proportional to the probability that
-the material model chooses that ray as the incoming light direction.](../images/13-lambertBkwds.png)
+the material model chooses that ray as the incoming light direction.](images/13-lambertBkwds.png)
 
 For an excellent, more in-depth exploration of how light interacts with surfaces, please see Bartosz Ciechanowski's article [*Lights and Shadows*](https://ciechanow.ski/lights-and-shadows/).
 
@@ -5434,7 +5434,7 @@ It turns out there's a way to perfectly sample this distribution, so that we cho
 
 Imagine the surface, the normal at the intersection point, and a sphere of radius 1 centered on the normal.
 
-![A surface, a normal at an intersection point, and a sphere (here represented by a circle) centered at that normal of radius 1.](../images/13-randomSample.svg)
+![A surface, a normal at an intersection point, and a sphere (here represented by a circle) centered at that normal of radius 1.](images/13-randomSample.svg)
 
 To sample a random Lambertian reflection direction, choose a random point on the sphere, then normalize it; this gives the needed distribution!
 
@@ -5468,7 +5468,7 @@ with:
 
 That's all you need for a Lambertian material model. You should now be able to build and run the code, and see the following:
 
-![](../images/12-vk_mini_path_tracer.png)
+![](images/12-vk_mini_path_tracer.png)
 
 With 10 lines of code, we've gone from an entirely reflective scene to a diffuse render. This render includes effects such as soft shadows, diffuse reflection, ambient occlusion, and area lighting (the sky). It should also match the output of other ray tracing programs such as Blender if the sky and Lambertian surface material are set up correctly. Adding more samples per pixel will reduce the level of noise. At the same time, because of the GPU acceleration techniques we've used, this image is fast to render.
 
@@ -5559,7 +5559,7 @@ Instead of setting `result.color = vec3(0.7f)` in `getObjectHitInfo`, we can mak
 
 That will look like this:
 
-![](../images/13-normalColors.png)
+![](images/13-normalColors.png)
 
 Or we can color faces that point in the +x direction red and faces that point in the -x direction green, to start to emulate the Cornell Box:
 
@@ -5577,7 +5577,7 @@ Or we can color faces that point in the +x direction red and faces that point in
   }
 ~~~
 
-![](../images/13-cornell.png)
+![](images/13-cornell.png)
 
 One can see how light picks up color as it bounces from the sky into the box, including the two non-gray walls.
 
@@ -5600,7 +5600,7 @@ We can add the random point on the sphere to the reflected ray to get a glossy m
 
 This will look like this:
 
-![](../images/13-glossy.png)
+![](images/13-glossy.png)
 
 !!! Warning
     This will sometimes generate rays that go below the surface.
@@ -5627,7 +5627,7 @@ Or replace the code with the following to use mirror reflection 20% of the time,
         }
 ~~~
 
-![](../images/13-mirrorAndDiffuse.png)
+![](images/13-mirrorAndDiffuse.png)
 
 ### Transparency
 
@@ -5638,7 +5638,7 @@ We can apply color absorption, but make the ray pass through the surface, by cha
         rayOrigin = hitInfo.worldPosition - 0.0001 * hitInfo.worldNormal;
 ~~~
 
-![](../images/13-transparency.png)
+![](images/13-transparency.png)
 
 This may not look interesting (because all surfaces have the same color), but this gives a way to do order-independent transparency quickly without additional data structures.
 
@@ -5671,7 +5671,7 @@ We can make it so that the ray uses diffuse reflection 50% of the time, but goes
 
 This is a technique for stochastic transparency with global illumination.
 
-![](../images/13-transparencyDiffuse.png)
+![](images/13-transparencyDiffuse.png)
 
 ### Cutouts
 
@@ -5709,7 +5709,7 @@ Here's how to make rays pass through slices of the model, making them invisible.
 
 Note that we've also introduced `doubleNormal`, the double-sided normal, to make Lambertian reflection more plausible when the ray intersects a surface from behind.
 
-![](../images/13-slices.png)
+![](images/13-slices.png)
 
 ## Further Reading
 
