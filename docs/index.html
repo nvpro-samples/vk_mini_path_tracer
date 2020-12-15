@@ -3927,7 +3927,7 @@ Add this code to initialize the ray query object:
                         10000.0);              // Maximum t-value
 ```
 
-Next, we'll call `rayQueryProceedEXT` in a loop. Normally, every time we call this function, it proceeds to the next intersection, and updates the **committed intersection**, which is the closest (accepted) intersection so far. `rayQueryProceedEXT` returns `false` once we've iterated through all ray-scene intersections. However, since we used the `gl_RayFlagsOpaqueEXT` flag, `rayQueryProceedEXT` will immediately find the closest intersection, and then return `true`.
+Next, we'll call `rayQueryProceedEXT` in a loop. Normally, every time we call this function, it proceeds to the next intersection, and updates the **committed intersection**, which is the closest (accepted) intersection so far. `rayQueryProceedEXT` returns `false` once we've iterated through all ray-scene intersections.
 
 Add the following code:
 
@@ -3938,6 +3938,12 @@ Add the following code:
   {
   }
 ```
+
+Since we used the `gl_RayFlagsOpaqueEXT` flag, `rayQueryProceedEXT`
+will immediately find the closest intersection, and then return `false`, without
+executing any code within the block. Using a `while` loop here, though,
+helps avoid errors -- it makes sure that the code would be correct even with
+different flags, and we'll see how to use it creatively in the next chapter.
 
 The ray cast has now finished, and `rayQuery` stores the closest intersection (the intersection with the lowest t-value)! Add this code to get the t-value of the committed intersection:
 
