@@ -1044,7 +1044,7 @@ Here's some additional information on TDR, noise, and command buffer lengths:
     Here are a few techniques other than adding more samples that can be used to reduce noise and make ray traced applications faster!
     - Using a denoiser such as the OptiX denoiser in the [`vk_denoise` sample](https://github.com/nvpro-samples/vk_denoise); denoisers have become faster and higher quality using techniques such as [ASVGF](https://github.com/NVIDIA/Q2RTX/blob/master/src/refresh/vkpt/shader/asvgf.glsl) and deep neural networks. Temporal denoisers use reprojection techniques to accumulate samples over multiple frames.
     - Rendering fewer pixels, and then upscaling to full resolution using an AI upscaler such as [DLSS](https://www.nvidia.com/en-us/geforce/technologies/dlss/).
-    - Using a [stratified sampler](http://www.pbr-book.org/3ed-2018/Sampling_and_Reconstruction/Stratified_Sampling.html) such as [Halton](http://www.pbr-book.org/3ed-2018/Sampling_and_Reconstruction/The_Halton_Sampler.html) rather than a uniform pseudorandom number generator (what the path tracer currently uses). This can reduce noise when we take lots of samples -- using a [low-discrepancy sequence](https://en.wikipedia.org/wiki/Low-discrepancy_sequence) can make the amount of error in the image fall off like $1/n$ instead of 1/\sqrt(n)$, where $n$ is the number of samples.
+    - Using a [stratified sampler](http://www.pbr-book.org/3ed-2018/Sampling_and_Reconstruction/Stratified_Sampling.html) such as [Halton](http://www.pbr-book.org/3ed-2018/Sampling_and_Reconstruction/The_Halton_Sampler.html) rather than a uniform pseudorandom number generator (what the path tracer currently uses). This can reduce noise when we take lots of samples -- using a [low-discrepancy sequence](https://en.wikipedia.org/wiki/Low-discrepancy_sequence) can make the amount of error in the image fall off like $1/n$ instead of $1/\sqrt(n)$, where $n$ is the number of samples.
     - Using [blue noise](https://blog.demofox.org/2018/01/30/what-the-heck-is-blue-noise/) instead of white noise (what we currently use) to make denoising easier. Blue noise has many applications and can be used without too much work. However, also see Eric Heitz and Laurent Belcour's paper [*Distributing Monte Carlo Errors as a Blue Noise in Screen Space by Permuting Pixel Seeds Between Frames*](https://eheitzresearch.wordpress.com/772-2/) as an example of a more sophisticated technique using blue noise.
     - Choosing sampling directions when bouncing off surfaces to better match the integrand of the rendering equation at a given point. There are many techniques that improve this, from multiple importance sampling to path guiding; see for instance Bitterli, Wyman, Pharr, Shirley, Lefohn, and Jarosz' paper [*Spatiotemporal reservoir resampling for real-time ray tracing with dynamic direct lighting*](https://cs.dartmouth.edu/wjarosz/publications/bitterli20spatiotemporal.html) as implemented in [RTXDI](https://developer.nvidia.com/rtxdi).
     
@@ -1257,7 +1257,7 @@ In Vulkan, an image can be much more than a two-dimensional, rectangular array o
 
 ![A sparse texture and four of its higher-level mips. From Cem Cebenoyan, [*Real Virtual Texturing - Taking Advantage of DirectX11.2 Tiled Resources*](https://developer.nvidia.com/sites/default/files/akamai/gameworks/events/gdc14/GDC_14_Real%20Virtual%20Texturing%20-%20Taking%20Advantage%20of%20DirectX%2011.2%20Tiled%20Resources.pdf).](images/e7-sparse.png)
 
-- Images can be **multisampled**: each texel (texture element) in an image can contain color information for not just 1, but multiple samples.
+- Images can be **multisampled**: each texel (texture element) in an image can contain color information for not only 1, but multiple samples.
 
 - Images can [tile their data in different ways](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkImageTiling.html) -- in addition to a row-major layout like a multidimensional C array (`VK_IMAGE_TILING_LINEAR`), they can also be laid out using `VK_IMAGE_TILING_OPTIMAL` tiling, which is a more complex way of ordering pixel data that is designed to be more optimal (generally by being more cache-friendly) for the GPU.
 
@@ -2312,7 +2312,7 @@ In the rest of this chapter, we'll set up a scene with 441 instances in a grid w
 
 To add more instances, we'll add more `nvvk::RaytracingBuilderKHR::Instance` structs to the `instances` vector. Each instance will have a `blasId` of 0, meaning they'll all point to the index 0 BLAS in the `blases` vector we passed to `nvvk::RaytracingBuilderKHR::buildBlas`, which is the BLAS for the Cornell box.
 
-We'll start by creating 441 instances (without modifying the transformation matrix just yet). Replace
+We'll start by creating 441 instances (without modifying the transformation matrix quite yet). Replace
 
 ~~~ cpp
   // Create an instance pointing to this BLAS, and build it into a TLAS:
@@ -3163,7 +3163,7 @@ There are four types of records. Each stores a shader group handle referencing u
 
 ### Indexing into SBTs
 
-When looking up a shader, different factors will tell the traversal engine the index of the shader to call. This is to support different shaders per instance, per geometry inside an instance, and per **ray type** (for instance, imagine if one wanted shadow rays to use simpler shaders than camera rays). These factors are:
+When looking up a shader, different factors will tell the traversal engine the index of the shader to call. This is to support different shaders per instance, per geometry inside an instance, and per **ray type** (for instance, imagine if one wanted shadow rays to use less computationally expensive shaders than camera rays, e.g. without shading). These factors are:
 
 1. `missIndex` from the GLSL `traceRayEXT` call;
 2. The instance's `hitGroupId` from TLAS creation;

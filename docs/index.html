@@ -58,8 +58,9 @@ nvvk::DescriptorSetContainer | nvvk::make                   | nvvk::RayTracingBu
 
 ## Supported GPUs
 
-This sample will work on all RTX GPUs. For more information,
-please see section [Install Dependencies].
+This sample will work on all GPUs with support for ray queries.
+As of this writing, these are all GPUs with hardware-accelerated ray tracing,
+including all RTX GPUs.
 
 !!! Tip GPUs Supporting Ray Tracing
     All RTX GPUs have RT Cores, which are dedicated hardware units that make
@@ -3710,7 +3711,7 @@ Finally, we must destroy the ray tracing builder and the vertex and index buffer
 
 This concludes the C++ code for this chapter! We've now written almost all the C++ code for this tutorial; the next chapter will add the vertex and index buffers to the descriptor set, but then after that, we'll exclusively modify the shader code.
 
-Let's now turn to modifying the compute shader to add a simple camera, and to trace rays into the scene. By the end of this chapter, we'll
+Let's now turn to modifying the compute shader to add a pinhole camera, and to trace rays into the scene. By the end of this chapter, we'll
 be able to render the Cornell Box.
 
 Now is also an excellent time to diff `main.cpp` against the the reference version of `main.cpp` in `8_ray_tracing`, and to check for any typos.
@@ -3813,7 +3814,7 @@ Here's a diagram of our scene. This scene uses the **OBJ coordinate system**, wh
 
 ![A diagram of the scene, showing the camera, its field of view, the Cornell box, and the positive X (red), Y (green), and Z (blue) axes of the coordinate system.](images/8-sceneDiagram.png)
 
-We'll ray trace this scene using a virtual camera located at (-0.001, 1, 6). (In other words, we'll render the scene from that point of view.) This camera will be a simplified pinhole camera, so all rays will have their origin at (-0.001, 1, 6), and each pixel will have a different direction.
+We'll ray trace this scene using a virtual camera located at (-0.001, 1, 6). (In other words, we'll render the scene from that point of view.) This camera will be a pinhole camera, so all rays will have their origin at (-0.001, 1, 6), and each pixel will have a different direction.
 
 To figure out the direction for each pixel, imagine placing a computer screen 1 unit in front of the camera origin, with a resolution of  resolution.x x resolution.y. Each ray will start at (-0.001, 1, 6), and will initially pass through the center of each pixel.
 Let's define the **vertical field of view** of the camera by saying that the screen extends from $y=1-1/5$ to $y=1+1/5$ (this controls how large the Cornell Box appears).
@@ -3960,7 +3961,7 @@ Here, `t` is the depth of the scene along the ray. Let's divide it by 10 to map 
 
 ~~~ glsl
   // Get the index of this invocation in the buffer:
-  uint linearIndex                      = resolution.x * pixel.y + pixel.x;
+  uint linearIndex       = resolution.x * pixel.y + pixel.x;
   // Give the pixel the color (t/10, t/10, t/10):
   imageData[linearIndex] = vec3(t / 10.0);
 ~~~
@@ -4003,7 +4004,7 @@ To make a path tracer, we'll need to compute how light interacts with each part 
 
 `rayQueryProceedEXT` iterates over ray-scene intersections. Now, the body of the `while` loop is empty, but we can use it to count how many times the ray intersects the scene.
 
-The ray flags currently include `gl_RayFlagsOpaqueEXT`, which will make `rayQueryProceedEXT` immediately return the closest intersection. However, we want it to iterate over every intersection. Simply removing the `gl_RayFlagsOpaqueEXT` flag won't work, since the instance has the equivalent `VK_GEOMETRY_OPAQUE_BIT_KHR` flag set. So, we need to override the instance setting by using the `gl_RayFlagsNoOpaqueEXT` ray flag. Replace the `rayQueryInitializeEXT` call with the following:
+The ray flags currently include `gl_RayFlagsOpaqueEXT`, which will make `rayQueryProceedEXT` immediately return the closest intersection. However, we want it to iterate over every intersection. Only removing the `gl_RayFlagsOpaqueEXT` flag won't work, since the instance has the equivalent `VK_GEOMETRY_OPAQUE_BIT_KHR` flag set. So, we need to override the instance setting by using the `gl_RayFlagsNoOpaqueEXT` ray flag. Replace the `rayQueryInitializeEXT` call with the following:
 
 ~~~ glsl
   rayQueryInitializeEXT(rayQuery,                // Ray query
@@ -4276,7 +4277,7 @@ layout(binding = 3, set = 0, scalar) buffer Indices
 ~~~
 
 To make sure that we can access these buffers correctly, let's visualize the first vertex of each triangle.
-Replace the first branch of the `if` statement in `raytrace.comp.glsl` (`if(rayQueryGetIntersectionTypeEXT(rayQuery, true) == gl_RayQueryCommittedIntersectionTriangleEXT)`) with the following:
+Replace the first branch of the `if` statement in `raytrace.comp.glsl` (`if(rayQueryGetIntersectionTypeEXT(rayQuery, true) == ...)`) with the following:
 
 First, get the ID of the triangle:
 
@@ -4515,7 +4516,7 @@ In this chapter, we'll write a path tracer for mirror surfaces.
 
 **Path tracers** trace paths of light through scenes to render images. Most path tracers today use [**geometric optics**](https://en.wikipedia.org/wiki/Geometrical_optics), which assumes that light travels along rays.
 
-Let's look at how light might travel in a more complicated scene than the one in this tutorial. Imagine an outdoors scene lit by the sun, where a camera looks at a glass on a wood table, with a tree in the background. Here's a simplified diagram of such a scene, showing the sun, the atmosphere, the tree, the table, the glass, and the camera.
+Let's look at how light might travel in a more complicated scene than the one in this tutorial. Imagine an outdoors scene lit by the sun, where a camera looks at a glass on a wood table, with a tree in the background. Here's a diagram of such a scene, showing the sun, the atmosphere, the tree, the table, the glass, and the camera.
 
 ****************************************************
 *
@@ -4904,6 +4905,9 @@ The bug here is that we set the minimum t-value of the `rayQueryInitializeEXT` c
 *          v| Gets stuck
 *-----------o-----------
 *          ^
+*         /
+*        /
+*
 *************************
 
 There are many different solutions to this problem. Wächter and Binder describe probably the state-of-the-art approach in their
@@ -4960,7 +4964,7 @@ In some sense, this simulates a one-sided surface, where one side is opaque, but
 
 To solve this, we can simulate a two-sided surface: we offset the ray origin along the normal, against the direction of the old ray.
 
-To do this, we can use GLSL's `faceforward` function:
+To do this, we can use GLSL's [`faceforward`](https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/faceforward.xhtml) function:
 
 ~~~ glsl
 genType faceforward( genType N,
