@@ -60,7 +60,8 @@ nvvk::DescriptorSetContainer | nvvk::make                   | nvvk::RayTracingBu
 
 This sample will work on all GPUs with support for ray queries.
 As of this writing, these are all GPUs with hardware-accelerated ray tracing,
-including all RTX GPUs.
+including all RTX GPUs. (In particular, GTX GPUs such as 10-series cards don't
+support ray queries, but many support [ray tracing pipelines](extras.html#raytracingpipelines). See the box below for more details.)
 
 !!! Tip GPUs Supporting Ray Tracing
     All RTX GPUs have RT Cores, which are dedicated hardware units that make
@@ -75,6 +76,23 @@ including all RTX GPUs.
     Older NVIDIA GPUs (including those that don't support the `VK_KHR_acceleration_structure`
     extension) can also perform ray tracing using [NVIDIA OptiX][optix].
     OptiX 7's API is relatively close to the Vulkan ray tracing pipeline API.
+    
+    This tutorial uses ray queries because they reduce the amount of C++ code
+    involved by about 75 lines, but ray tracing pipelines let shaders call other
+    shaders, and can be faster in multi-material scenes. See the box in
+    Section [Using Compute Shaders for Ray Tracing] for more information about
+    the tradeoffs between ray queries and ray tracing pipelines.
+    
+    If you have a GPU that supports ray tracing pipelines but not ray queries,
+    there are still many ways to learn Vulkan and ray tracing! If you don't have
+    prior Vulkan experience, then you can follow this tutorial up to chapter [Acceleration Structures and Ray Tracing],
+    skipping section [Requesting Device Extensions],
+    then go to the [Ray Tracing Pipelines](extras.html#raytracingpipelines)
+    chapter in the extras. If you have some prior Vulkan experience, then check out the
+    [NVIDIA Vulkan Ray Tracing Tutorials](https://github.com/nvpro-samples/vk_raytracing_tutorial_KHR),
+    which will work on your GPU, and go into more detail about ray tracing pipelines
+    than this tutorial! Also make sure to check out the
+    More Useful Vulkan and Ray Tracing Tutorials section below.
 
 [nvbetadriver]: https://developer.nvidia.com/vulkan-driver
 [optix]: https://developer.nvidia.com/optix
