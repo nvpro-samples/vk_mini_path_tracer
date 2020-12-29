@@ -3686,7 +3686,20 @@ To trace rays from a shader, we need to add the acceleration structure to the de
   descriptorSetContainer.addBinding(1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, VK_SHADER_STAGE_COMPUTE_BIT);
 ~~~
 
-We also must make this descriptor in the descriptor set point to the TLAS. We've also changed the code here to use an array of `VkWriteDescriptorSet`s, instead of a single `VkWriteDescriptorSet`:
+We also must make this descriptor in the descriptor set point to the TLAS.  Find the following code block:
+
+~~~ cpp
+  // Write a single descriptor in the descriptor set.
+  VkDescriptorBufferInfo descriptorBufferInfo{};
+  descriptorBufferInfo.buffer          = buffer.buffer;    // The VkBuffer object
+  descriptorBufferInfo.range           = bufferSizeBytes;  // The length of memory to bind; offset is 0.
+  VkWriteDescriptorSet writeDescriptor = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
+  vkUpdateDescriptorSets(context,              // The context
+                         1, &writeDescriptor,  // An array of VkWriteDescriptorSet objects
+                         0, nullptr);          // An array of VkCopyDescriptorSet objects (unused)
+~~~
+
+And replace it with this code:
 
 ~~~ cpp
   // Write values into the descriptor set.
@@ -3707,6 +3720,8 @@ We also must make this descriptor in the descriptor set point to the TLAS. We've
                          writeDescriptorSets.data(),                         // Pointer to VkWriteDescriptorSet objects
                          0, nullptr);  // An array of VkCopyDescriptorSet objects (unused)
 ~~~
+
+This allows creates an array of `VkWriteDescriptorSet`s, instead of a single `VkWriteDescriptorSet` for passing to `vkUpdateDescriptorSets`.
 
 !!! Tip What Is `std::array`?
     `std::array` is part of the C++ specification. An `std::array` is a sized array:
