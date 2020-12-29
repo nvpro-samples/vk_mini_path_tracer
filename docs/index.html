@@ -2157,7 +2157,9 @@ creating object B first.
     Make sure you're using a debug build as described in Section [Configure and Generate the Project using CMake] in order to see validation layer messages.
 
 To start off, include two additional headers: `nvh/fileoperations.hpp`, for
-loading files, and `nvvk/shaders_vk.hpp`, for creating shader modules from SPIR-V:
+loading files, and `nvvk/shaders_vk.hpp`, for creating shader modules from SPIR-V.
+
+Your entire include section should now look like this:
 
 ~~~ cpp
 #define STB_IMAGE_WRITE_IMPLEMENTATION
