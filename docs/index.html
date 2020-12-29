@@ -31,7 +31,7 @@ relatively small.
 We'll show how to write a small path tracer, using the
 NVVK helpers, included in the nvpro-samples framework, to help with some Vulkan calls when needed. For
 advanced readers, we'll also optionally talk about performance tips and some of the implementation
-details inside the helpers and Vulkan itself.
+details inside the helpers and Vulkan itself. 
 
 The final program uses less than 300 lines of C++ and less than 250 lines of GLSL shader code, including comments. You can find it [here](https://github.com/nvpro-samples/vk_mini_path_tracer/tree/main/vk_mini_path_tracer).
 
@@ -1527,7 +1527,7 @@ We could submit multiple command buffers at once, but here we'll only submit one
   VkSubmitInfo submitInfo       = nvvk::make<VkSubmitInfo>();
   submitInfo.commandBufferCount = 1;
   submitInfo.pCommandBuffers    = &cmdBuffer;
-  NVVK_CHECK(vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE));
+  NVVK_CHECK(vkQueueSubmit(context.m_queueGCT, 1, &submitInfo, VK_NULL_HANDLE));
 ~~~
 
 !!! Tip `vkQueueSubmit` Performance
