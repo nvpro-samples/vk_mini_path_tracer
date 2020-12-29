@@ -2314,8 +2314,15 @@ here we only need to create one:
 
 ## Dispatching the Compute Pipeline
 
-First, remove the four lines that set `fillValue` and `fillValueU32` and then call `vkCmdFillBuffer` -- we'll run
+First, remove the following lines that set `fillValue` and `fillValueU32` and then call `vkCmdFillBuffer` -- we'll run
 the compute shader instead!
+
+~~~ cpp
+  // Fill the buffer
+  const float     fillValue    = 0.5f;
+  const uint32_t& fillValueU32 = reinterpret_cast<const uint32_t&>(fillValue);
+  vkCmdFillBuffer(cmdBuffer, buffer.buffer, 0, bufferSizeBytes, fillValueU32);
+~~~
 
 To dispatch a compute shader, we first need to bind the compute shader's pipeline (this is a state change operation):
 
