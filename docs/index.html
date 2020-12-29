@@ -3721,7 +3721,7 @@ And replace it with this code:
                          0, nullptr);  // An array of VkCopyDescriptorSet objects (unused)
 ~~~
 
-This allows creates an array of `VkWriteDescriptorSet`s, instead of a single `VkWriteDescriptorSet` for passing to `vkUpdateDescriptorSets`.
+This creates an array of `VkWriteDescriptorSet`s, instead of a single `VkWriteDescriptorSet` for passing to `vkUpdateDescriptorSets`.
 
 !!! Tip What Is `std::array`?
     `std::array` is part of the C++ specification. An `std::array` is a sized array:
@@ -4053,7 +4053,8 @@ To make a path tracer, we'll need to compute how light interacts with each part 
 
 ## Counting Intersections with `rayQueryProceedEXT`
 
-(This chapter is intended to help the reader learn about the `rayQueryProceedEXT` while loop, which is empty; they can skip to the Hits and Misses section if they want.)
+!!! TIP
+    This section is intended to help the reader learn about the `rayQueryProceedEXT` while loop; they can skip to the Hits and Misses section if they want.
 
 `rayQueryProceedEXT` iterates over ray-scene intersections. Now, the body of the `while` loop is empty, but we can use it to count how many times the ray intersects the scene.
 
@@ -4062,7 +4063,9 @@ The ray flags currently include `gl_RayFlagsOpaqueEXT`, which will make `rayQuer
 ~~~ glsl
   rayQueryInitializeEXT(rayQuery,                // Ray query
                         tlas,                    // Top-level acceleration structure
+~~~ glsl highlight
                         gl_RayFlagsNoOpaqueEXT,  // Ray flags, force iterating over every intersection (note: slow)
+~~~ glsl
                         0xFF,                    // 8-bit instance mask, here saying "trace against all instances"
                         rayOrigin,               // Ray origin
                         0.0,                     // Minimum t-value
@@ -4075,15 +4078,26 @@ Then replace the code after `rayQueryInitializeEXT` with the following:
 ~~~ glsl
   // Start traversal, and loop over all ray-scene intersections. When this finishes,
   // rayQuery stores a "committed" intersection, the closest intersection (if any).
+~~~ glsl highlight
   float numIntersections = 0.0;
+~~~ glsl
   while(rayQueryProceedEXT(rayQuery))
   {
+~~~ glsl highlight
     numIntersections += 1.0;
+~~~ glsl
   }
 
   // Get the index of this invocation in the buffer:
   uint linearIndex       = resolution.x * pixel.y + pixel.x;
+~~~ glsl highlight
   imageData[linearIndex] = vec3(numIntersections / 10.0);
+~~~
+
+This counts the number of intersections (`numIntersections`) instead of using the following code (that it replaced) to get the distance to the first intersection:
+
+~~~ glsl
+const float t = rayQueryGetIntersectionTEXT(rayQuery, true);
 ~~~
 
 Here's what `out.hdr` will look like now:
@@ -4119,7 +4133,39 @@ geometry using `rayQueryGenerateIntersectionEXT`. For an example, please see the
 However, tracing non-opaque meshes can be quite slow, as the shader might have to iterate through every
 ray-scene intersection. In scenes where there are lots of overlapping objects, this can be relatively expensive.
 
-Revert any changes before continuing.
+!!! WARNING
+    Revert the changes from this section before continuing, so that the end of the shader looks like this:
+
+    ~~~ glsl
+    // Trace the ray and see if and where it intersects the scene!
+    // First, initialize a ray query object:
+    rayQueryEXT rayQuery;
+    rayQueryInitializeEXT(rayQuery,              // Ray query
+                          tlas,                  // Top-level acceleration structure
+                          gl_RayFlagsOpaqueEXT,  // Ray flags, here saying "treat all geometry as opaque"
+                          0xFF,                  // 8-bit instance mask, here saying "trace against all instances"
+                          rayOrigin,             // Ray origin
+                          0.0,                   // Minimum t-value
+                          rayDirection,          // Ray direction
+                          10000.0);              // Maximum t-value
+  
+    // Start traversal, and loop over all ray-scene intersections. When this finishes,
+    // rayQuery stores a "committed" intersection, the closest intersection (if any).
+    while(rayQueryProceedEXT(rayQuery))
+    {
+    }
+  
+    // Get the t-value of the intersection (if there's no intersection, this will
+    // be tMax = 10000.0). "true" says "get the committed intersection."
+    const float t = rayQueryGetIntersectionTEXT(rayQuery, true);
+  
+    // Get the index of this invocation in the buffer:
+    uint linearIndex = resolution.x * pixel.y + pixel.x;
+    // Give the pixel the color (t/10, t/10, t/10):
+    imageData[linearIndex] = vec3(t / 10.0);
+    ~~~
+
+
 
 
 ## Hits and Misses
