@@ -222,6 +222,17 @@ Visual Studio:
     
     This and several later chapters make use of the **validation layer**'s messages, which (as of this writing) are only shown in Debug builds. GPU performance will be about the same as in Release builds.
 
+!!! Tip Setting the Startup Project in Visual Studio
+    If you're using Visual Studio, the current startup project will be shown in **BOLD** in
+    the Solution Explorer.  For example, in the above image, `ALL_BUILD` is in bold as it is
+    the first project in the solution.
+
+    If you try to start debugging by pressing `F5`, or pressing the `▶ Local Windows Debugger` button then you
+    are likely to see an error dialog stating something similar to `Unalbe to start program '<YOUR PATH>\ALL_BUILD'.  Access is denied.`
+
+    To address this issue, right click on the `vk_mini_path_tracer__edit` project (which is the one
+    you will be using to follow along with this tutorial) in the Solution Explorer and select `⚙ Set as Startup Project`.
+
 You're now ready to begin programming with Vulkan!
 
 ## Hello, Vulkan!
