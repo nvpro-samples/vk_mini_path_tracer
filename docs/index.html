@@ -4328,15 +4328,27 @@ First, let's add two new storage buffer bindings to the `nvvk::DescriptorSetCont
   descriptorSetContainer.addBinding(3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_COMPUTE_BIT);
 ~~~
 
-To write to these descriptors, first change the definition of `writeDescriptorSets` to be an array of length 4 instead of an array of length 2:
+To write to these descriptors, we need to update the definition of the `writeDescriptorSets` array.  First
+change the declaration of `writeDescriptorSets` to be an array of length 4 instead of an array of length 2,
+and then add two new descriptor sets to the end:
 
 ~~~ cpp
-VkWriteDescriptorSet writeDescriptorSets[4];
-~~~
-
-Then replace the `vkUpdateDescriptorSets` call with the following code:
-
+  // Write values into the descriptor set.
+~~~ cpp highlight
+  std::array<VkWriteDescriptorSet, 4> writeDescriptorSets;
 ~~~ cpp
+  // 0
+  VkDescriptorBufferInfo descriptorBufferInfo{};
+  descriptorBufferInfo.buffer = buffer.buffer;    // The VkBuffer object
+  descriptorBufferInfo.range  = bufferSizeBytes;  // The length of memory to bind; offset is 0.
+  writeDescriptorSets[0]      = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
+  // 1
+  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = nvvk::make<VkWriteDescriptorSetAccelerationStructureKHR>();
+  VkAccelerationStructureKHR tlasCopy = raytracingBuilder.getAccelerationStructure();  // So that we can take its address
+  descriptorAS.accelerationStructureCount = 1;
+  descriptorAS.pAccelerationStructures    = &tlasCopy;
+  writeDescriptorSets[1]                  = descriptorSetContainer.makeWrite(0, 1, &descriptorAS);
+~~~ cpp highlight
   // 2
   VkDescriptorBufferInfo vertexDescriptorBufferInfo{};
   vertexDescriptorBufferInfo.buffer = vertexBuffer.buffer;
@@ -4347,12 +4359,12 @@ Then replace the `vkUpdateDescriptorSets` call with the following code:
   indexDescriptorBufferInfo.buffer = indexBuffer.buffer;
   indexDescriptorBufferInfo.range  = VK_WHOLE_SIZE;
   writeDescriptorSets[3]           = descriptorSetContainer.makeWrite(0, 3, &indexDescriptorBufferInfo);
-  vkUpdateDescriptorSets(context,                 // The context
-                         4, writeDescriptorSets,  // An array of VkWriteDescriptorSet objects
-                         0, nullptr);             // An array of VkCopyDescriptorSet objects (unused)
+~~~ cpp
+  vkUpdateDescriptorSets(context,                                            // The context
+                        static_cast<uint32_t>(writeDescriptorSets.size()),  // Number of VkWriteDescriptorSet objects
+                        writeDescriptorSets.data(),                         // Pointer to VkWriteDescriptorSet objects
+                        0, nullptr);  // An array of VkCopyDescriptorSet objects (unused)
 ~~~
-
-Note that the second argument of `vkUpdateDescriptorSets`, the length of `writeDescriptorSets`, has changed to 4.
 
 We've now finished all the C++ code for the main section of this tutorial! All of the remaining coding in the main section of this tutorial will take place in `raytrace.comp.glsl`.
 
