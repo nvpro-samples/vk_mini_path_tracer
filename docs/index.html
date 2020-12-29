@@ -1005,7 +1005,7 @@ After calling `allocator.init`, compute the size of the buffer and create the bu
 
 ~~~ cpp
   // Create a buffer
-  VkDeviceSize bufferSizeBytes = uint64_t(pushConstants.render_width) * uint64_t(pushConstants.render_height) * 3 * sizeof(float);
+  VkDeviceSize bufferSizeBytes = render_width * render_height * 3 * sizeof(float);
   VkBufferCreateInfo bufferCreateInfo = nvvk::make<VkBufferCreateInfo>();
   bufferCreateInfo.size               = bufferSizeBytes;
   bufferCreateInfo.usage              = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
