@@ -31,7 +31,7 @@ relatively small.
 We'll show how to write a small path tracer, using the
 NVVK helpers, included in the nvpro-samples framework, to help with some Vulkan calls when needed. For
 advanced readers, we'll also optionally talk about performance tips and some of the implementation
-details inside the helpers and Vulkan itself.
+details inside the helpers and Vulkan itself. 
 
 The final program uses less than 300 lines of C++ and less than 250 lines of GLSL shader code, including comments. You can find it [here](https://github.com/nvpro-samples/vk_mini_path_tracer/tree/main/vk_mini_path_tracer).
 
@@ -221,6 +221,17 @@ Visual Studio:
     ![](images/1-cmakeDebugGUI.png)
     
     This and several later chapters make use of the **validation layer**'s messages, which (as of this writing) are only shown in Debug builds. GPU performance will be about the same as in Release builds.
+
+!!! Tip Setting the Startup Project in Visual Studio
+    If you're using Visual Studio, the current startup project will be shown in **BOLD** in
+    the Solution Explorer.  For example, in the above image, `ALL_BUILD` is in bold as it is
+    the first project in the solution.
+
+    If you try to start debugging by pressing `F5`, or pressing the `▶ Local Windows Debugger` button then you
+    are likely to see an error dialog stating something similar to `Unalbe to start program '<YOUR PATH>\ALL_BUILD'.  Access is denied.`
+
+    To address this issue, right click on the `vk_mini_path_tracer__edit` project (which is the one
+    you will be using to follow along with this tutorial) in the Solution Explorer and select `⚙ Set as Startup Project`.
 
 You're now ready to begin programming with Vulkan!
 
@@ -1005,7 +1016,7 @@ After calling `allocator.init`, compute the size of the buffer and create the bu
 
 ~~~ cpp
   // Create a buffer
-  VkDeviceSize bufferSizeBytes = uint64_t(pushConstants.render_width) * uint64_t(pushConstants.render_height) * 3 * sizeof(float);
+  VkDeviceSize bufferSizeBytes = render_width * render_height * 3 * sizeof(float);
   VkBufferCreateInfo bufferCreateInfo = nvvk::make<VkBufferCreateInfo>();
   bufferCreateInfo.size               = bufferSizeBytes;
   bufferCreateInfo.usage              = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
@@ -1527,7 +1538,7 @@ We could submit multiple command buffers at once, but here we'll only submit one
   VkSubmitInfo submitInfo       = nvvk::make<VkSubmitInfo>();
   submitInfo.commandBufferCount = 1;
   submitInfo.pCommandBuffers    = &cmdBuffer;
-  NVVK_CHECK(vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE));
+  NVVK_CHECK(vkQueueSubmit(context.m_queueGCT, 1, &submitInfo, VK_NULL_HANDLE));
 ~~~
 
 !!! Tip `vkQueueSubmit` Performance
@@ -2157,7 +2168,9 @@ creating object B first.
     Make sure you're using a debug build as described in Section [Configure and Generate the Project using CMake] in order to see validation layer messages.
 
 To start off, include two additional headers: `nvh/fileoperations.hpp`, for
-loading files, and `nvvk/shaders_vk.hpp`, for creating shader modules from SPIR-V:
+loading files, and `nvvk/shaders_vk.hpp`, for creating shader modules from SPIR-V.
+
+Your entire include section should now look like this:
 
 ~~~ cpp
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -2312,8 +2325,15 @@ here we only need to create one:
 
 ## Dispatching the Compute Pipeline
 
-First, remove the four lines that set `fillValue` and `fillValueU32` and then call `vkCmdFillBuffer` -- we'll run
+First, remove the following lines that set `fillValue` and `fillValueU32` and then call `vkCmdFillBuffer` -- we'll run
 the compute shader instead!
+
+~~~ cpp
+  // Fill the buffer
+  const float     fillValue    = 0.5f;
+  const uint32_t& fillValueU32 = reinterpret_cast<const uint32_t&>(fillValue);
+  vkCmdFillBuffer(cmdBuffer, buffer.buffer, 0, bufferSizeBytes, fillValueU32);
+~~~
 
 To dispatch a compute shader, we first need to bind the compute shader's pipeline (this is a state change operation):
 
@@ -3666,7 +3686,20 @@ To trace rays from a shader, we need to add the acceleration structure to the de
   descriptorSetContainer.addBinding(1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, VK_SHADER_STAGE_COMPUTE_BIT);
 ~~~
 
-We also must make this descriptor in the descriptor set point to the TLAS. We've also changed the code here to use an array of `VkWriteDescriptorSet`s, instead of a single `VkWriteDescriptorSet`:
+We also must make this descriptor in the descriptor set point to the TLAS.  Find the following code block:
+
+~~~ cpp
+  // Write a single descriptor in the descriptor set.
+  VkDescriptorBufferInfo descriptorBufferInfo{};
+  descriptorBufferInfo.buffer          = buffer.buffer;    // The VkBuffer object
+  descriptorBufferInfo.range           = bufferSizeBytes;  // The length of memory to bind; offset is 0.
+  VkWriteDescriptorSet writeDescriptor = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
+  vkUpdateDescriptorSets(context,              // The context
+                         1, &writeDescriptor,  // An array of VkWriteDescriptorSet objects
+                         0, nullptr);          // An array of VkCopyDescriptorSet objects (unused)
+~~~
+
+And replace it with this code:
 
 ~~~ cpp
   // Write values into the descriptor set.
@@ -3687,6 +3720,8 @@ We also must make this descriptor in the descriptor set point to the TLAS. We've
                          writeDescriptorSets.data(),                         // Pointer to VkWriteDescriptorSet objects
                          0, nullptr);  // An array of VkCopyDescriptorSet objects (unused)
 ~~~
+
+This creates an array of `VkWriteDescriptorSet`s, instead of a single `VkWriteDescriptorSet` for passing to `vkUpdateDescriptorSets`.
 
 !!! Tip What Is `std::array`?
     `std::array` is part of the C++ specification. An `std::array` is a sized array:
@@ -4018,7 +4053,8 @@ To make a path tracer, we'll need to compute how light interacts with each part 
 
 ## Counting Intersections with `rayQueryProceedEXT`
 
-(This chapter is intended to help the reader learn about the `rayQueryProceedEXT` while loop, which is empty; they can skip to the Hits and Misses section if they want.)
+!!! TIP
+    This section is intended to help the reader learn about the `rayQueryProceedEXT` while loop; they can skip to the Hits and Misses section if they want.
 
 `rayQueryProceedEXT` iterates over ray-scene intersections. Now, the body of the `while` loop is empty, but we can use it to count how many times the ray intersects the scene.
 
@@ -4027,7 +4063,9 @@ The ray flags currently include `gl_RayFlagsOpaqueEXT`, which will make `rayQuer
 ~~~ glsl
   rayQueryInitializeEXT(rayQuery,                // Ray query
                         tlas,                    // Top-level acceleration structure
+~~~ glsl highlight
                         gl_RayFlagsNoOpaqueEXT,  // Ray flags, force iterating over every intersection (note: slow)
+~~~ glsl
                         0xFF,                    // 8-bit instance mask, here saying "trace against all instances"
                         rayOrigin,               // Ray origin
                         0.0,                     // Minimum t-value
@@ -4040,15 +4078,26 @@ Then replace the code after `rayQueryInitializeEXT` with the following:
 ~~~ glsl
   // Start traversal, and loop over all ray-scene intersections. When this finishes,
   // rayQuery stores a "committed" intersection, the closest intersection (if any).
+~~~ glsl highlight
   float numIntersections = 0.0;
+~~~ glsl
   while(rayQueryProceedEXT(rayQuery))
   {
+~~~ glsl highlight
     numIntersections += 1.0;
+~~~ glsl
   }
 
   // Get the index of this invocation in the buffer:
   uint linearIndex       = resolution.x * pixel.y + pixel.x;
+~~~ glsl highlight
   imageData[linearIndex] = vec3(numIntersections / 10.0);
+~~~
+
+This counts the number of intersections (`numIntersections`) instead of using the following code (that it replaced) to get the distance to the first intersection:
+
+~~~ glsl
+const float t = rayQueryGetIntersectionTEXT(rayQuery, true);
 ~~~
 
 Here's what `out.hdr` will look like now:
@@ -4084,7 +4133,39 @@ geometry using `rayQueryGenerateIntersectionEXT`. For an example, please see the
 However, tracing non-opaque meshes can be quite slow, as the shader might have to iterate through every
 ray-scene intersection. In scenes where there are lots of overlapping objects, this can be relatively expensive.
 
-Revert any changes before continuing.
+!!! WARNING
+    Revert the changes from this section before continuing, so that the end of the shader looks like this:
+
+    ~~~ glsl
+    // Trace the ray and see if and where it intersects the scene!
+    // First, initialize a ray query object:
+    rayQueryEXT rayQuery;
+    rayQueryInitializeEXT(rayQuery,              // Ray query
+                          tlas,                  // Top-level acceleration structure
+                          gl_RayFlagsOpaqueEXT,  // Ray flags, here saying "treat all geometry as opaque"
+                          0xFF,                  // 8-bit instance mask, here saying "trace against all instances"
+                          rayOrigin,             // Ray origin
+                          0.0,                   // Minimum t-value
+                          rayDirection,          // Ray direction
+                          10000.0);              // Maximum t-value
+  
+    // Start traversal, and loop over all ray-scene intersections. When this finishes,
+    // rayQuery stores a "committed" intersection, the closest intersection (if any).
+    while(rayQueryProceedEXT(rayQuery))
+    {
+    }
+  
+    // Get the t-value of the intersection (if there's no intersection, this will
+    // be tMax = 10000.0). "true" says "get the committed intersection."
+    const float t = rayQueryGetIntersectionTEXT(rayQuery, true);
+  
+    // Get the index of this invocation in the buffer:
+    uint linearIndex = resolution.x * pixel.y + pixel.x;
+    // Give the pixel the color (t/10, t/10, t/10):
+    imageData[linearIndex] = vec3(t / 10.0);
+    ~~~
+
+
 
 
 ## Hits and Misses
@@ -4247,15 +4328,27 @@ First, let's add two new storage buffer bindings to the `nvvk::DescriptorSetCont
   descriptorSetContainer.addBinding(3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_COMPUTE_BIT);
 ~~~
 
-To write to these descriptors, first change the definition of `writeDescriptorSets` to be an array of length 4 instead of an array of length 2:
+To write to these descriptors, we need to update the definition of the `writeDescriptorSets` array.  First
+change the declaration of `writeDescriptorSets` to be an array of length 4 instead of an array of length 2,
+and then add two new descriptor sets to the end:
 
 ~~~ cpp
-VkWriteDescriptorSet writeDescriptorSets[4];
-~~~
-
-Then replace the `vkUpdateDescriptorSets` call with the following code:
-
+  // Write values into the descriptor set.
+~~~ cpp highlight
+  std::array<VkWriteDescriptorSet, 4> writeDescriptorSets;
 ~~~ cpp
+  // 0
+  VkDescriptorBufferInfo descriptorBufferInfo{};
+  descriptorBufferInfo.buffer = buffer.buffer;    // The VkBuffer object
+  descriptorBufferInfo.range  = bufferSizeBytes;  // The length of memory to bind; offset is 0.
+  writeDescriptorSets[0]      = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
+  // 1
+  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = nvvk::make<VkWriteDescriptorSetAccelerationStructureKHR>();
+  VkAccelerationStructureKHR tlasCopy = raytracingBuilder.getAccelerationStructure();  // So that we can take its address
+  descriptorAS.accelerationStructureCount = 1;
+  descriptorAS.pAccelerationStructures    = &tlasCopy;
+  writeDescriptorSets[1]                  = descriptorSetContainer.makeWrite(0, 1, &descriptorAS);
+~~~ cpp highlight
   // 2
   VkDescriptorBufferInfo vertexDescriptorBufferInfo{};
   vertexDescriptorBufferInfo.buffer = vertexBuffer.buffer;
@@ -4266,12 +4359,12 @@ Then replace the `vkUpdateDescriptorSets` call with the following code:
   indexDescriptorBufferInfo.buffer = indexBuffer.buffer;
   indexDescriptorBufferInfo.range  = VK_WHOLE_SIZE;
   writeDescriptorSets[3]           = descriptorSetContainer.makeWrite(0, 3, &indexDescriptorBufferInfo);
-  vkUpdateDescriptorSets(context,                 // The context
-                         4, writeDescriptorSets,  // An array of VkWriteDescriptorSet objects
-                         0, nullptr);             // An array of VkCopyDescriptorSet objects (unused)
+~~~ cpp
+  vkUpdateDescriptorSets(context,                                            // The context
+                        static_cast<uint32_t>(writeDescriptorSets.size()),  // Number of VkWriteDescriptorSet objects
+                        writeDescriptorSets.data(),                         // Pointer to VkWriteDescriptorSet objects
+                        0, nullptr);  // An array of VkCopyDescriptorSet objects (unused)
 ~~~
-
-Note that the second argument of `vkUpdateDescriptorSets`, the length of `writeDescriptorSets`, has changed to 4.
 
 We've now finished all the C++ code for the main section of this tutorial! All of the remaining coding in the main section of this tutorial will take place in `raytrace.comp.glsl`.
 
@@ -5155,7 +5248,8 @@ You should now be able to build and run the program, and get an image that looks
 
 ![](images/11-randomNoise.png)
 
-Remove the `pixelColor = vec3(stepAndOutputRNGFloat(rngState));` line before continuing.
+!!! WARNING
+    Remove the `pixelColor = vec3(stepAndOutputRNGFloat(rngState));` line before continuing.
 
 ## Antialiasing
 
