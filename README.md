@@ -2,7 +2,7 @@
 
 # vk_mini_path_tracer 
 
-A relatively small, beginner-friendly path tracing tutorial.
+A relatively small, beginner-friendly path tracing tutorial. 
 
 :arrow_forward: **[Load the tutorial!](https://nvpro-samples.github.io/vk_mini_path_tracer/index.html)** :arrow_backward:
 
