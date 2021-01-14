@@ -1,6 +1,6 @@
 ![logo](http://nvidianews.nvidia.com/_ir/219/20157/NV_Designworks_logo_horizontal_greenblack.png)
 
-# vk_mini_path_tracer
+# vk_mini_path_tracer 
 
 A relatively small, beginner-friendly path tracing tutorial.
 
