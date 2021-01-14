@@ -11,7 +11,7 @@ photorealistic path tracer in less than 300 lines of C++ code and 250 lines of
 GLSL shader code using Vulkan. Here's an example of what you'll render at the
 end of this tutorial!
 
-![](docs/images/12-vk_mini_path_tracer.png)
+![](docs/images/12-vk_mini_path_tracer.png) 
 
 Vulkan is a low-level API for programming GPUs – fast, highly parallel processors.
 It works on a wide variety of platforms – everything from workstations, to
