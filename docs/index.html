@@ -949,7 +949,7 @@ straightforward allocator that uses a single memory allocation per resource
     an allocator like one of these two -- instead of `nvvk::AllocatorDedicated` -- since
     using a dedicated allocation for every resource can run into an OS limit
     on the number of Vulkan dedicated allocations (as of this writing, this is 4096 on Windows; one can get
-    this limit from `nvvk::Context`'s `VkPhysicalDeviceProperties::maxMemoryAllocationCount`).
+    this limit from `nvvk::Context`'s `VkPhysicalDeviceProperties::limits::maxMemoryAllocationCount`).
     
     Suballocators don't have this issue and can also be faster than using
     a dedicated allocation for every resource, although they are also more complex.
@@ -3848,7 +3848,7 @@ layout(binding = 1, set = 0) uniform accelerationStructureEXT tlas;
 
 Delete all the code in `main()` starting with the line that defines `const vec3 pixelColor`. (Don't delete the `if((pixel.x >= resolution.x) ...` check.) The rest of the GLSL code will, for each pixel:
 * Define a virtual camera located at (-0.001, 1, 6);
-* Find the direction of a ray passing through a corner of the pixel;
+* Find the direction of the camera ray passing through the center of the pixel;
 * Initialize a ray query;
 * Trace the ray until it finds the closest surface that the ray intersects;
 * Get the **t-value** of the ray;
