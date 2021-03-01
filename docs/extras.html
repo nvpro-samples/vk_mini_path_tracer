@@ -1042,9 +1042,10 @@ Here's some additional information on TDR, noise, and command buffer lengths:
     Many applications -- especially real-time applications -- can generate ray traced images with only one sample per pixel per frame or less (such as if each frame only samples every other pixel). This is both less noisy and faster than this tutorial's path tracer. Since this is a tutorial primarily for Vulkan, we talk about adding more samples because it's a good way to talk about TDR, and is also a common situation for offline path tracers.
     
     Here are a few techniques other than adding more samples that can be used to reduce noise and make ray traced applications faster!
-    - Using a denoiser such as the OptiX denoiser in the [`vk_denoise` sample](https://github.com/nvpro-samples/vk_denoise); denoisers have become faster and higher quality using techniques such as [ASVGF](https://github.com/NVIDIA/Q2RTX/blob/master/src/refresh/vkpt/shader/asvgf.glsl) and deep neural networks. Temporal denoisers use reprojection techniques to accumulate samples over multiple frames.
+    
+    - Using a denoiser such as [NRD](https://developer.nvidia.com/nvidia-rt-denoiser) or the OptiX denoiser in the [`vk_denoise` sample](https://github.com/nvpro-samples/vk_denoise); denoisers have become faster and higher quality using techniques such as [ASVGF](https://github.com/NVIDIA/Q2RTX/blob/master/src/refresh/vkpt/shader/asvgf.glsl) and deep neural networks. Temporal denoisers use reprojection techniques to accumulate samples over multiple frames.
     - Rendering fewer pixels, and then upscaling to full resolution using an AI upscaler such as [DLSS](https://www.nvidia.com/en-us/geforce/technologies/dlss/).
-    - Using a [stratified sampler](http://www.pbr-book.org/3ed-2018/Sampling_and_Reconstruction/Stratified_Sampling.html) such as [Halton](http://www.pbr-book.org/3ed-2018/Sampling_and_Reconstruction/The_Halton_Sampler.html) rather than a uniform pseudorandom number generator (what the path tracer currently uses). This can reduce noise when we take lots of samples -- using a [low-discrepancy sequence](https://en.wikipedia.org/wiki/Low-discrepancy_sequence) can make the amount of error in the image fall off like $1/n$ instead of $1/\sqrt(n)$, where $n$ is the number of samples.
+    - Using a [stratified sampler](http://www.pbr-book.org/3ed-2018/Sampling_and_Reconstruction/Stratified_Sampling.html) such as [Halton](http://www.pbr-book.org/3ed-2018/Sampling_and_Reconstruction/The_Halton_Sampler.html) rather than a uniform pseudorandom number generator (what the path tracer currently uses). This can reduce noise when we take lots of samples -- using a [low-discrepancy sequence](https://en.wikipedia.org/wiki/Low-discrepancy_sequence) can make the amount of error in the image fall off like $1/n$ instead of $1/\sqrt{n}$, where $n$ is the number of samples.
     - Using [blue noise](https://blog.demofox.org/2018/01/30/what-the-heck-is-blue-noise/) instead of white noise (what we currently use) to make denoising easier. Blue noise has many applications and can be used without too much work. However, also see Eric Heitz and Laurent Belcour's paper [*Distributing Monte Carlo Errors as a Blue Noise in Screen Space by Permuting Pixel Seeds Between Frames*](https://eheitzresearch.wordpress.com/772-2/) as an example of a more sophisticated technique using blue noise.
     - Choosing sampling directions when bouncing off surfaces to better match the integrand of the rendering equation at a given point. There are many techniques that improve this, from multiple importance sampling to path guiding; see for instance Bitterli, Wyman, Pharr, Shirley, Lefohn, and Jarosz' paper [*Spatiotemporal reservoir resampling for real-time ray tracing with dynamic direct lighting*](https://cs.dartmouth.edu/wjarosz/publications/bitterli20spatiotemporal.html) as implemented in [RTXDI](https://developer.nvidia.com/rtxdi).
     
@@ -2268,7 +2269,7 @@ with
     
     More formally, the normal vector $n$ of a triangle formed by vertices $v_1$, $v_2$, and $v_3$ must always be perpendicular to the directions of the edges of the triangle, such as $v_2 - v_1$ and $v_3 - v_1$. In other words, we must have
 
-    $$ n . (v_2 - v_1) = 0 \text{ and } n \cdot (v_3 - v_1) = 0 $$
+    $$ n \cdot (v_2 - v_1) = 0 \text{ and } n \cdot (v_3 - v_1) = 0 $$
     
     where $\cdot$ is the dot product. (We assume the triangle isn't degenerate, which means we must only consider two edges.)
     
@@ -2284,7 +2285,7 @@ with
     
     $$ n' = c M^{-T} n $$
     
-    works, because of the property of the dot product that for any matrix $A$ and vectors $u, v$, $Au.v = u.A^T v$:
+    works, because of the property of the dot product that for any matrix $A$ and vectors $u, v$, $Au \cdot v = u \cdot A^T v$:
     
     $$ c M^{-T} n \cdot (M (v_2 - v_1)) = c n \cdot (M^{-1} M (v_2 - v_1)) = c n \cdot (v_2 - v_1) = 0 $$
     
