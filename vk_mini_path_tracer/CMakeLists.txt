@@ -1,6 +1,6 @@
 # Copyright 2020 NVIDIA Corporation
 # SPDX-License-Identifier: Apache-2.0
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5)
 set(PROJNAME "vk_mini_path_tracer")
 project(${PROJNAME})
 
@@ -58,7 +58,7 @@ endforeach(RELEASELIB)
 #####################################################################################
 # copies binaries that need to be put next to the exe files (ZLib, etc.)
 #
-_copy_binaries_to_target( ${PROJNAME} )
+_finalize_target( ${PROJNAME} )
 
 install(FILES ${SPV_OUTPUT} CONFIGURATIONS Release DESTINATION "bin_${ARCH}/${PROJNAME}/shaders")
 install(FILES ${SPV_OUTPUT} CONFIGURATIONS Debug DESTINATION "bin_${ARCH}_debug/${PROJNAME}/shaders")

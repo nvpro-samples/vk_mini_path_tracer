@@ -140,8 +140,8 @@ int main(int argc, const char** argv)
   // image in order to read the image data back on the CPU.
   // As before, we'll transition the image layout in the same command buffer
   // used to upload the vertex and index buffers.
-  imageCreateInfo.tiling = VK_IMAGE_TILING_LINEAR;
-  imageCreateInfo.usage  = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+  imageCreateInfo.tiling           = VK_IMAGE_TILING_LINEAR;
+  imageCreateInfo.usage            = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
   nvvk::ImageDedicated imageLinear = allocator.createImage(imageCreateInfo,                           //
                                                            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT       //
                                                                | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT  //
@@ -149,9 +149,9 @@ int main(int argc, const char** argv)
   debugUtil.setObjectName(imageLinear.image, "imageLinear");
 
   // Load the mesh of the first shape from an OBJ file
-  std::vector<std::string> searchPaths = {
-      PROJECT_ABSDIRECTORY,       PROJECT_ABSDIRECTORY "../",    PROJECT_ABSDIRECTORY "../../", PROJECT_RELDIRECTORY,
-      PROJECT_RELDIRECTORY "../", PROJECT_RELDIRECTORY "../../", PROJECT_NAME};
+  const std::string        exePath(argv[0], std::string(argv[0]).find_last_of("/\\") + 1);
+  std::vector<std::string> searchPaths = {exePath + PROJECT_RELDIRECTORY, exePath + PROJECT_RELDIRECTORY "..",
+                                          exePath + PROJECT_RELDIRECTORY "../..", exePath + PROJECT_NAME};
   tinyobj::ObjReader       reader;  // Used to read an OBJ file
   reader.ParseFromFile(nvh::findFile("scenes/CornellBox-Original-Merged.obj", searchPaths));
   assert(reader.Valid());  // Make sure tinyobj was able to parse this file

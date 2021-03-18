@@ -2054,7 +2054,7 @@ the project. (However, one does need to re-run CMake in order for it to detect n
     This is why one needs to re-run CMake (re-running these lines) in order for the build system to find
     new GLSL files.
     
-    The `_compile_GLSL` CMake macro is defined in `shared_sources/CMakeLists_include.txt`, which is a
+    The `_compile_GLSL` CMake macro is defined in `shared_sources/setup.cmake`, which is a
     CMake file used by almost all NVIDIA DesignWorks samples.. It ultimately calls CMake's
     `add_custom_command` to add a build rule to run `glslangValidator` on the given GLSL source files.
 
@@ -2236,8 +2236,9 @@ To create a **shader module**, we'll need to:
 of directories to search for `raytrace.comp.glsl.spv` after creating `nvvk::BufferDedicated buffer`:
 
 ~~~ cpp
-  std::vector<std::string> searchPaths = {PROJECT_ABSDIRECTORY, PROJECT_ABSDIRECTORY "../", PROJECT_RELDIRECTORY,
-                                          PROJECT_RELDIRECTORY "../", PROJECT_NAME};
+  const std::string        exePath(argv[0], std::string(argv[0]).find_last_of("/\\") + 1);
+  std::vector<std::string> searchPaths = {exePath + PROJECT_RELDIRECTORY, exePath + PROJECT_RELDIRECTORY "..",
+                                          exePath + PROJECT_RELDIRECTORY "../..", exePath + PROJECT_NAME};
 ~~~
 
 Then, after creating the command pool, find, load, and create a shader module as follows. `nvh::loadFile` finds and loads
@@ -3279,8 +3280,9 @@ line defining `searchPaths` with
 
 ~~~ cpp
   // Load the mesh of the first shape from an OBJ file
-  std::vector<std::string> searchPaths = {PROJECT_ABSDIRECTORY, PROJECT_ABSDIRECTORY "../", PROJECT_RELDIRECTORY,
-                                          PROJECT_RELDIRECTORY "../", PROJECT_NAME};
+  const std::string        exePath(argv[0], std::string(argv[0]).find_last_of("/\\") + 1);
+  std::vector<std::string> searchPaths = {exePath + PROJECT_RELDIRECTORY, exePath + PROJECT_RELDIRECTORY "..",
+                                          exePath + PROJECT_RELDIRECTORY "../..", exePath + PROJECT_NAME};
   tinyobj::ObjReader       reader;  // Used to read an OBJ file
   reader.ParseFromFile(nvh::findFile("scenes/CornellBox-Original-Merged.obj", searchPaths));
   assert(reader.Valid());  // Make sure tinyobj was able to parse this file

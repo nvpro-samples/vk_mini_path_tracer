@@ -87,9 +87,9 @@ int main(int argc, const char** argv)
                                                             | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
   // Load the mesh of the first shape from an OBJ file
-  std::vector<std::string> searchPaths = {
-      PROJECT_ABSDIRECTORY,       PROJECT_ABSDIRECTORY "../",    PROJECT_ABSDIRECTORY "../../", PROJECT_RELDIRECTORY,
-      PROJECT_RELDIRECTORY "../", PROJECT_RELDIRECTORY "../../", PROJECT_NAME};
+  const std::string        exePath(argv[0], std::string(argv[0]).find_last_of("/\\") + 1);
+  std::vector<std::string> searchPaths = {exePath + PROJECT_RELDIRECTORY, exePath + PROJECT_RELDIRECTORY "..",
+                                          exePath + PROJECT_RELDIRECTORY "../..", exePath + PROJECT_NAME};
   tinyobj::ObjReader       reader;  // Used to read an OBJ file
   reader.ParseFromFile(nvh::findFile("scenes/CornellBox-Original-Merged.obj", searchPaths));
   assert(reader.Valid());  // Make sure tinyobj was able to parse this file

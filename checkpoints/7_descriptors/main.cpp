@@ -52,9 +52,9 @@ int main(int argc, const char** argv)
                                                             | VK_MEMORY_PROPERTY_HOST_CACHED_BIT  //
                                                             | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-  std::vector<std::string> searchPaths = {
-      PROJECT_ABSDIRECTORY,       PROJECT_ABSDIRECTORY "../",    PROJECT_ABSDIRECTORY "../../", PROJECT_RELDIRECTORY,
-      PROJECT_RELDIRECTORY "../", PROJECT_RELDIRECTORY "../../", PROJECT_NAME};
+  const std::string        exePath(argv[0], std::string(argv[0]).find_last_of("/\\") + 1);
+  std::vector<std::string> searchPaths = {exePath + PROJECT_RELDIRECTORY, exePath + PROJECT_RELDIRECTORY "..",
+                                          exePath + PROJECT_RELDIRECTORY "../..", exePath + PROJECT_NAME};
 
   // Create the command pool
   VkCommandPoolCreateInfo cmdPoolInfo = nvvk::make<VkCommandPoolCreateInfo>();
