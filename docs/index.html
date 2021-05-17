@@ -46,11 +46,11 @@ vkDestroyCommandPool           | vkDestroyPipeline              | vkDestroyShade
 vkFreeCommandBuffers           | vkGetBufferDeviceAddress       | vkQueueSubmit
 vkQueueWaitIdle                | vkUpdateDescriptorSets
 
-NVVK Functions and Objects   |                              |
------------------------------|------------------------------|----------------------------
-nvvk::AllocatorDedicated     | nvvk::BufferDedicated        | NVVK_CHECK
-nvvk::Context                | nvvk::ContextCreateInfo      | nvvk::createShaderModule
-nvvk::DescriptorSetContainer | nvvk::make                   | nvvk::RayTracingBuilderKHR
+NVVK Functions and Objects     |                            |
+-------------------------------|----------------------------|----------------------------------
+nvvk::Buffer                   | NVVK_CHECK                 | nvvk::Context
+nvvk::ContextCreateInfo        | nvvk::createShaderModule   | nvvk::DescriptorSetContainer
+nvvk::make                     | nvvk::RayTracingBuilderKHR | nvvk::ResourceAllocatorDedicated
 
 !!! Tip Link to Code and Chapter Checkpoints on GitHub
     This tutorial's text and code (including chapter checkpoints -- see *Debugging Help* below)
@@ -178,12 +178,9 @@ Then open the `build_all` folder and run either `clone_all.bat` (Windows) or
 **If you want to clone as few repositories as possible**, open a command line,
 and run the following commands to clone the repositories you need:
 ~~~~~
-git clone https://github.com/nvpro-samples/shared_sources.git
-git clone https://github.com/nvpro-samples/shared_external.git
+git clone --recursive --shallow-submodules https://github.com/nvpro-samples/nvpro_core.git
 git clone https://github.com/nvpro-samples/vk_mini_path_tracer.git
 ~~~~~
-
-On Linux, you can skip the `shared_external` line.
 
 ## Configure and Generate the Project using CMake
 Launch the CMake GUI. In the "Where is the source code" box, enter the path to
@@ -902,12 +899,11 @@ then submit these larger packets of information to the GPU all at once.
 
 ## Including Additional Headers
 
-Add the following lines to the list of `#include` directives at the top of
-`main.cpp`. This will choose and include the NVVK memory allocator that we'll use.
+Add the following line to the list of `#include` directives at the top of
+`main.cpp`. This will include the NVVK memory allocator that we'll use.
 
 ~~~ cpp
-#define NVVK_ALLOC_DEDICATED
-#include <nvvk/allocator_vk.hpp>  // For NVVK memory allocators
+#include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
 ~~~
 
 You can also remove the `#include <cassert>` line now if you want.
@@ -937,16 +933,16 @@ on the GPU, which an application can use to implement its own GPU version of `ma
 For this tutorial, we won't have to implement our own `malloc` -- instead, we'll
 use one of NVVK's built-in GPU memory allocators.
 
-The code above `#include`s `nvvk::AllocatorDedicated`, which is a relatively
+The code above `#include`s `nvvk::ResourceAllocatorDedicated`, which is a relatively
 straightforward allocator that uses a single memory allocation per resource
 (e.g. buffer, image, or acceleration structure).
 
 !!! Tip Different Vulkan Memory Allocators
-    NVVK also includes `nvvk::AllocatorDma` and `nvvk::AllocatorVma`.
+    NVVK also includes `nvvk::ResourceAllocatorDma` and `nvvk::ResourceAllocatorVma`.
     
     Unlike
-    `nvvk::AllocatorDedicated`, these suballocate resources. Most production applications would use
-    an allocator like one of these two -- instead of `nvvk::AllocatorDedicated` -- since
+    `nvvk::ResourceAllocatorDedicated`, these suballocate resources. Most production applications would use
+    an allocator like one of these two -- instead of `nvvk::ResourceAllocatorDedicated` -- since
     using a dedicated allocation for every resource can run into an OS limit
     on the number of Vulkan dedicated allocations (as of this writing, this is 4096 on Windows; one can get
     this limit from `nvvk::Context`'s `VkPhysicalDeviceProperties::limits::maxMemoryAllocationCount`).
@@ -954,20 +950,20 @@ straightforward allocator that uses a single memory allocation per resource
     Suballocators don't have this issue and can also be faster than using
     a dedicated allocation for every resource, although they are also more complex.
     
-    Interested readers can find `AllocatorDma`'s implementation in
-    `allocator_dma_vk.hpp` and `memorymanagement_vk.hpp`; `AllocatorVma` uses
+    Interested readers can find `ResourceAllocatorDma`'s implementation in
+    `resourceallocator_vk.cpp`, `allocator_dma_vk.hpp`, and `memorymanagement_vk.hpp`; `ResourceAllocatorVma` uses
     an interface to the AMD Vulkan Memory Allocator.
     
-    If one's interested in writing their own memory allocator, `nvvk::AllocatorDma`
+    If one's interested in writing their own memory allocator, `nvvk::ResourceAllocatorDma`
     is a good place to start; they might also be interested in Chris Hebert's
     article [Vulkan Memory Management](https://developer.nvidia.com/vulkan-memory-management).
 
-To set up an `nvvk::AllocatorDedicated`, add the following code after the
+To set up an `nvvk::ResourceAllocatorDedicated`, add the following code after the
 `assert(rtFeatures.rayQuery == VK_TRUE)` check:
 
 ~~~ cpp
   // Create the allocator
-  nvvk::AllocatorDedicated allocator;
+  nvvk::ResourceAllocatorDedicated allocator;
   allocator.init(context, context.m_physicalDevice);
 ~~~
 
@@ -1026,10 +1022,10 @@ After calling `allocator.init`, compute the size of the buffer and create the bu
   // VK_MEMORY_PROPERTY_HOST_CACHED_BIT means that the CPU caches this memory.
   // VK_MEMORY_PROPERTY_HOST_COHERENT_BIT means that the CPU side of cache management
   // is handled automatically, with potentially slower reads/writes.
-  nvvk::BufferDedicated buffer = allocator.createBuffer(bufferCreateInfo,                         //
-                                                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT       //
-                                                            | VK_MEMORY_PROPERTY_HOST_CACHED_BIT  //
-                                                            | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+  nvvk::Buffer buffer = allocator.createBuffer(bufferCreateInfo,                         //
+                                               VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT       //
+                                                   | VK_MEMORY_PROPERTY_HOST_CACHED_BIT  //
+                                                   | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 ~~~
 
 !!! Tip
@@ -1078,7 +1074,7 @@ data from the GPU to the CPU.
 
 After the call to `allocator.createBuffer`, add the following lines of code to
 map the buffer to the CPU, interpret it as an array of `float`s, print out its
-first four elements, and then return ownership back to the GPU:
+first three elements, and then return ownership back to the GPU:
 
 ~~~ cpp
   // In future chapters, we'll program the GPU to write to the buffer.
@@ -1087,13 +1083,13 @@ first four elements, and then return ownership back to the GPU:
   // Get the image data back from the GPU
   void*  data    = allocator.map(buffer);
   float* fltData = reinterpret_cast<float*>(data);
-  printf("First four elements: %f, %f, %f, %f\n", fltData[0], fltData[1], fltData[2], fltData[3]);
+  printf("First three elements: %f, %f, %f\n", fltData[0], fltData[1], fltData[2]);
   allocator.unmap(buffer);
 ~~~
 
 Running the program should now print out something like
 ~~~ output
-First four elements: 0.000000, 0.000000, 0.000000, 0.000000
+First three elements: 0.000000, 0.000000, 0.000000
 ~~~
 
 We've just read **uninitialized data** back from the GPU since we haven't told the GPU to fill the buffer with anything. The buffer will most likely be filled with zeros, but it might also contain seemingly random values.
@@ -1157,10 +1153,20 @@ fences, semaphores, and events, so that you can make
 sure tasks complete in the order you want them to
 (e.g. render the scene before denoising it).
 
-Applications get command buffers from command pools, so we'll need to start by
-creating a command pool.
+First, add an `#include` for `<nvvk/error_vk.hpp>`. This includes the `NVVK_CHECK`
+macro, which we use for API calls that can return error codes. It checks to see
+if a Vulkan function returned the `VkResult` VK_SUCCESS` -- if it didn't,
+it prints a message showing what failed and halts the program.
 
-Add the following code after calling `allocator.createBuffer` to create a command pool:
+~~~cpp
+#include <nvvk/error_vk.hpp>              // For NVVK_CHECK
+~~~
+
+!!! Tip
+    Some Vulkan functions return `void` instead of `VKResult`, in which case we don't use `NVVK_CHECK`.
+
+Applications get command buffers from command pools, so we'll need to
+create a command pool. Add the following code after calling `allocator.createBuffer` to create a command pool:
 
 ~~~cpp
   // Create the command pool
@@ -1171,20 +1177,17 @@ Add the following code after calling `allocator.createBuffer` to create a comman
 ~~~
 
 The `queueFamilyIndex` line here says that all command buffers allocated from this command pool
-will use the GCT queue. This is also our first time using the `NVVK_CHECK` macro;
-this macro checks to see if the Vulkan function  returns the `VkResult` `VK_SUCCESS` -- if it
-didn't, it prints a message showing what failed and halts the program.
-
-!!! Tip
-    Some Vulkan functions return `void` instead of `VKResult`, in which case we don't use `NVVK_CHECK`.
+will use the GCT queue.
 
 In the last line, a value of `nullptr` means that `vkCreateCommandPool`
 will use the [default Vulkan CPU-side memory allocator](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/html/vkspec.html#memory-allocation).
 
 !!! Tip `nullptr` and `VK_NULL_HANDLE`
-    `nullptr` has a pointer type and value NULL (0), while `VK_NULL_HANDLE` is the value 0.
-    We use `VK_NULL_HANDLE` when passing null Vulkan handles and `nullptr` when passing
-    null pointers, but aside from their types, they can be interchanged.
+    We use `nullptr` when passing null pointers in structs, and `VK_NULL_HANDLE`
+    for all **non-dispatchable Vulkan handles** (which are almost all handles).
+    The reason is because these have different types with value 0: `nullptr` has
+    a pointer type, while `VK_NULL_HANDLE`'s type depends on the platform
+    since Vulkan 1.2.174.
 
 Next, allocate a command buffer from the command pool. We can allocate multiple
 command buffers at once, and create **secondary command buffers** (command buffers
@@ -1599,7 +1602,7 @@ First four elements: 0.500000, 0.500000, 0.500000, 0.500000
 
 In the last two chapters, we saw how to:
 
-* Allocate GPU memory using `nvvk::AllocatorDedicated`;
+* Allocate GPU memory using `nvvk::ResourceAllocatorDedicated`;
 * Create a `VkBuffer` representing an image;
 * Map data from the GPU to the CPU;
 * Create a command buffer and a command pool;
@@ -1634,7 +1637,7 @@ implementation of stb_image_write (since stb_image_write is a single-file header
 
 ~~~ cpp
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <fileformats/stb_image_write.h>
+#include <stb_image_write.h>
 ~~~
 
 ## Writing an HDR File
@@ -2054,7 +2057,7 @@ the project. (However, one does need to re-run CMake in order for it to detect n
     This is why one needs to re-run CMake (re-running these lines) in order for the build system to find
     new GLSL files.
     
-    The `_compile_GLSL` CMake macro is defined in `shared_sources/setup.cmake`, which is a
+    The `_compile_GLSL` CMake macro is defined in `nvpro_core/setup.cmake`, which is a
     CMake file used by almost all NVIDIA DesignWorks samples.. It ultimately calls CMake's
     `add_custom_command` to add a build rule to run `glslangValidator` on the given GLSL source files.
 
@@ -2176,16 +2179,14 @@ Your entire include section should now look like this:
 
 ~~~ cpp
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <fileformats/stb_image_write.h>
+#include <stb_image_write.h>
+
 #include <nvh/fileoperations.hpp>  // For nvh::loadFile
-#include <vulkan/vulkan.h>         // For the full (not only core) Vulkan API
-
-
-#define NVVK_ALLOC_DEDICATED
-#include <nvvk/allocator_vk.hpp>  // For NVVK memory allocators
 #include <nvvk/context_vk.hpp>
-#include <nvvk/shaders_vk.hpp>  // For nvvk::createShaderModule
-#include <nvvk/structs_vk.hpp>  // For nvvk::make
+#include <nvvk/error_vk.hpp>              // For NVVK_CHECK
+#include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
+#include <nvvk/shaders_vk.hpp>            // For nvvk::createShaderModule
+#include <nvvk/structs_vk.hpp>            // For nvvk::make
 ~~~
 
 ## Defining the Work Group Width and Height
@@ -2233,7 +2234,7 @@ To create a **shader module**, we'll need to:
 * Create a shader module from it
 
 `nvh::loadFile` can help with the first two steps. First, define a `std::vector`
-of directories to search for `raytrace.comp.glsl.spv` after creating `nvvk::BufferDedicated buffer`:
+of directories to search for `raytrace.comp.glsl.spv` after creating `nvvk::Buffer buffer`:
 
 ~~~ cpp
   const std::string        exePath(argv[0], std::string(argv[0]).find_last_of("/\\") + 1);
@@ -3086,21 +3087,22 @@ the lines of code to add:
 #include <array>
 ~~~ cpp
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <fileformats/stb_image_write.h>
+#include <stb_image_write.h>
 ~~~ cpp highlight
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <fileformats/tiny_obj_loader.h>
 ~~~ cpp
+
 #include <nvh/fileoperations.hpp>  // For nvh::loadFile
-#define NVVK_ALLOC_DEDICATED
-#include <nvvk/allocator_vk.hpp>  // For NVVK memory allocators
 #include <nvvk/context_vk.hpp>
-#include <nvvk/descriptorsets_vk.hpp>  // For nvvk::DescriptorSetContainer
+#include <nvvk/descriptorsets_vk.hpp>     // For nvvk::DescriptorSetContainer
+#include <nvvk/error_vk.hpp>              // For NVVK_CHECK
 ~~~ cpp highlight
-#include <nvvk/raytraceKHR_vk.hpp>     // For nvvk::RaytracingBuilderKHR
+#include <nvvk/raytraceKHR_vk.hpp>        // For nvvk::RaytracingBuilderKHR
 ~~~ cpp
-#include <nvvk/shaders_vk.hpp>         // For nvvk::createShaderModule
-#include <nvvk/structs_vk.hpp>         // For nvvk::make
+#include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
+#include <nvvk/shaders_vk.hpp>            // For nvvk::createShaderModule
+#include <nvvk/structs_vk.hpp>            // For nvvk::make
 ~~~
 
 ## Refactoring Command Buffers
@@ -3338,15 +3340,15 @@ The overload of `allocator.createBuffer` that we'll use looks like this:
 
 ~~~ cpp
 template <typename T>
-BufferDedicated createBuffer(const VkCommandBuffer& cmdBuff, // A command buffer to add upload commands to
-                           const std::vector<T>&  data_,     // The data to upload to the command buffer
-                           VkBufferUsageFlags     usage_,    // Specifies in advance how the buffer can be used
-                           // By default, the final buffer exists in GPU-local memory, which means
-                           // that the CPU can't access it. (We created `buffer` with memory properties
-                           // that allowed us to map it to and from the CPU.)
-                           VkMemoryPropertyFlags  memProps_ = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+nvvk::Buffer createBuffer(const VkCommandBuffer& cmdBuf, // A command buffer to add upload commands to
+                          const std::vector<T>&  data_,  // The data to upload to the command buffer
+                          VkBufferUsageFlags     usage_, // Specifies in advance how the buffer can be used
+                          // By default, the final buffer exists in GPU-local memory, which means
+                          // that the CPU can't access it. (We created `buffer` with memory properties
+                          // that allowed us to map it to and from the CPU.)
+                          VkMemoryPropertyFlags  memProps_ = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {
-  return createBuffer(cmdBuff, sizeof(T) * data_.size(), data_.data(), usage_, memProps_);
+  return createBuffer(cmdBuf, sizeof(T) * data_.size(), data_.data(), usage_, memProps_);
 }
 ~~~
 
@@ -3357,7 +3359,7 @@ After the call to `vkCreateCommandPool`, add the following code to start a comma
 
 ~~~ cpp
   // Upload the vertex and index buffers to the GPU.
-  nvvk::BufferDedicated vertexBuffer, indexBuffer;
+  nvvk::Buffer vertexBuffer, indexBuffer;
   {
     // Start a command buffer for uploading the buffers
     VkCommandBuffer uploadCmdBuffer = AllocateAndBeginOneTimeCommandBuffer(context, cmdPool);
@@ -5625,7 +5627,7 @@ It's sometimes useful for me to visualize the dependencies between the Vulkan ob
 *************************************************************************************
 *
 *  .---------------.              .--------------------------------------.
-*  | VkCommandPool |              |       nvvk::AllocatorDedicated       |
+*  | VkCommandPool |              |   nvvk::ResourceAllocatorDedicated   |
 *  '-------+-------'              '-+------------------+---------------+-'
 *          |                        |                  |               |
 *          |                        v                  v               |

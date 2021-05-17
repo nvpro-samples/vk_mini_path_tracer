@@ -42,11 +42,11 @@ Here are all the Vulkan functions, and NVVK functions and objects, that we'll us
 | vkFreeCommandBuffers     | vkGetBufferDeviceAddress | vkQueueSubmit            |
 | vkQueueWaitIdle          | vkUpdateDescriptorSets   |                          |
 
-| **NVVK Functions and Objects** |                         |                            |
-| ------------------------------ | ----------------------- | -------------------------- |
-| nvvk::AllocatorDedicated       | nvvk::BufferDedicated   | NVVK_CHECK                 |
-| nvvk::Context                  | nvvk::ContextCreateInfo | nvvk::createShaderModule   |
-| nvvk::DescriptorSetContainer   | nvvk::make              | nvvk::RayTracingBuilderKHR |
+| **NVVK Functions and Objects** |                            |                                  |
+| ------------------------------ | -------------------------- | -------------------------------- |
+| nvvk::Buffer                   | NVVK_CHECK                 | nvvk::Context                    |
+| nvvk::ContextCreateInfo        | nvvk::createShaderModule   | nvvk::DescriptorSetContainer     |
+| nvvk::make                     | nvvk::RayTracingBuilderKHR | nvvk::ResourceAllocatorDedicated |
 
 -------
 

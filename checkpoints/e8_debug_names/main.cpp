@@ -1,18 +1,20 @@
-// Copyright 2020 NVIDIA Corporation
+// Copyright 2020-2021 NVIDIA Corporation
 // SPDX-License-Identifier: Apache-2.0
 #include <array>
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <fileformats/stb_image_write.h>
+#include <stb_image_write.h>
 #define TINYOBJLOADER_IMPLEMENTATION
-#include <fileformats/tiny_obj_loader.h>
+#include <tiny_obj_loader.h>
+
 #include <nvh/fileoperations.hpp>  // For nvh::loadFile
-#define NVVK_ALLOC_DEDICATED
-#include <nvvk/allocator_vk.hpp>  // For NVVK memory allocators
 #include <nvvk/context_vk.hpp>
 #include <nvvk/descriptorsets_vk.hpp>  // For nvvk::DescriptorSetContainer
-#include <nvvk/raytraceKHR_vk.hpp>     // For nvvk::RaytracingBuilderKHR
-#include <nvvk/shaders_vk.hpp>         // For nvvk::createShaderModule
-#include <nvvk/structs_vk.hpp>         // For nvvk::make
+#include <nvvk/error_vk.hpp>
+#include <nvvk/images_vk.hpp>
+#include <nvvk/raytraceKHR_vk.hpp>        // For nvvk::RaytracingBuilderKHR
+#include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
+#include <nvvk/shaders_vk.hpp>            // For nvvk::createShaderModule
+#include <nvvk/structs_vk.hpp>            // For nvvk::make
 
 #include "common.h"
 
@@ -74,7 +76,7 @@ int main(int argc, const char** argv)
   nvvk::DebugUtil debugUtil(context);
 
   // Create the allocator
-  nvvk::AllocatorDedicated allocator;
+  nvvk::ResourceAllocatorDedicated allocator;
   allocator.init(context, context.m_physicalDevice);
 
   // Create an image. Images are more complex than buffers - they can have
@@ -106,7 +108,7 @@ int main(int argc, const char** argv)
   // according to the specification; we'll transition the layout shortly,
   // in the same command buffer used to upload the vertex and index buffers:
   imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-  nvvk::ImageDedicated image    = allocator.createImage(imageCreateInfo);
+  nvvk::Image image             = allocator.createImage(imageCreateInfo);
   debugUtil.setObjectName(image.image, "image");
 
   // Create an image view for the entire image
@@ -140,12 +142,12 @@ int main(int argc, const char** argv)
   // image in order to read the image data back on the CPU.
   // As before, we'll transition the image layout in the same command buffer
   // used to upload the vertex and index buffers.
-  imageCreateInfo.tiling           = VK_IMAGE_TILING_LINEAR;
-  imageCreateInfo.usage            = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-  nvvk::ImageDedicated imageLinear = allocator.createImage(imageCreateInfo,                           //
-                                                           VK_MEMORY_PROPERTY_HOST_COHERENT_BIT       //
-                                                               | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT  //
-                                                               | VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+  imageCreateInfo.tiling  = VK_IMAGE_TILING_LINEAR;
+  imageCreateInfo.usage   = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+  nvvk::Image imageLinear = allocator.createImage(imageCreateInfo,                           //
+                                                  VK_MEMORY_PROPERTY_HOST_COHERENT_BIT       //
+                                                      | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT  //
+                                                      | VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
   debugUtil.setObjectName(imageLinear.image, "imageLinear");
 
   // Load the mesh of the first shape from an OBJ file
@@ -175,7 +177,7 @@ int main(int argc, const char** argv)
   debugUtil.setObjectName(cmdPool, "cmdPool");
 
   // Upload the vertex and index buffers to the GPU.
-  nvvk::BufferDedicated vertexBuffer, indexBuffer;
+  nvvk::Buffer vertexBuffer, indexBuffer;
   {
     // Start a command buffer for uploading the buffers
     VkCommandBuffer uploadCmdBuffer = AllocateAndBeginOneTimeCommandBuffer(context, cmdPool);
@@ -444,10 +446,9 @@ int main(int argc, const char** argv)
   }
 
   // Get the image data back from the GPU
-  void* data;
-  NVVK_CHECK(vkMapMemory(context, imageLinear.allocation, 0, VK_WHOLE_SIZE, 0, &data));
+  void* data = allocator.map(imageLinear);
   stbi_write_hdr("out.hdr", render_width, render_height, 4, reinterpret_cast<float*>(data));
-  vkUnmapMemory(context, imageLinear.allocation);
+  allocator.unmap(imageLinear);
 
   vkDestroyPipeline(context, computePipeline, nullptr);
   vkDestroyShaderModule(context, rayTraceModule, nullptr);

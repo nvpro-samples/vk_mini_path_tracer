@@ -302,7 +302,7 @@ We can also show the information from these sampling points in the Events View b
     One way to speed up this `vkCreateDevice` call is to reduce the number of
     queues the `VkDevice` can access. `Nvvk::Context` allocates the maximum
     possible, but most applications will require fewer queues. One way to do
-    this is to change the following line in `shared_sources/context_vk.cpp`
+    this is to change the following line in `nvpro_core/context_vk.cpp`
     in the nvpro-samples library:
     
     ~~~ cpp
@@ -1374,14 +1374,14 @@ In `main.cpp`, remove the following code:
   // VK_MEMORY_PROPERTY_HOST_CACHED_BIT means that the CPU caches this memory.
   // VK_MEMORY_PROPERTY_HOST_COHERENT_BIT means that the CPU side of cache management
   // is handled automatically, with potentially slower reads/writes.
-  nvvk::BufferDedicated buffer = allocator.createBuffer(bufferCreateInfo,                         //
-                                                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT       //
-                                                            | VK_MEMORY_PROPERTY_HOST_CACHED_BIT  //
-                                                            | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+  nvvk::Buffer buffer = allocator.createBuffer(bufferCreateInfo,                         //
+                                               VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT       //
+                                                   | VK_MEMORY_PROPERTY_HOST_CACHED_BIT  //
+                                                   | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 ~~~
 
 Replace it with the following code to
-- create an image, the `nvvk::ImageDedicated image` using settings from a `VkImageCreateInfo` object;
+- create an image, the `nvvk::Image image` using settings from a `VkImageCreateInfo` object;
 - create an image view for all of `image`; and
 - create `imageLinear` with linear tiling, different usage, and different memory properties.
 
@@ -1417,7 +1417,7 @@ We've included comments to describe what each line does.
   // according to the specification; we'll transition the layout shortly,
   // in the same command buffer used to upload the vertex and index buffers:
   imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-  nvvk::ImageDedicated image    = allocator.createImage(imageCreateInfo);
+  nvvk::Image image             = allocator.createImage(imageCreateInfo);
 
   // Create an image view for the entire image
   // When we create a descriptor for the image, we'll also need an image view
@@ -1451,10 +1451,10 @@ We've included comments to describe what each line does.
   // used to upload the vertex and index buffers.
   imageCreateInfo.tiling = VK_IMAGE_TILING_LINEAR;
   imageCreateInfo.usage  = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-  nvvk::ImageDedicated imageLinear = allocator.createImage(imageCreateInfo,                           //
-                                                           VK_MEMORY_PROPERTY_HOST_COHERENT_BIT       //
-                                                               | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT  //
-                                                               | VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+  nvvk::Image imageLinear = allocator.createImage(imageCreateInfo,                           //
+                                                  VK_MEMORY_PROPERTY_HOST_COHERENT_BIT       //
+                                                      | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT  //
+                                                      | VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
 ~~~
 
 
@@ -1488,7 +1488,7 @@ We'll need to add the image memory barriers used to do the layout transitions to
 
 ~~~ cpp
   // Upload the vertex and index buffers to the GPU.
-  nvvk::BufferDedicated vertexBuffer, indexBuffer;
+  nvvk::Buffer vertexBuffer, indexBuffer;
   {
     // Start a command buffer for uploading the buffers
     VkCommandBuffer uploadCmdBuffer = AllocateAndBeginOneTimeCommandBuffer(context, cmdPool);
@@ -1878,7 +1878,7 @@ but one can also create their own version of `DebugUtil` or call `vkSetDebugUtil
 
 ## Initializing `DebugUtil`
 
-To create and initialize an `nvvk::DebugUtil` object, add the following line just before creating the `nvvk::AllocatorDedicated`, where we pass the device to the `DebugUtil` constructor.
+To create and initialize an `nvvk::DebugUtil` object, add the following line just before creating the `nvvk::ResourceAllocatorDedicated`, where we pass the device to the `DebugUtil` constructor.
 
 ~~~ cpp
   // Initialize the debug utilities:
@@ -1892,7 +1892,7 @@ The next step is to use `debugUtil.setObjectName` to set the names of all the ob
 `Image`:
 
 ~~~ cpp
-  nvvk::ImageDedicated image    = allocator.createImage(imageCreateInfo);
+  nvvk::Image image             = allocator.createImage(imageCreateInfo);
 ~~~ cpp highlight
   debugUtil.setObjectName(image.image, "image");
 ~~~
@@ -1908,10 +1908,10 @@ The next step is to use `debugUtil.setObjectName` to set the names of all the ob
 `ImageLinear`:
 
 ~~~ cpp
-  nvvk::ImageDedicated imageLinear = allocator.createImage(imageCreateInfo,                           //
-                                                           VK_MEMORY_PROPERTY_HOST_COHERENT_BIT       //
-                                                               | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT  //
-                                                               | VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+  nvvk::Image imageLinear = allocator.createImage(imageCreateInfo,                           //
+                                                  VK_MEMORY_PROPERTY_HOST_COHERENT_BIT       //
+                                                      | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT  //
+                                                      | VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
 ~~~ cpp highlight
   debugUtil.setObjectName(imageLinear.image, "imageLinear");
 ~~~
@@ -3485,8 +3485,8 @@ with the following:
   // We'll create the ray tracing pipeline by specifying the shaders + layout,
   // and then get the handles of the shaders for the shader binding table from
   // the pipeline.
-  VkPipeline            rtPipeline;
-  nvvk::BufferDedicated rtSBTBuffer;  // The buffer for the Shader Binding Table
+  VkPipeline   rtPipeline;
+  nvvk::Buffer rtSBTBuffer;  // The buffer for the Shader Binding Table
   {
     // First, we create objects that point to each of our shaders.
     // These are called "shader stages" in this context.

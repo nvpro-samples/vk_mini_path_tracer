@@ -4,29 +4,29 @@ cmake_minimum_required(VERSION 3.5)
 project(vk_mini_path_tracer)
 
 #####################################################################################
-# look for shared_sources 1) as a sub-folder 2) at some other locations
+# look for nvpro_core 1) as a sub-folder 2) at some other locations
 # this cannot be put anywhere else since we still didn't find setup.cmake yet
 #
 if(NOT BASE_DIRECTORY)
 
   find_path(BASE_DIRECTORY
-    NAMES shared_sources/cmake/setup.cmake
+    NAMES nvpro_core/cmake/setup.cmake
     PATHS ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_SOURCE_DIR}/../.. 
     REQUIRED
-    DOC "Directory containing shared_sources"
+    DOC "Directory containing nvpro_core"
     )
 endif()
-if(EXISTS ${BASE_DIRECTORY}/shared_sources/cmake/setup.cmake)
-  include(${BASE_DIRECTORY}/shared_sources/cmake/setup.cmake)
+if(EXISTS ${BASE_DIRECTORY}/nvpro_core/cmake/setup.cmake)
+  include(${BASE_DIRECTORY}/nvpro_core/cmake/setup.cmake)
 else()
-  message(FATAL_ERROR "could not find base directory, please set BASE_DIRECTORY to folder containing shared_sources")
+  message(FATAL_ERROR "could not find base directory, please set BASE_DIRECTORY to folder containing nvpro_core")
 endif()
 
 #####################################################################################
 # Add sample packages
 #
 _add_package_VulkanSDK()
-_add_shared_sources_lib()
+_add_nvpro_core_lib()
 
 #####################################################################################
 # Add chapters

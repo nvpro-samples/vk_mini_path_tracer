@@ -1,15 +1,15 @@
-// Copyright 2020 NVIDIA Corporation
+// Copyright 2020-2021 NVIDIA Corporation
 // SPDX-License-Identifier: Apache-2.0
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <fileformats/stb_image_write.h>
-#include <nvh/fileoperations.hpp>  // For nvh::loadFile
+#include <stb_image_write.h>
 
-#define NVVK_ALLOC_DEDICATED
-#include <nvvk/allocator_vk.hpp>  // For NVVK memory allocators
+#include <nvh/fileoperations.hpp>  // For nvh::loadFile
 #include <nvvk/context_vk.hpp>
-#include <nvvk/descriptorsets_vk.hpp>  // For nvvk::DescriptorSetContainer
-#include <nvvk/shaders_vk.hpp>         // For nvvk::createShaderModule
-#include <nvvk/structs_vk.hpp>         // For nvvk::make
+#include <nvvk/descriptorsets_vk.hpp>     // For nvvk::DescriptorSetContainer
+#include <nvvk/error_vk.hpp>              // For NVVK_CHECK
+#include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
+#include <nvvk/shaders_vk.hpp>            // For nvvk::createShaderModule
+#include <nvvk/structs_vk.hpp>            // For nvvk::make
 
 static const uint64_t render_width     = 800;
 static const uint64_t render_height    = 600;
@@ -35,7 +35,7 @@ int main(int argc, const char** argv)
   assert(asFeatures.accelerationStructure == VK_TRUE && rayQueryFeatures.rayQuery == VK_TRUE);
 
   // Create the allocator
-  nvvk::AllocatorDedicated allocator;
+  nvvk::ResourceAllocatorDedicated allocator;
   allocator.init(context, context.m_physicalDevice);
 
   // Create a buffer
@@ -47,10 +47,10 @@ int main(int argc, const char** argv)
   // VK_MEMORY_PROPERTY_HOST_CACHED_BIT means that the CPU caches this memory.
   // VK_MEMORY_PROPERTY_HOST_COHERENT_BIT means that the CPU side of cache management
   // is handled automatically, with potentially slower reads/writes.
-  nvvk::BufferDedicated buffer = allocator.createBuffer(bufferCreateInfo,                         //
-                                                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT       //
-                                                            | VK_MEMORY_PROPERTY_HOST_CACHED_BIT  //
-                                                            | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+  nvvk::Buffer buffer = allocator.createBuffer(bufferCreateInfo,                         //
+                                               VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT       //
+                                                   | VK_MEMORY_PROPERTY_HOST_CACHED_BIT  //
+                                                   | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
   const std::string        exePath(argv[0], std::string(argv[0]).find_last_of("/\\") + 1);
   std::vector<std::string> searchPaths = {exePath + PROJECT_RELDIRECTORY, exePath + PROJECT_RELDIRECTORY "..",
