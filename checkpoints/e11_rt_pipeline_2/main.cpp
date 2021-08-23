@@ -273,7 +273,7 @@ int main(int argc, const char** argv)
     triangles.vertexFormat                                    = VK_FORMAT_R32G32B32_SFLOAT;
     triangles.vertexData.deviceAddress                        = vertexBufferAddress;
     triangles.vertexStride                                    = 3 * sizeof(float);
-    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size() - 1);
+    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size() / 3 - 1);
     triangles.indexType                                       = VK_INDEX_TYPE_UINT32;
     triangles.indexData.deviceAddress                         = indexBufferAddress;
     triangles.transformData.deviceAddress                     = 0;  // No transform
@@ -299,25 +299,30 @@ int main(int argc, const char** argv)
                                           | VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT_KHR);
 
   // Create 441 instances with random rotations pointing to BLAS 0, and build these instances into a TLAS:
-  std::vector<nvvk::RaytracingBuilderKHR::Instance> instances;
-  std::default_random_engine                        randomEngine;  // The random number generator
-  std::uniform_real_distribution<float>             uniformDist(-0.5f, 0.5f);
-  std::uniform_int_distribution<int>                uniformIntDist(0, 8);
+  std::vector<VkAccelerationStructureInstanceKHR> instances;
+  std::default_random_engine                      randomEngine;  // The random number generator
+  std::uniform_real_distribution<float>           uniformDist(-0.5f, 0.5f);
+  std::uniform_int_distribution<int>              uniformIntDist(0, 8);
   for(int x = -10; x <= 10; x++)
   {
     for(int y = -10; y <= 10; y++)
     {
-      nvvk::RaytracingBuilderKHR::Instance instance;
-      instance.transform.translate(nvmath::vec3f(float(x), float(y), 0.0f));
-      instance.transform.scale(1.0f / 2.7f);
-      instance.transform.rotate(uniformDist(randomEngine), nvmath::vec3f(0.0f, 1.0f, 0.0f));
-      instance.transform.rotate(uniformDist(randomEngine), nvmath::vec3f(1.0f, 0.0f, 0.0f));
-      instance.transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
+      nvmath::mat4f transform(1);
+      transform.translate(nvmath::vec3f(float(x), float(y), 0.0f));
+      transform.scale(1.0f / 2.7f);
+      transform.rotate(uniformDist(randomEngine), nvmath::vec3f(0.0f, 1.0f, 0.0f));
+      transform.rotate(uniformDist(randomEngine), nvmath::vec3f(1.0f, 0.0f, 0.0f));
+      transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
 
-      instance.instanceCustomId = 0;  // 24 bits accessible to ray shaders via gl_InstanceCustomIndex
-      instance.blasId           = 0;  // The index of the BLAS in `blases` that this instance points to
-      instance.hitGroupId       = 0;  // An offset that will be added when looking up the instance's shader in the SBT.
+      VkAccelerationStructureInstanceKHR instance{};
+      instance.transform           = nvvk::toTransformMatrixKHR(transform);
+      instance.instanceCustomIndex = 0;  // 24 bits accessible to ray shaders via rayQueryGetIntersectionInstanceCustomIndexEXT
+      // The address of the BLAS in `blases` that this instance points to
+      instance.accelerationStructureReference = raytracingBuilder.getBlasDeviceAddress(0);
+      // Used for a shader offset index, accessible via rayQueryGetIntersectionInstanceShaderBindingTableRecordOffsetEXT
+      instance.instanceShaderBindingTableRecordOffset = 0;
       instance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;  // How to trace this instance
+      instance.mask  = 0xFF;
       instances.push_back(instance);
     }
   }
