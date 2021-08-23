@@ -3548,7 +3548,7 @@ This object says:
 * The vertex format is `VK_FORMAT_R32G32B32_SFLOAT` (i.e. a vertex consists of three 32-bit floating-point coordinates in X, Y, Z order).
 * The vertices can be found at `vertexBufferAddress`.
 * Each vertex starts $3 * \text{sizeof}(\text{float}) = 12$ bytes after the next. (This is useful in case one has a buffer where e.g. there's a set of XYZ coordinates for a vertex, then an RGB color, then another set of XYZ coordinates, and so on.)
-* We'll use vertices 0 through `objVertices.size() - 1`.
+* We'll use vertices 0 through `objVertices.size()/3 - 1`. The division by 3 is because `objVertices` is a vector of floats, and each vertex uses 3 floats.
 * The index format is `VK_INDEX_TYPE_UINT32` (i.e. an index is a 32-bit unsigned integer).
 * The indices can be found at `indexBufferAddress`.
 * There is no transformation matrix. (This can be a pointer to a matrix in device memory -- but here we use 0 to indicate that the builder should use the identity matrix, which doesn't affect the position of the vertices.)
@@ -3559,7 +3559,7 @@ This object says:
     triangles.vertexFormat                                    = VK_FORMAT_R32G32B32_SFLOAT;
     triangles.vertexData.deviceAddress                        = vertexBufferAddress;
     triangles.vertexStride                                    = 3 * sizeof(float);
-    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size() - 1);
+    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size()/3 - 1);
     triangles.indexType                                       = VK_INDEX_TYPE_UINT32;
     triangles.indexData.deviceAddress                         = indexBufferAddress;
     triangles.transformData.deviceAddress                     = 0;  // No transform

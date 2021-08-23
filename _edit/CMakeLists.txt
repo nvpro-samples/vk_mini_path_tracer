@@ -15,6 +15,30 @@ _add_project_definitions(${PROJNAME})
 file(GLOB SOURCE_FILES *.cpp *.hpp *.inl *.h *.c)
 
 #####################################################################################
+# For _edit, we add a check to make sure readers create a shaders directory
+# and place shaders inside that, instead of placing them in the main directory.
+# It's possible to miss creating this directory, and the effect will be that
+# shaders never appear to be compiled.
+# Instead of being a fatal error, we automatically fix things by copying files
+# to the right place when this happens. This only occurs for .glsl files, since
+# the first chapter that introduces shaders only uses .glsl files, and copying
+# .h files could cause problems if readers experiment with adding libraries.
+file(GLOB _GLSL_WRONG_LOCATION_FILES "*.glsl")
+if(_GLSL_WRONG_LOCATION_FILES)
+  message(WARNING "It looks like some .glsl files were placed in the top level of _edit, rather than making a 'shaders' subdirectory and placing the shaders inside that! This script will move them to the shaders directory.")
+  file(MAKE_DIRECTORY "shaders")
+endif()
+foreach(_FILE ${_GLSL_WRONG_LOCATION_FILES})
+  get_filename_component(_FILE_NAME ${_FILE} NAME)
+  set(_NEW_FILE "${CMAKE_CURRENT_LIST_DIR}/shaders/${_FILE_NAME}")
+  if(EXISTS "${_NEW_FILE}")
+    message(WARNING "Tried to move ${_FILE} to ${_NEW_FILE}, but ${_NEW_FILE} already existed! In other words, there are two copies of a shader, one in the shaders directory (which will be compiled), and one outside of that. One may wish to compare the files to determine which is the correct one.")
+  else()
+    file(RENAME "${_FILE}" "${_NEW_FILE}")
+  endif()
+endforeach()
+
+#####################################################################################
 # GLSL to SPIR-V custom build
 #
 # more than one file can be given: _compile_GLSL("GLSL_mesh.vert;GLSL_mesh.frag" "GLSL_mesh.spv" GLSL_SOURCES)
