@@ -35,7 +35,7 @@ source_group("Shader Files" FILES ${GLSL_SOURCES})
 #####################################################################################
 # Executable
 #
-add_executable(${PROJNAME} ${SOURCE_FILES} ${GLSL_SOURCES})
+add_executable(${PROJNAME} ${SOURCE_FILES} ${COMMON_SOURCE_FILES} ${GLSL_SOURCES})
 
 #####################################################################################
 # Source code group

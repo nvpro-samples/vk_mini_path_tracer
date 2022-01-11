@@ -242,7 +242,7 @@ int main(int argc, const char** argv)
     triangles.vertexFormat                                    = VK_FORMAT_R32G32B32_SFLOAT;
     triangles.vertexData.deviceAddress                        = vertexBufferAddress;
     triangles.vertexStride                                    = 3 * sizeof(float);
-    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size()/3 - 1);
+    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size() / 3 - 1);
     triangles.indexType                                       = VK_INDEX_TYPE_UINT32;
     triangles.indexData.deviceAddress                         = indexBufferAddress;
     triangles.transformData.deviceAddress                     = 0;  // No transform
@@ -269,8 +269,8 @@ int main(int argc, const char** argv)
 
   // Create 441 instances with random rotations pointing to BLAS 0, and build these instances into a TLAS:
   std::vector<VkAccelerationStructureInstanceKHR> instances;
-  std::default_random_engine                        randomEngine;  // The random number generator
-  std::uniform_real_distribution<float>             uniformDist(-0.5f, 0.5f);
+  std::default_random_engine                      randomEngine;  // The random number generator
+  std::uniform_real_distribution<float>           uniformDist(-0.5f, 0.5f);
   for(int x = -10; x <= 10; x++)
   {
     for(int y = -10; y <= 10; y++)

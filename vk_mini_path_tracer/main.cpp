@@ -168,9 +168,10 @@ int main(int argc, const char** argv)
   std::vector<VkAccelerationStructureInstanceKHR> instances;
   {
     VkAccelerationStructureInstanceKHR instance{};
-    instance.transform = nvvk::toTransformMatrixKHR(nvmath::mat4f(1));  // Set the instance transform to the identity matrix
-    instance.instanceCustomIndex = 0;  // 24 bits accessible to ray shaders via rayQueryGetIntersectionInstanceCustomIndexEXT
     instance.accelerationStructureReference = raytracingBuilder.getBlasDeviceAddress(0);  // The address of the BLAS in `blases` that this instance points to
+    // Set the instance transform to the identity matrix:
+    instance.transform.matrix[0][0] = instance.transform.matrix[1][1] = instance.transform.matrix[2][2] = 1.0f;
+    instance.instanceCustomIndex = 0;  // 24 bits accessible to ray shaders via rayQueryGetIntersectionInstanceCustomIndexEXT
     // Used for a shader offset index, accessible via rayQueryGetIntersectionInstanceShaderBindingTableRecordOffsetEXT
     instance.instanceShaderBindingTableRecordOffset = 0;
     instance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;  // How to trace this instance

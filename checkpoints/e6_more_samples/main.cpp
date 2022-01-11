@@ -139,7 +139,7 @@ int main(int argc, const char** argv)
     triangles.vertexFormat                                    = VK_FORMAT_R32G32B32_SFLOAT;
     triangles.vertexData.deviceAddress                        = vertexBufferAddress;
     triangles.vertexStride                                    = 3 * sizeof(float);
-    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size()/3 - 1);
+    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size() / 3 - 1);
     triangles.indexType                                       = VK_INDEX_TYPE_UINT32;
     triangles.indexData.deviceAddress                         = indexBufferAddress;
     triangles.transformData.deviceAddress                     = 0;  // No transform
@@ -167,12 +167,11 @@ int main(int argc, const char** argv)
   // Create an instance pointing to this BLAS, and build it into a TLAS:
   std::vector<VkAccelerationStructureInstanceKHR> instances;
   {
-    nvmath::mat4f transform(1);// Set the instance transform to the identity matrix
     VkAccelerationStructureInstanceKHR instance;
-    instance.transform = nvvk::toTransformMatrixKHR(transform);
+    instance.accelerationStructureReference = raytracingBuilder.getBlasDeviceAddress(0);  // The address of the BLAS in `blases` that this instance points to
+    // Set the instance transform to the identity matrix:
+    instance.transform.matrix[0][0] = instance.transform.matrix[1][1] = instance.transform.matrix[2][2] = 1.0f;
     instance.instanceCustomIndex = 0;  // 24 bits accessible to ray shaders via rayQueryGetIntersectionInstanceCustomIndexEXT
-    // The address of the BLAS in `blases` that this instance points to
-    instance.accelerationStructureReference = raytracingBuilder.getBlasDeviceAddress(0);
     // Used for a shader offset index, accessible via rayQueryGetIntersectionInstanceShaderBindingTableRecordOffsetEXT
     instance.instanceShaderBindingTableRecordOffset = 0;
     instance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;  // How to trace this instance

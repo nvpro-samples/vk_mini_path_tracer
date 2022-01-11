@@ -3090,7 +3090,7 @@ the lines of code to add:
 #include <stb_image_write.h>
 ~~~ cpp highlight
 #define TINYOBJLOADER_IMPLEMENTATION
-#include <fileformats/tiny_obj_loader.h>
+#include <tiny_obj_loader.h>
 ~~~ cpp
 
 #include <nvh/fileoperations.hpp>  // For nvh::loadFile
@@ -3465,9 +3465,9 @@ and also include some additional info described below.
     look different. 
     
     Luckily, instances include information that make this possible! Each instance can
-    contain a 24-bit **instance ID** and a 32-bit **shader offset index**. (Both of
+    contain a 24-bit **instance ID** and a 24-bit **shader offset index**. Both of
     these can be accessed from ray queries. Shader offset indices have special meaning
-    when looking up shaders in shader binding tables in ray tracing pipelines, not ray queries.)
+    when looking up shaders in shader binding tables in ray tracing pipelines, not ray queries.
 
 !!! Tip Examples for Instanced and Procedural Objects
     The only object in this tutorial is a mesh, but if you're interested in instancing
@@ -3559,14 +3559,14 @@ This object says:
     triangles.vertexFormat                                    = VK_FORMAT_R32G32B32_SFLOAT;
     triangles.vertexData.deviceAddress                        = vertexBufferAddress;
     triangles.vertexStride                                    = 3 * sizeof(float);
-    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size()/3 - 1);
+    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size() / 3 - 1);
     triangles.indexType                                       = VK_INDEX_TYPE_UINT32;
     triangles.indexData.deviceAddress                         = indexBufferAddress;
     triangles.transformData.deviceAddress                     = 0;  // No transform
 ~~~
 
 !!! Tip The `VkFormat` Enum
-    `VK_FORMAT_R32G32B32_SFLOAT` specifies three floating-point values in order. It looks like a color format, but it can also be used as a vertex format. For more information, as well as for a way to find out what formats can be used as vertex formats, see [`vkGetPhysicalDeviceFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetPhysicalDeviceFormatProperties.html).
+    `VK_FORMAT_R32G32B32_SFLOAT` specifies three floating-point values in order. It looks like a color format, but it can also be used as a vertex format. For more information, as well as for a way to find out which formats can be used as vertex formats, see [`vkGetPhysicalDeviceFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetPhysicalDeviceFormatProperties.html).
 
 #### `VkAccelerationStructureGeometryKHR`
 
@@ -3629,21 +3629,41 @@ This will now build a bottom-level acceleration structure!
 
 ### Creating the TLAS
 
-To create the TLAS, we need to create an `nvvk::RaytracingBuilderKHR::Instance` object. This object has four fields:
-* `blasId` is the index of the BLAS to use. We want to use the first BLAS, which is index 0.
-* `transform` is a 4 x 4 matrix transform (only the top 3 rows are used) that can be applied to translate, scale, rotate, and skew the instance. However, we use the identity matrix, which doesn't change vertex positions. See below for more information.
-* `instanceCustomId` and `hitGroupId` are 24-bit and 32-bit values (respectively) that allow instances to have different appearances as described above. However, we don't use them in the main part of this tutorial.
+As described above, a top-level acceleration structure (TLAS) is an acceleration
+structure over an array of instances. These instances place BLASes within a
+scene.
+
+Each instance points to a BLAS and includes a
+transformation matrix as well as several other properties that can change the
+appearance of the BLAS. For instance, if we wanted to place several copies of an
+object with different materials in the world (see the [Multiple Materials](extras.html#multiplematerials) section in the Extras),
+we could create several instances where each instance points to the same BLAS,
+but with different transform matrices and different shader indices.
+
+We define each instance using a [VkAccelerationStructureInstanceKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkAccelerationStructureInstanceKHR.html)
+struct. This type has six fields:
+* `uint64_t accelerationStructureReference` is the device address of the BLAS. This is a pointer to the start of the BLAS in device memory. We'll use `nvvk::RayTracingBuilderKHR::getBlasDeviceAddress(n)`, which gets the device address of BLAS *n*, but this is essentially a small wrapper around Vulkan's [vkGetAccelerationStructureDeviceAddressKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetAccelerationStructureDeviceAddressKHR.html) function.
+* `VkTransformMatrixKHR transform` is a 3 x 4 matrix transform that can be applied to translate, scale, rotate, and skew the instance. However, we use the identity matrix, which doesn't change vertex positions. See the "Affine Transformation Matrices" tip below for more information.
+* `instanceCustomIndex` is a field we can use to store an arbitrary 24-bit number. When a ray query intersects a BLAS, we can access this number using `rayQueryGetIntersectionInstanceCustomIndexEXT`. We'll set it to 0 for now.
+* `instanceShaderBindingTableRecordOffset` is interesting: it's designed to store an offset for looking up material shaders (changing how light interacts differently with different objects). This directly affects the control flow of ray tracing pipelines, which we'll cover in the Extras. However, we're using ray queries here, so this can also be an arbitrary 24-bit number for now. Like `instanceCustomIndex`, this is accessible using `rayQueryGetIntersectionInstanceShaderBindingTableRecordOffsetEXT`. We'll also set it to 0 for now.
+* `VkGeometryInstanceFlagsKHR flags` acts like `geometry.flags` above: it changes how rays intersect with the instance during ray traversal. For instance, if we didn't use `VK_GEOMETRY_OPAQUE_BIT_KHR` in `geometry.flags` above, we could have used `VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_KHR`. The set of flags is technically slightly different, and is available at the [VkGeometryInstanceFlagBitsKHR page](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkGeometryInstanceFlagBitsKHR.html). We'll use `VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR`, which turns off [backface culling](https://en.wikipedia.org/wiki/Back-face_culling) (where rays pass through triangles from one side). We enable this because the square shape at the top of the ceiling of the Cornell box represents a solid surface, but it's modeled as two triangles, rather than a full cuboid.
+* `mask` is an 8-bit bitmask. We'll describe this in more detail in Section [GLSL: Ray Queries]. For now, know that it lets us programmatically select a set of instances to trace, without rebuilding the TLAS. We set it to 0xFF to include each instance in every ray trace.
+
+Note that we only create one instance here. We'll see examples of multiple instances in [the Extras](extras.html#instancesandtransformationmatrices).
 
 ~~~ cpp
   // Create an instance pointing to this BLAS, and build it into a TLAS:
-  std::vector<nvvk::RaytracingBuilderKHR::Instance> instances;
+  std::vector<VkAccelerationStructureInstanceKHR> instances;
   {
-    nvvk::RaytracingBuilderKHR::Instance instance;
-    instance.transform.identity();  // Set the instance transform to the identity matrix
-    instance.instanceCustomId = 0;  // 24 bits accessible to ray shaders via rayQueryGetIntersectionInstanceCustomIndexEXT
-    instance.blasId           = 0;  // The index of the BLAS in `blases` that this instance points to
-    instance.hitGroupId = 0;  // Used for a shader offset index, accessible via rayQueryGetIntersectionInstanceShaderBindingTableRecordOffsetEXT
+    VkAccelerationStructureInstanceKHR instance{};
+    instance.accelerationStructureReference = raytracingBuilder.getBlasDeviceAddress(0);  // The address of the BLAS in `blases` that this instance points to
+    // Set the instance transform to the identity matrix:
+    instance.transform.matrix[0][0] = instance.transform.matrix[1][1] = instance.transform.matrix[2][2] = 1.0f;
+    instance.instanceCustomIndex = 0;  // 24 bits accessible to ray shaders via rayQueryGetIntersectionInstanceCustomIndexEXT
+    // Used for a shader offset index, accessible via rayQueryGetIntersectionInstanceShaderBindingTableRecordOffsetEXT
+    instance.instanceShaderBindingTableRecordOffset = 0;
     instance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;  // How to trace this instance
+    instance.mask  = 0xFF;
     instances.push_back(instance);
   }
 ~~~
@@ -3657,7 +3677,7 @@ Finally, launch the TLAS build by calling `nvvk::RaytracingBuilderKHR::buildTlas
 Now all that's left on the C++ side is to add the TLAS to the descriptor set!
 
 !!! Tip Affine Transformation Matrices
-    Vulkan ray tracing uses 3 x 4 affine transformation matrices to transform meshes. These can be used to position, rotate, scale, and skew objects. (`instance.transform` uses a 4 x 4 matrix, but the implementation removes the last row to pass it to Vulkan ray tracing.)
+    Vulkan ray tracing uses 3 x 4 affine transformation matrices to transform meshes. These can be used to position, rotate, scale, and skew objects. (If you are familiar with 4 x 4 transformation matrices in computer graphics, these are the same, but with vectors multiplied on the right and the last row removed.)
     
     When using an `instance.transform` matrix $M$ to represent a transformed BLAS, the instance acts as if all the $v = (x, y, z)$ vertices have had the following transformation applied:
     
@@ -3969,7 +3989,7 @@ To initialize the ray query, we call `rayQueryInitializeEXT` with:
 **tMin** and **tMax** let us search for intersections in a single line segment, the part of the ray where $ t_{\text{min}} \leq t \leq t_{\text{max}} $, instead of the entire ray.
 
 !!! Tip Instance Masks Set to 0xFF
-    The instance mask was part of `nvvk::RaytracingBuilderKHR::Instance`, which we created in Section [Creating the TLAS].
+    The instance mask was part of `VkAccelerationStructureInstanceKHR`, which we created in Section [Creating the TLAS].
     Its default value (from `raytraceKHR_vk.hpp`) is 0xFF, which is why all instances have a mask of 0xFF in this tutorial.
 
 Add this code to initialize the ray query object:
@@ -5089,7 +5109,7 @@ genType faceforward( genType N,
                      genType Nref);
 ~~~
 
-(in our case, `genType` is `vec3`). This function returns `N` or `-N` depending on the directions `I` (like an incoming light vector) and `Nref` (like a normal of a surface). If `I` and `Nref` point towards each other (i.e. their angles differ by more than 180 degrees), then this returns `N`. Otherwise (if `I` and `Nref` point within 180 degrees of the same direction), then this returns `-N`.
+(in our case, `genType` is `vec3`). This function returns `N` or `-N` depending on the directions `I` (like an incoming light vector) and `Nref` (like a normal of a surface). If `I` and `Nref` point towards each other (i.e. their angles differ by more than 90 degrees), then this returns `N`. Otherwise (if `I` and `Nref` point within 90 degrees of the same direction), then this returns `-N`.
 
 So, replace the `rayOrigin` line with
 

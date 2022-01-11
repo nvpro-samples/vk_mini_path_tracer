@@ -273,7 +273,7 @@ int main(int argc, const char** argv)
     triangles.vertexFormat                                    = VK_FORMAT_R32G32B32_SFLOAT;
     triangles.vertexData.deviceAddress                        = vertexBufferAddress;
     triangles.vertexStride                                    = 3 * sizeof(float);
-    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size()/3 - 1);
+    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size() / 3 - 1);
     triangles.indexType                                       = VK_INDEX_TYPE_UINT32;
     triangles.indexData.deviceAddress                         = indexBufferAddress;
     triangles.transformData.deviceAddress                     = 0;  // No transform
@@ -300,9 +300,9 @@ int main(int argc, const char** argv)
 
   // Create 441 instances with random rotations pointing to BLAS 0, and build these instances into a TLAS:
   std::vector<VkAccelerationStructureInstanceKHR> instances;
-  std::default_random_engine                        randomEngine;  // The random number generator
-  std::uniform_real_distribution<float>             uniformDist(-0.5f, 0.5f);
-  std::uniform_int_distribution<int>                uniformIntDist(0, 8);
+  std::default_random_engine                      randomEngine;  // The random number generator
+  std::uniform_real_distribution<float>           uniformDist(-0.5f, 0.5f);
+  std::uniform_int_distribution<int>              uniformIntDist(0, 8);
   for(int x = -10; x <= 10; x++)
   {
     for(int y = -10; y <= 10; y++)
@@ -320,11 +320,10 @@ int main(int argc, const char** argv)
       // The address of the BLAS in `blases` that this instance points to
       instance.accelerationStructureReference = raytracingBuilder.getBlasDeviceAddress(0);
       // An offset that will be added when looking up the instance's shader in the SBT.
-      instance.instanceShaderBindingTableRecordOffset = uniformIntDist(randomEngine);      
+      instance.instanceShaderBindingTableRecordOffset = uniformIntDist(randomEngine);
       instance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;  // How to trace this instance
       instance.mask  = 0xFF;
       instances.push_back(instance);
-
     }
   }
   raytracingBuilder.buildTlas(instances, VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR);
