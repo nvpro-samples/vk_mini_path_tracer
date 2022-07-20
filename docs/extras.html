@@ -2011,7 +2011,7 @@ of these path-traced images until the end of this chapter.
 The identity matrix doesn't change the locations of things.
 
 ~~~ cpp
-    transform.translate(nvmath::vec3f(1.0f, 0.0f, 0.0f));
+    transform.identity();
 ~~~
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
@@ -2373,6 +2373,14 @@ with
     }
   }
 ~~~
+
+!!! Tip
+    The `nvmath::mat4f transform(1)` constructor is the same as creating the matrix,
+    then setting it to the identity. That is, it's equivalent to this code:
+    ```
+    nvmath::mat4f transform;
+    transform.identity();
+    ```
 
 You can now build and run the program -- but it'll run a bit slowly, since we have 21 x 21 = 441 copies of the Cornell box stacked on top of each other! (Overlapping bounding boxes are not good for ray tracing performance, because the traversal engine must consider each instance instead of only a few.)
 
