@@ -2221,8 +2221,9 @@ After adding the `VK_KHR_RAY_QUERY_EXTENSION_NAME` (`VK_KHR_ray_query`) extensio
   deviceInfo.instanceCreateInfoExt                       = &validationInfo;
 #ifdef _WIN32
   _putenv_s("DEBUG_PRINTF_TO_STDOUT", "1");
-#else   // If not _WIN32
-  putenv("DEBUG_PRINTF_TO_STDOUT=1");
+#else  // If not _WIN32
+  static char putenvString[] = "DEBUG_PRINTF_TO_STDOUT=1";
+  putenv(putenvString);
 #endif  // _WIN32
 ~~~
 
@@ -2819,8 +2820,9 @@ We won't use Debug Printf for the remainder of the tutorial, so
   deviceInfo.instanceCreateInfoExt                       = &validationInfo;
 #ifdef _WIN32
   _putenv_s("DEBUG_PRINTF_TO_STDOUT", "1");
-#else   // If not _WIN32
-  putenv("DEBUG_PRINTF_TO_STDOUT=1");
+#else  // If not _WIN32
+  static char putenvString[] = "DEBUG_PRINTF_TO_STDOUT=1";
+  putenv(putenvString);
 #endif  // _WIN32
 ~~~
 

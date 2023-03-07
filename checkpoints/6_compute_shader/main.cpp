@@ -1,4 +1,4 @@
-// Copyright 2020-2021 NVIDIA Corporation
+// Copyright 2020-2023 NVIDIA Corporation
 // SPDX-License-Identifier: Apache-2.0
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
@@ -39,7 +39,8 @@ int main(int argc, const char** argv)
 #ifdef _WIN32
   _putenv_s("DEBUG_PRINTF_TO_STDOUT", "1");
 #else  // If not _WIN32
-  putenv("DEBUG_PRINTF_TO_STDOUT=1");
+  static char putenvString[] = "DEBUG_PRINTF_TO_STDOUT=1";
+  putenv(putenvString);
 #endif  // _WIN32
 
   nvvk::Context context;     // Encapsulates device state in a single object
