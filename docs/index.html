@@ -127,7 +127,7 @@ Here are some other tutorials that might be helpful in combination with this tut
 
 * For a longer Vulkan tutorial about rasterization, [vulkan-tutorial.com](https://vulkan-tutorial.com/) ([Rust version](https://github.com/bwasty/vulkan-tutorial-rs), [Java version](https://github.com/Naitsirc98/Vulkan-Tutorial-Java)).
 
-* For a path tracer tutorial based on Shadertoy (using only GLSL pixel shaders) that goes deeper into materials, Alan Wolfe wrote a path tracer tutorial avalable at https://blog.demofox.org/2020/05/25/casual-shadertoy-path-tracing-1-basic-camera-diffuse-emissive/.
+* For a path tracer tutorial based on Shadertoy (using only GLSL pixel shaders) that goes deeper into materials, Alan Wolfe wrote a path tracer tutorial available at https://blog.demofox.org/2020/05/25/casual-shadertoy-path-tracing-1-basic-camera-diffuse-emissive/.
 
 * For a series of books about ray tracing, the [Ray Tracing in One Weekend](https://github.com/RayTracing/raytracing.github.io) book series (an interesting project is to port these to the GPU for improved performance, such as [a CUDA version you can write](https://developer.nvidia.com/blog/accelerated-ray-tracing-cuda/) and [this Vulkan RTX version](https://github.com/GPSnoopy/RayTracingInVulkan)).
 
@@ -1121,7 +1121,7 @@ Let's now see how to set the buffer data to something other than 0!
 # Commands
 
 In this chapter, we'll create a command buffer, record a command to tell the GPU
-to fill the buffer with the value `0.5`, submit the command bufer, and wait
+to fill the buffer with the value `0.5`, submit the command buffer, and wait
 for the GPU to finish.
 
 !!! Tip
@@ -3080,7 +3080,7 @@ us to define `TINYOBJLOADER_IMPLEMENTATION` in one file (`main.cpp`) before incl
 
 Finally, the main section of this tutorial will also use the `nvvk::RaytracingBuilderKHR` object
 to help with building common types of acceleration structures.
-The NVIDIA Vulkan Ray Tracing Tutorial shows the implementation of these helpers [here](https://nvpro-samples.github.io/vk_raytracing_tutorial_KHR/vkrt_tutorial.md.htm#accelerationstructure/bottom-levelaccelerationstructure/helperdetails:raytracingbuilder::buildblas()).
+The NVIDIA Vulkan Ray Tracing Tutorial shows the implementation of these helpers [here](https://nvpro-samples.github.io/vk_raytracing_tutorial_KHR/vkrt_tutorial.md#accelerationstructure/bottom-levelaccelerationstructure/helperdetails:raytracingbuilder::buildblas()).
 
 Change the block of includes at the top of `main.cpp` to the following -- we've highlighted
 the lines of code to add:
@@ -3573,7 +3573,7 @@ This object says:
 #### `VkAccelerationStructureGeometryKHR`
 
 This object says:
-* The geometry is a triangle mesh (as opposed to a list of instance boundig boxes or a procedural object).
+* The geometry is a triangle mesh (as opposed to a list of instance bounding boxes or a procedural object).
 * The object describing the triangle mesh is `triangles`.
 * The geometry uses the `VK_GEOMETRY_OPAQUE_BIT_KHR` flag. (For a full list of flags, please see [https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkGeometryFlagBitsNV.html](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkGeometryFlagBitsNV.html).)
 
@@ -5077,7 +5077,7 @@ You should now be able to compile and run it again, and see this:
 
 ![](images/10-reflectionPt2.png)
 
-However, there's one more thing we can do. Recall that non-degenerate triangles have two normals. But what happens if a ray hits a triangle from the wrong side? For instance, this can happen with the rectangle in the center of the top of the box, if a ray bounces off the ceiling and behind the rectangle. With our current method, the new ray will be pushed through the surface, then reflect agains the surface again. (However, this is nearly imperceptible in our image.) Here's a zoomed-in view, showing two bounces:
+However, there's one more thing we can do. Recall that non-degenerate triangles have two normals. But what happens if a ray hits a triangle from the wrong side? For instance, this can happen with the rectangle in the center of the top of the box, if a ray bounces off the ceiling and behind the rectangle. With our current method, the new ray will be pushed through the surface, then reflect against the surface again. (However, this is nearly imperceptible in our image.) Here's a zoomed-in view, showing two bounces:
 
 *************************
 *
