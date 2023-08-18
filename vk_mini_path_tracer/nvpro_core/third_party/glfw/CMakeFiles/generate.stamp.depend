@@ -1,0 +1,17 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.27/Modules/BasicConfigVersion-SameMajorVersion.cmake.in
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDependentOption.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakePackageConfigHelpers.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CheckCSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CheckIncludeFile.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CheckLibraryExists.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/FindThreads.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/GNUInstallDirs.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/Internal/CheckSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/WriteBasicConfigVersionFile.cmake
+C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/third_party/glfw/CMakeLists.txt
+C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/third_party/glfw/src/glfw3.pc.in
+C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/third_party/glfw/src/glfw3Config.cmake.in
+C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/third_party/glfw/src/glfw_config.h.in

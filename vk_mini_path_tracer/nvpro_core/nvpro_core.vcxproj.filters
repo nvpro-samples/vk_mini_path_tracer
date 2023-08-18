@@ -1,0 +1,629 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\nvpro_core\CMakeFiles\nvpro_core.dir\cmake_pch.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\appwindowprofiler.cpp">
+      <Filter>nvh</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\bitarray.cpp">
+      <Filter>nvh</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\cameramanipulator.cpp">
+      <Filter>nvh</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\filemapping.cpp">
+      <Filter>nvh</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\gltfscene.cpp">
+      <Filter>nvh</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\nvprint.cpp">
+      <Filter>nvh</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\parametertools.cpp">
+      <Filter>nvh</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\primitives.cpp">
+      <Filter>nvh</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\profiler.cpp">
+      <Filter>nvh</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\shaderfilemanager.cpp">
+      <Filter>nvh</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\fileformats\nv_dds.cpp">
+      <Filter>fileformats</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\fileformats\tiny_converter.cpp">
+      <Filter>fileformats</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\nvpwindow.cpp">
+      <Filter>nvp</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\nvpsystem.cpp">
+      <Filter>nvp</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\nvpfilesystem.cpp">
+      <Filter>nvp</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\nvpsystem_win32.cpp">
+      <Filter>nvp</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\appwindowprofiler_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\buffersuballocator_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\commands_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\context_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\debug_util_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\descriptorsets_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\dynamicrendering_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\error_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\extensions_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\gizmos_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\images_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\memallocator_dedicated_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\memallocator_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\memorymanagement_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\memorymanagement_vkgl.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\pipeline_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\profiler_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\raytraceKHR_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\raytraceNV_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\renderpasses_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\resourceallocator_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\samplers_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\sbtwrapper_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\shadermodulemanager_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\sparse_image_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\stagingmemorymanager_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\swapchain_vk.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\vulkanhppsupport.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\vulkanhppsupport_vkgl.cpp">
+      <Filter>nvvk</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\appbase_vk.cpp">
+      <Filter>nvvkhl</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\appbase_vkpp.cpp">
+      <Filter>nvvkhl</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\application.cpp">
+      <Filter>nvvkhl</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\gbuffer.cpp">
+      <Filter>nvvkhl</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\gltf_scene.cpp">
+      <Filter>nvvkhl</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\gltf_scene_rtx.cpp">
+      <Filter>nvvkhl</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\gltf_scene_vk.cpp">
+      <Filter>nvvkhl</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\hdr_env.cpp">
+      <Filter>nvvkhl</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\hdr_env_dome.cpp">
+      <Filter>nvvkhl</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\sky.cpp">
+      <Filter>nvvkhl</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\tonemap_postprocess.cpp">
+      <Filter>nvvkhl</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\alignment.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\appwindowcamerainertia.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\appwindowprofiler.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\bitarray.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\boundingbox.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\cameracontrol.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\camerainertia.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\cameramanipulator.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\commandlineparser.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\container_utils.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\filemapping.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\fileoperations.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\geometry.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\gltfscene.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\inputparser.h">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\misc.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\nsightevents.h">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\nvprint.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\parallel_work.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\parametertools.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\primitives.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\profiler.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\radixsort.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\shaderfilemanager.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\threading.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\timesampler.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvh\trangeallocator.hpp">
+      <Filter>nvh</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvmath\nvmath.h">
+      <Filter>nvmath</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvmath\nvmath.inl">
+      <Filter>nvmath</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvmath\nvmath_glsltypes.h">
+      <Filter>nvmath</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvmath\nvmath_hlsltypes.h">
+      <Filter>nvmath</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvmath\nvmath_types.h">
+      <Filter>nvmath</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\fileformats\bmp.hpp">
+      <Filter>fileformats</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\fileformats\cadscenefile.h">
+      <Filter>fileformats</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\fileformats\khr_df.h">
+      <Filter>fileformats</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\fileformats\nv_dds.h">
+      <Filter>fileformats</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\fileformats\nv_ktx.h">
+      <Filter>fileformats</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\fileformats\nv_ktx.inl">
+      <Filter>fileformats</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\fileformats\tiny_converter.hpp">
+      <Filter>fileformats</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\fileformats\tiny_gltf_freeimage.h">
+      <Filter>fileformats</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\nvpwindow.hpp">
+      <Filter>nvp</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\nvpsystem.hpp">
+      <Filter>nvp</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\nvpfilesystem.hpp">
+      <Filter>nvp</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\perproject_globals.hpp">
+      <Filter>nvp</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\appwindowprofiler_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\buffers_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\buffersuballocator_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\commands_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\compute_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\context_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\debug_util_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\descriptorsets_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\dynamicrendering_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\error_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\extensions_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\gizmos_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\images_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\memallocator_dedicated_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\memallocator_dma_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\memallocator_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\memallocator_vma_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\memallocator_vma_vk.inl">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\memorymanagement_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\memorymanagement_vkgl.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\nsight_aftermath_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\pipeline_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\profiler_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\raypicker_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\raytraceKHR_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\raytraceNV_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\renderpasses_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\resourceallocator_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\samplers_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\sbtwrapper_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\shadermodulemanager_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\shaders_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\sparse_image_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\specialization.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\stagingmemorymanager_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\structs_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\swapchain_vk.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\vulkanhppsupport.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\vulkanhppsupport_vkgl.hpp">
+      <Filter>nvvk</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\alloc_vma.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\appbase_vk.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\appbase_vkpp.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\application.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\element_camera.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\element_dbgprintf.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\element_gui.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\element_logger.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\element_testing.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\gbuffer.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\glsl_compiler.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\gltf_scene.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\gltf_scene_rtx.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\gltf_scene_vk.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\hdr_env.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\hdr_env_dome.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\pipeline_container.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\scene_camera.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\sky.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\tonemap_postprocess.hpp">
+      <Filter>nvvkhl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\bsdf_functions.h">
+      <Filter>nvvkhl\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\bsdf_structs.h">
+      <Filter>nvvkhl\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\dh_comp.h">
+      <Filter>nvvkhl\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\dh_hdr.h">
+      <Filter>nvvkhl\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\dh_lighting.h">
+      <Filter>nvvkhl\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\dh_scn_desc.h">
+      <Filter>nvvkhl\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\dh_sky.h">
+      <Filter>nvvkhl\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\dh_tonemap.h">
+      <Filter>nvvkhl\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\pbr_mat_struct.h">
+      <Filter>nvvkhl\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\VulkanSDK\1.3.250.1\Include\vulkan\vulkan_core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\nvpro_core\CMakeFiles\nvpro_core.dir\Debug\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\nvpro_core\CMakeFiles\nvpro_core.dir\Release\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\nvpro_core\CMakeFiles\nvpro_core.dir\MinSizeRel\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\nvpro_core\CMakeFiles\nvpro_core.dir\RelWithDebInfo\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf\tiny_gltf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader\tiny_obj_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include\vk_mem_alloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include\nvtx3\nvToolsExt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\hdr_dome.comp">
+      <Filter>nvvkhl\shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\hdr_integrate_brdf.comp">
+      <Filter>nvvkhl\shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\hdr_prefilter_diffuse.comp">
+      <Filter>nvvkhl\shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\hdr_prefilter_glossy.comp">
+      <Filter>nvvkhl\shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\passthrough.vert">
+      <Filter>nvvkhl\shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\sky.comp">
+      <Filter>nvvkhl\shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\tonemapper.comp">
+      <Filter>nvvkhl\shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\tonemapper.frag">
+      <Filter>nvvkhl\shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\constants.glsl">
+      <Filter>nvvkhl\shaders</Filter>
+    </None>
+    <None Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\func.glsl">
+      <Filter>nvvkhl\shaders</Filter>
+    </None>
+    <None Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\ggx.glsl">
+      <Filter>nvvkhl\shaders</Filter>
+    </None>
+    <None Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\hdr_env_sampling.glsl">
+      <Filter>nvvkhl\shaders</Filter>
+    </None>
+    <None Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\light_contrib.glsl">
+      <Filter>nvvkhl\shaders</Filter>
+    </None>
+    <None Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\pbr_mat_eval.glsl">
+      <Filter>nvvkhl\shaders</Filter>
+    </None>
+    <None Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\random.glsl">
+      <Filter>nvvkhl\shaders</Filter>
+    </None>
+    <None Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvkhl\shaders\ray_util.glsl">
+      <Filter>nvvkhl\shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{96073567-35AB-384C-92B0-F8F5895AFC1C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Precompile Header File">
+      <UniqueIdentifier>{83E55D53-E9A5-37AF-A88D-922E830AF28A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{1F3A190B-892B-3A56-AC62-DF7BFD602A88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fileformats">
+      <UniqueIdentifier>{1A90BEDB-44D4-3F0A-A960-19C80B6AA166}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nvh">
+      <UniqueIdentifier>{240F9DED-9EC1-3DBD-8804-9366681FFFCB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nvmath">
+      <UniqueIdentifier>{2970968B-68E8-3C1D-8F9F-273DA597FEA8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nvp">
+      <UniqueIdentifier>{6C366153-973E-31DD-82D2-8373DC070CF5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nvvk">
+      <UniqueIdentifier>{1E7ED07F-C241-320A-A794-682920F59ECD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nvvkhl">
+      <UniqueIdentifier>{E2C286D3-8BE2-3B51-A91D-1E0C009F8BF0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nvvkhl\shaders">
+      <UniqueIdentifier>{DC0CB376-14AD-37F2-844D-135904C66946}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

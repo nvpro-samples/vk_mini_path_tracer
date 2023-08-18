@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DE4B9F0A-06B4-33DE-BEF1-0D372CA5A7BC}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>vk_mini_path_tracer_7_descriptors</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\bin_x64\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vk_mini_path_tracer_7_descriptors.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vk_mini_path_tracer_7_descriptors</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\bin_x64\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vk_mini_path_tracer_7_descriptors.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vk_mini_path_tracer_7_descriptors</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\bin_x64\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">vk_mini_path_tracer_7_descriptors.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">vk_mini_path_tracer_7_descriptors</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\bin_x64\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">vk_mini_path_tracer_7_descriptors.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">vk_mini_path_tracer_7_descriptors</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;RESOURCE_DIRECTORY="C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/resources/";NOMINMAX;NVP_SUPPORTS_VULKANSDK;VK_ENABLE_BETA_EXTENSIONS;VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1;VK_USE_PLATFORM_WIN32_KHR;PROJECT_NAME="vk_mini_path_tracer_7_descriptors";PROJECT_RELDIRECTORY="../../vk_mini_path_tracer/checkpoints/7_descriptors/";PROJECT_DOWNLOAD_RELDIRECTORY="../../downloaded_resources/";STBI_MSC_SECURE_CRT;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;RESOURCE_DIRECTORY=\"C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/resources/\";NOMINMAX;NVP_SUPPORTS_VULKANSDK;VK_ENABLE_BETA_EXTENSIONS;VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1;VK_USE_PLATFORM_WIN32_KHR;PROJECT_NAME=\"vk_mini_path_tracer_7_descriptors\";PROJECT_RELDIRECTORY=\"../../vk_mini_path_tracer/checkpoints/7_descriptors/\";PROJECT_DOWNLOAD_RELDIRECTORY=\"../../downloaded_resources/\";STBI_MSC_SECURE_CRT;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>C:\VulkanSDK\1.3.250.1\Lib\vulkan-1.lib;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\bin_x64\Debug\nvpro_core_vk.lib;C:\VulkanSDK\1.3.250.1\Lib\vulkan-1.lib;..\..\nvpro_core\third_party\glfw\src\Debug\glfw3.lib;..\..\nvpro_core\third_party\Debug\imgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/bin_x64/Debug/vk_mini_path_tracer_7_descriptors.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/bin_x64/Debug/vk_mini_path_tracer_7_descriptors.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RESOURCE_DIRECTORY="C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/resources/";NOMINMAX;NVP_SUPPORTS_VULKANSDK;VK_ENABLE_BETA_EXTENSIONS;VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1;VK_USE_PLATFORM_WIN32_KHR;PROJECT_NAME="vk_mini_path_tracer_7_descriptors";PROJECT_RELDIRECTORY="../../vk_mini_path_tracer/checkpoints/7_descriptors/";PROJECT_DOWNLOAD_RELDIRECTORY="../../downloaded_resources/";STBI_MSC_SECURE_CRT;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RESOURCE_DIRECTORY=\"C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/resources/\";NOMINMAX;NVP_SUPPORTS_VULKANSDK;VK_ENABLE_BETA_EXTENSIONS;VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1;VK_USE_PLATFORM_WIN32_KHR;PROJECT_NAME=\"vk_mini_path_tracer_7_descriptors\";PROJECT_RELDIRECTORY=\"../../vk_mini_path_tracer/checkpoints/7_descriptors/\";PROJECT_DOWNLOAD_RELDIRECTORY=\"../../downloaded_resources/\";STBI_MSC_SECURE_CRT;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>C:\VulkanSDK\1.3.250.1\Lib\vulkan-1.lib;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\bin_x64\Release\nvpro_core_vk.lib;C:\VulkanSDK\1.3.250.1\Lib\vulkan-1.lib;..\..\nvpro_core\third_party\glfw\src\Release\glfw3.lib;..\..\nvpro_core\third_party\Release\imgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/bin_x64/Release/vk_mini_path_tracer_7_descriptors.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/bin_x64/Release/vk_mini_path_tracer_7_descriptors.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RESOURCE_DIRECTORY="C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/resources/";NOMINMAX;NVP_SUPPORTS_VULKANSDK;VK_ENABLE_BETA_EXTENSIONS;VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1;VK_USE_PLATFORM_WIN32_KHR;PROJECT_NAME="vk_mini_path_tracer_7_descriptors";PROJECT_RELDIRECTORY="../../vk_mini_path_tracer/checkpoints/7_descriptors/";PROJECT_DOWNLOAD_RELDIRECTORY="../../downloaded_resources/";STBI_MSC_SECURE_CRT;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RESOURCE_DIRECTORY=\"C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/resources/\";NOMINMAX;NVP_SUPPORTS_VULKANSDK;VK_ENABLE_BETA_EXTENSIONS;VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1;VK_USE_PLATFORM_WIN32_KHR;PROJECT_NAME=\"vk_mini_path_tracer_7_descriptors\";PROJECT_RELDIRECTORY=\"../../vk_mini_path_tracer/checkpoints/7_descriptors/\";PROJECT_DOWNLOAD_RELDIRECTORY=\"../../downloaded_resources/\";STBI_MSC_SECURE_CRT;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>C:\VulkanSDK\1.3.250.1\Lib\vulkan-1.lib;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\bin_x64\MinSizeRel\nvpro_core_vk.lib;C:\VulkanSDK\1.3.250.1\Lib\vulkan-1.lib;..\..\nvpro_core\third_party\glfw\src\MinSizeRel\glfw3.lib;..\..\nvpro_core\third_party\MinSizeRel\imgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/bin_x64/MinSizeRel/vk_mini_path_tracer_7_descriptors.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/bin_x64/MinSizeRel/vk_mini_path_tracer_7_descriptors.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RESOURCE_DIRECTORY="C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/resources/";NOMINMAX;NVP_SUPPORTS_VULKANSDK;VK_ENABLE_BETA_EXTENSIONS;VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1;VK_USE_PLATFORM_WIN32_KHR;PROJECT_NAME="vk_mini_path_tracer_7_descriptors";PROJECT_RELDIRECTORY="../../vk_mini_path_tracer/checkpoints/7_descriptors/";PROJECT_DOWNLOAD_RELDIRECTORY="../../downloaded_resources/";STBI_MSC_SECURE_CRT;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RESOURCE_DIRECTORY=\"C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/resources/\";NOMINMAX;NVP_SUPPORTS_VULKANSDK;VK_ENABLE_BETA_EXTENSIONS;VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1;VK_USE_PLATFORM_WIN32_KHR;PROJECT_NAME=\"vk_mini_path_tracer_7_descriptors\";PROJECT_RELDIRECTORY=\"../../vk_mini_path_tracer/checkpoints/7_descriptors/\";PROJECT_DOWNLOAD_RELDIRECTORY=\"../../downloaded_resources/\";STBI_MSC_SECURE_CRT;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp;C:\VulkanSDK\1.3.250.1\Include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\glfw\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\stb;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\cgltf;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\dxh\include\directx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>C:\VulkanSDK\1.3.250.1\Lib\vulkan-1.lib;C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\bin_x64\RelWithDebInfo\nvpro_core_vk.lib;C:\VulkanSDK\1.3.250.1\Lib\vulkan-1.lib;..\..\nvpro_core\third_party\glfw\src\RelWithDebInfo\glfw3.lib;..\..\nvpro_core\third_party\RelWithDebInfo\imgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/bin_x64/RelWithDebInfo/vk_mini_path_tracer_7_descriptors.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/bin_x64/RelWithDebInfo/vk_mini_path_tracer_7_descriptors.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors\shaders\raytrace.comp.glsl">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl.spv</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe --target-env vulkan1.2 -o shaders/raytrace.comp.glsl.spv -g "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe --target-env vulkan1.2 -o shaders/raytrace.comp.glsl.spv -g "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors\shaders\raytrace.comp.glsl.spv</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl.spv</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe --target-env vulkan1.2 -o shaders/raytrace.comp.glsl.spv -g "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe --target-env vulkan1.2 -o shaders/raytrace.comp.glsl.spv -g "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors\shaders\raytrace.comp.glsl.spv</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Generating C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl.spv</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe --target-env vulkan1.2 -o shaders/raytrace.comp.glsl.spv -g "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe --target-env vulkan1.2 -o shaders/raytrace.comp.glsl.spv -g "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors\shaders\raytrace.comp.glsl.spv</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Generating C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl.spv</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe --target-env vulkan1.2 -o shaders/raytrace.comp.glsl.spv -g "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe --target-env vulkan1.2 -o shaders/raytrace.comp.glsl.spv -g "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/shaders/raytrace.comp.glsl"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors\shaders\raytrace.comp.glsl.spv</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer" "-BC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer" --check-stamp-file "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer/checkpoints/7_descriptors/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer" "-BC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer" --check-stamp-file "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer/checkpoints/7_descriptors/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer" "-BC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer" --check-stamp-file "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer/checkpoints/7_descriptors/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/checkpoints/7_descriptors/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer" "-BC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer" --check-stamp-file "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer/checkpoints/7_descriptors/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\checkpoints\7_descriptors\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\7_descriptors\main.cpp" />
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\resources.h" />
+    <ResourceCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\resources.rc" />
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\perproject_globals.cpp" />
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\nsight_aftermath_vk.cpp" />
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf\tiny_gltf.h" />
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf\json.hpp" />
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader\tiny_obj_loader.h" />
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include\vk_mem_alloc.h" />
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include\nvtx3\nvToolsExt.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\ZERO_CHECK.vcxproj">
+      <Project>{721DA315-61F5-315E-9146-553289682E9B}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\nvpro_core\third_party\glfw\src\glfw.vcxproj">
+      <Project>{7FBD6101-B0BD-37A0-8DC8-A2D35DB399C6}</Project>
+      <Name>glfw</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\nvpro_core\third_party\imgui.vcxproj">
+      <Project>{31105842-E5C0-30C8-AA2F-EF1BF4A210C1}</Project>
+      <Name>imgui</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\nvpro_core\nvpro_core.vcxproj">
+      <Project>{D1821FA6-563A-3017-9A14-E38A0092C81F}</Project>
+      <Name>nvpro_core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

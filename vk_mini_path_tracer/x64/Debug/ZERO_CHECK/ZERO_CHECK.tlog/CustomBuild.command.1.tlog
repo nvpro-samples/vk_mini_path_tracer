@@ -1,0 +1,10 @@
+^C:\USERS\ANKIT\ONEDRIVE\DESKTOP\MY VK_MINI_PATH_TRACER\VK_MINI_PATH_TRACER\VK_MINI_PATH_TRACER\CMAKEFILES\0FB52ACD7D303D4BABB51FFF23AA5092\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer" "-BC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer/vk_mini_path_tracer.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

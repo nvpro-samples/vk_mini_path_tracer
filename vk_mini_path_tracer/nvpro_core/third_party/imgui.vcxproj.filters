@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui\imgui_tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui\imconfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui\imgui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui\imgui_internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui\imstb_rectpack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui\imstb_textedit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\imgui\imstb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{96073567-35AB-384C-92B0-F8F5895AFC1C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{1F3A190B-892B-3A56-AC62-DF7BFD602A88}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

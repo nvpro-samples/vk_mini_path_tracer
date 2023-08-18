@@ -1,0 +1,7 @@
+﻿  Building Custom Rule C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/third_party/CMakeLists.txt
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  imgui.vcxproj -> C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\vk_mini_path_tracer\nvpro_core\third_party\Debug\imgui.lib

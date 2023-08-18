@@ -1,0 +1,138 @@
+^C:\USERS\ANKIT\ONEDRIVE\DESKTOP\MY VK_MINI_PATH_TRACER\NVPRO_CORE\NVVKHL\SHADERS\HDR_DOME.COMP
+setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn hdr_dome_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/hdr_dome.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/hdr_dome.comp"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn hdr_dome_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/hdr_dome.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/hdr_dome.comp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\ANKIT\ONEDRIVE\DESKTOP\MY VK_MINI_PATH_TRACER\NVPRO_CORE\NVVKHL\SHADERS\HDR_INTEGRATE_BRDF.COMP
+setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn hdr_integrate_brdf_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/hdr_integrate_brdf.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/hdr_integrate_brdf.comp"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn hdr_integrate_brdf_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/hdr_integrate_brdf.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/hdr_integrate_brdf.comp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\ANKIT\ONEDRIVE\DESKTOP\MY VK_MINI_PATH_TRACER\NVPRO_CORE\NVVKHL\SHADERS\HDR_PREFILTER_DIFFUSE.COMP
+setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn hdr_prefilter_diffuse_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/hdr_prefilter_diffuse.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/hdr_prefilter_diffuse.comp"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn hdr_prefilter_diffuse_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/hdr_prefilter_diffuse.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/hdr_prefilter_diffuse.comp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\ANKIT\ONEDRIVE\DESKTOP\MY VK_MINI_PATH_TRACER\NVPRO_CORE\NVVKHL\SHADERS\HDR_PREFILTER_GLOSSY.COMP
+setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn hdr_prefilter_glossy_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/hdr_prefilter_glossy.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/hdr_prefilter_glossy.comp"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn hdr_prefilter_glossy_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/hdr_prefilter_glossy.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/hdr_prefilter_glossy.comp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\ANKIT\ONEDRIVE\DESKTOP\MY VK_MINI_PATH_TRACER\NVPRO_CORE\NVVKHL\SHADERS\PASSTHROUGH.VERT
+setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn passthrough_vert -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/passthrough.vert.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/passthrough.vert"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn passthrough_vert -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/passthrough.vert.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/passthrough.vert"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\ANKIT\ONEDRIVE\DESKTOP\MY VK_MINI_PATH_TRACER\NVPRO_CORE\NVVKHL\SHADERS\SKY.COMP
+setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn sky_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/sky.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/sky.comp"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn sky_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/sky.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/sky.comp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\ANKIT\ONEDRIVE\DESKTOP\MY VK_MINI_PATH_TRACER\NVPRO_CORE\NVVKHL\SHADERS\TONEMAPPER.COMP
+setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn tonemapper_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/tonemapper.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/tonemapper.comp"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn tonemapper_comp -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/tonemapper.comp.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/tonemapper.comp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\ANKIT\ONEDRIVE\DESKTOP\MY VK_MINI_PATH_TRACER\NVPRO_CORE\NVVKHL\SHADERS\TONEMAPPER.FRAG
+setlocal
+cd "C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+echo C:/VulkanSDK/1.3.250.1/Bin/glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn tonemapper_frag -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/tonemapper.frag.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/tonemapper.frag"
+if %errorlevel% neq 0 goto :cmEnd
+C:\VulkanSDK\1.3.250.1\Bin\glslangValidator.exe -Invvkhl/shaders "-IC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core" -g --target-env vulkan1.2 --vn tonemapper_frag -o "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/_autogen/tonemapper.frag.h" "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/nvpro_core/nvvkhl/shaders/tonemapper.frag"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\ANKIT\ONEDRIVE\DESKTOP\MY VK_MINI_PATH_TRACER\NVPRO_CORE\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer" "-BC:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer" --check-stamp-file "C:/Users/ankit/OneDrive/Desktop/My VK_Mini_Path_Tracer/vk_mini_path_tracer/vk_mini_path_tracer/nvpro_core/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

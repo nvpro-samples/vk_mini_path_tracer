@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\e1_gaussian\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\perproject_globals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvvk\nsight_aftermath_vk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf\tiny_gltf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinygltf\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\tinyobjloader\tiny_obj_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\vma\include\vk_mem_alloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\third_party\NVTX\c\include\nvtx3\nvToolsExt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\e1_gaussian\shaders\raytrace.comp.glsl">
+      <Filter>Shader Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\vk_mini_path_tracer\checkpoints\e1_gaussian\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="C:\Users\ankit\OneDrive\Desktop\My VK_Mini_Path_Tracer\nvpro_core\nvp\resources.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{96073567-35AB-384C-92B0-F8F5895AFC1C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files">
+      <UniqueIdentifier>{7E90D0AF-D8D9-318E-BE7F-BA2759E61380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{1F3A190B-892B-3A56-AC62-DF7BFD602A88}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
