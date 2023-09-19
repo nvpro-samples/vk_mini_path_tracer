@@ -1,1 +1,3 @@
 **/shaders/*.spv
+build
+cmake_build
