@@ -102,6 +102,9 @@ body {
     padding: 0;
     border: none;
 }
+.linenumbers {
+  padding-left: 20px;
+}
 
 .md code > .highlight {
     background-color: #ffffff;
