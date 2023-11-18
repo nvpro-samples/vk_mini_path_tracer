@@ -55,6 +55,7 @@ body {
     margin: 0.4em 0 0 0;
     padding: 0;
     text-align: inherit;
+    counter-reset: h1 h2 h3 h4 h5 h6; /* fixes Section 0 numbering on Firefox */
 }
 
 .md div.subtitle {
