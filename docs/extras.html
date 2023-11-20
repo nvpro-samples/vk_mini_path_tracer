@@ -1530,7 +1530,7 @@ We'll need to add the image memory barriers used to do the layout transitions to
     // Here's how to do that:
     const VkPipelineStageFlags srcStages = nvvk::makeAccessMaskPipelineStageFlags(srcAccesses);
     const VkPipelineStageFlags dstStages = nvvk::makeAccessMaskPipelineStageFlags(dstImageAccesses | dstImageLinearAccesses);
-    VkImageMemoryBarrier       imageBarriers[2];
+    VkImageMemoryBarrier imageBarriers[2];
     // Image memory barrier for `image` from UNDEFINED to GENERAL layout:
     imageBarriers[0] = nvvk::makeImageMemoryBarrier(image.image,                    // The VkImage
                                                     srcAccesses, dstImageAccesses,  // Source and destination access masks
@@ -1991,9 +1991,14 @@ $$\begin{aligned} M\mathbf{v} &= \begin{pmatrix}M[0][0] & M[0][1] & M[0][2] & M[
     &= \begin{pmatrix}M[0][0] & M[0][1] & M[0][2] \\ M[1][0] & M[1][1] & M[1][2] \\ M[2][0] & M[2][1] & M[2][2]\end{pmatrix} \begin{pmatrix}x\\y\\z\end{pmatrix} + \begin{pmatrix}M[0][3]\\M[1][3]\\M[2][3]\end{pmatrix} \\
     &= \begin{pmatrix}M[0][0]x + M[0][1]y + M[0][2]z + M[0][3]\\M[1][0]x + M[1][1]y + M[1][2]z + M[1][3]\\M[2][0]x + M[2][1]y + M[2][2]z + M[2][3]\end{pmatrix}\end{aligned}$$
 
-We'll set the transform of an instance by setting `nvvk::RaytracingBuilder::KHR::Instance::transform`, which is an `nvmath::mat4f` (a 4 x 4 floating-point matrix). We can multiply 4 x 4 matrices to compute the transformation matrix that represents one transformation followed by another. `nvvk::RaytracingBuilderKHR` will turn this into a 3 x 4 `VkTransformMatrixKHR` by ignoring the last row (which is always `(0, 0, 0, 1)`).
+We'll use the [OpenGL Mathematics (GLM)](https://github.com/g-truc/glm) math
+library to compute the transform of an instance. This library uses 4 x 4 matrices
+instead of 3 x 4 matrices to represent general transformations, but the last row
+will always be `(0, 0, 0, 1)`. When we copy the matrix into
+`VkAccelerationStructureInstanceKHR::instance`, which is a
+`VkTransformMatrixKHR` (a 3 x 4 matrix), we will discard the last row.
 
-Here are some examples of transformations. For each transformation, we'll show the `nvmath::mat4f` function(s) used to create it, the 3 x 4 matrix form of the transformation, and a path-traced image of the result.
+Here are some examples of transformations. For each transformation, we'll show the function(s) used to create it, the 3 x 4 matrix form of the transformation, and a path-traced image of the result.
 
 Remember that the world space coordinate system we're using is a right-handed,
 Y-up coordinate system. From the point of view of the camera, the world space +X
@@ -2006,12 +2011,30 @@ $(-0.001, 1, 6)$. Please note that because we'll need to modify
 `raytrace.comp.glsl` a bit, one may not be able to reproduce the shading of all
 of these path-traced images until the end of this chapter.
 
+### Including GLM
+
+We'll use [OpenGL Mathematics (GLM)](https://github.com/g-truc/glm), which is
+a math library based on objects from GLSL. `glm::mat4` works like GLSL's `mat4`,
+`vec4` works like GLSL's `vec4` and so on. It also includes useful extensions
+such as built-in matrix translation, rotation, and scaling.
+
+Nvpro_core comes with GLM, so you already have it in your include paths. In
+main.cpp, in the list of `#include` directives, add the following two lines:
+
+~~~ cpp highlight
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+~~~ cpp
+#include <nvh/fileoperations.hpp>  // For nvh::loadFile
+...
+~~~
+
 ### Identity
 
-The identity matrix doesn't change the locations of things.
+The identity matrix doesn't change anything.
 
 ~~~ cpp
-    transform.identity();
+glm::mat4 transform = glm::identity<glm::mat4>();
 ~~~
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
@@ -2024,7 +2047,7 @@ $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmat
 Translation by $(1, 0, 0)$:
 
 ~~~ cpp
-    transform.translate(nvmath::vec3f(1.0f, 0.0f, 0.0f));
+glm::mat4 transform = glm::translate(glm::vec3(1.0f, 0.0f, 0.0f));
 ~~~
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & 1 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
@@ -2035,7 +2058,7 @@ $$ M = \begin{pmatrix} 1 & 0 & 0 & 1 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmat
 Translation by $(-1.5, 0, 0)$:
 
 ~~~ cpp
-    transform.translate(nvmath::vec3f(-1.5f, 0.0f, 0.0f));
+glm::mat4 transform = glm::translate(glm::vec3(-1.5f, 0.0f, 0.0f));
 ~~~
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & -1.5 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
@@ -2046,7 +2069,7 @@ $$ M = \begin{pmatrix} 1 & 0 & 0 & -1.5 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{p
 Translation by $(0, 0.6, 0)$:
 
 ~~~ cpp
-    transform.translate(nvmath::vec3f(0.0f, 0.6f, 0.0f));
+glm::mat4 transform = glm::translate(glm::vec3(0.0f, 0.6f, 0.0f));
 ~~~
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0.6 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
@@ -2057,7 +2080,7 @@ $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0.6 \\ 0 & 0 & 1 & 0 \end{pm
 Translation by $(0, 0, 1)$:
 
 ~~~ cpp
-    transform.translate(nvmath::vec3f(0.0f, 0.0f, 1.0f));
+glm::mat4 transform = glm::translate(glm::vec3(0.0f, 0.0f, 1.0f));
 ~~~
 
 $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 1 \end{pmatrix} $$
@@ -2073,7 +2096,7 @@ $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 1 \end{pmat
 Scaling by $(2, 2, 2)$:
 
 ~~~ cpp
-    transform.scale(2.0f);
+glm::mat4 transform = glm::scale(glm::vec3(2.0f, 2.0f, 2.0f));
 ~~~
 
 $$ M = \begin{pmatrix} 2 & 0 & 0 & 0 \\ 0 & 2 & 0 & 0 \\ 0 & 0 & 2 & 0 \end{pmatrix} $$
@@ -2084,7 +2107,7 @@ $$ M = \begin{pmatrix} 2 & 0 & 0 & 0 \\ 0 & 2 & 0 & 0 \\ 0 & 0 & 2 & 0 \end{pmat
 Scaling by $(0.4, 0.4, 0.4)$:
 
 ~~~ cpp
-    transform.scale(0.4f);
+glm::mat4 transform = glm::scale(glm::vec3(0.4f, 0.4f, 0.4f));
 ~~~
 
 $$ M = \begin{pmatrix} 0.4 & 0 & 0 & 0 \\ 0 & 0.4 & 0 & 0 \\ 0 & 0 & 0.4 & 0 \end{pmatrix} $$
@@ -2094,15 +2117,12 @@ $$ M = \begin{pmatrix} 0.4 & 0 & 0 & 0 \\ 0 & 0.4 & 0 & 0 \\ 0 & 0 & 0.4 & 0 \en
 Scaling by $(0.4, 0.9, 0.1)$:
 
 ~~~ cpp
-    transform.scale(nvmath::vec3f(0.4f, 0.9f, 0.1f));
+glm::mat4 transform = glm::scale(glm::vec3(0.4f, 0.9f, 0.1f));
 ~~~
 
 $$ M = \begin{pmatrix} 0.4 & 0 & 0 & 0 \\ 0 & 0.9 & 0 & 0 \\ 0 & 0 & 0.1 & 0 \end{pmatrix} $$
 
 ![Scaling by $(0.4, 0.9, 0.1)$](images/e9-s.4,.9,.1.png)
-
-!!! Tip
-    Some rendering engines don't support non-uniform scaling like $(0.4, 0.9, 0.1)$ or skewing. This allows them to transform normals using the object-to-world matrix, instead of a matrix proportional to the transpose of the inverse. This chapter's path tracer supports all invertible matrix operations.
 
 !!! Tip
     The matrix formed by the first three columns and rows of the object-to-world matrix must be **invertible**; that is, it must be possible to "undo" the object-to-world matrix. An example of a matrix that isn't invertible is scaling by $(1, 0, 0)$:
@@ -2111,15 +2131,20 @@ $$ M = \begin{pmatrix} 0.4 & 0 & 0 & 0 \\ 0 & 0.9 & 0 & 0 \\ 0 & 0 & 0.1 & 0 \en
 
     This is so that the driver can take a 3 x 4 object-to-world matrix and construct the world-to-object matrix that inverts the transformation of the first matrix.
 
+!!! Tip
+    Some rendering engines don't support non-uniform scaling like $(0.4, 0.9, 0.1)$ or skewing. This restriction -- only rotation, translation, and uniform scaling -- lets them perform a small optimization: they can transform normals using the object-to-world matrix, instead of spending time computing a matrix proportional to the transpose of the inverse of the object-to-world matrix. More on this in Section [GLSL: Adding Transformation Support].
+
+    This chapter's path tracer supports all invertible matrix operations.
+
 ### Rotation
 
 Rotating by $\pi/6$ radians around the +x axis:
 
 ~~~ cpp
-    transform.rotate(nv_pi / 6.0f, nvmath::vec3f(1.0f, 0.0f, 0.0f));
+glm::mat4 transform = glm::rotate(glm::pi<float>() / 6.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 ~~~
 
-$$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 0.866025388 & -0.5 & 0 \\ 0 & 0.5 & 0.866025388 & 0 \end{pmatrix} $$
+$$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 0.866025388... & -0.5 & 0 \\ 0 & 0.5 & 0.866025388... & 0 \end{pmatrix} $$
 
 ![Rotating around the +x axis](images/e9-r1,0,0.png)
 
@@ -2127,10 +2152,10 @@ $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 0.866025388 & -0.5 & 0 \\ 0 & 0.5 & 
 Rotating by $\pi/6$ radians around the -x axis (the inverse of the above rotation):
 
 ~~~ cpp
-    transform.rotate(nv_pi / 6.0f, nvmath::vec3f(-1.0f, 0.0f, 0.0f));
+glm::mat4 transform = glm::rotate(glm::pi<float>() / 6.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
 ~~~
 
-$$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 0.866025388 & 0.5 & 0 \\ 0 & -0.5 & 0.866025388 & 0 \end{pmatrix} $$
+$$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 0.866025388... & 0.5 & 0 \\ 0 & -0.5 & 0.866025388... & 0 \end{pmatrix} $$
 
 ![Rotating around the -x axis](images/e9-r-1,0,0.png)
 
@@ -2138,10 +2163,10 @@ $$ M = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 0.866025388 & 0.5 & 0 \\ 0 & -0.5 & 
 Rotating by $\pi/6$ radians around the +y axis:
 
 ~~~ cpp
-    transform.rotate(nv_pi / 6.0f, nvmath::vec3f(0.0f, 1.0f, 0.0f));
+glm::mat4 transform = glm::rotate(glm::pi<float>() / 6.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 ~~~
 
-$$ M = \begin{pmatrix} 0.866025388 & 0 & 0.5 & 0 \\ 0 & 1 & 0 & 0 \\ -0.5 & 0 & 0.866025388 & 0 \end{pmatrix} $$
+$$ M = \begin{pmatrix} 0.866025388... & 0 & 0.5 & 0 \\ 0 & 1 & 0 & 0 \\ -0.5 & 0 & 0.866025388... & 0 \end{pmatrix} $$
 
 ![Rotating around the +y axis](images/e9-r0,1,0.png)
 
@@ -2149,20 +2174,22 @@ $$ M = \begin{pmatrix} 0.866025388 & 0 & 0.5 & 0 \\ 0 & 1 & 0 & 0 \\ -0.5 & 0 & 
 Rotating by $\pi/6$ radians around the +z axis:
 
 ~~~ cpp
-    transform.rotate(nv_pi / 6.0f, nvmath::vec3f(0.0f, 0.0f, 1.0f));
+glm::mat4 transform = glm::rotate(glm::pi<float>() / 6.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 ~~~
 
-$$ M = \begin{pmatrix} 0.866025388 & -0.5 & 0 & 0 \\ 0.5 & 0.866025388 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
+$$ M = \begin{pmatrix} 0.866025388... & -0.5 & 0 & 0 \\ 0.5 & 0.866025388... & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
 
 ![Rotating around the +z axis](images/e9-r0,0,1.png)
 
 
 ### Skewing
 
-`nvmath::mat4f` doesn't have built-in functions for skewing, but we can write a custom skew as follows:
+GLM has functions for skewing, but we need to include a second header for it:
 
 ~~~ cpp
-    transform.a01 = 1.0f;
+#include <glm/gtx/transform2.hpp>
+...
+glm::mat4 transform = glm::shearY3D(glm::identity<glm::mat4>(), 1.0f, 0.0f);
 ~~~
 
 $$ M = \begin{pmatrix} 1 & 1 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$
@@ -2172,24 +2199,38 @@ $$ M = \begin{pmatrix} 1 & 1 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{pmat
 
 ### Combining Operations
 
-Here's how to write a transformation that represents translating the Cornell box down 1 unit, then rotating by $pi/6$ radians around the +z axis. Note the order in which we apply these: to do A, then B, we call `transform.B` followed by `transform.A`:
+Here's how to write a transformation that represents translating the Cornell box down 1 unit, then rotating by $\pi/6$ radians around the +z axis.
 
 ~~~ cpp
-    transform.rotate(nv_pi / 6.0f, nvmath::vec3f(0.0f, 0.0f, 1.0f));
-    transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
+glm::mat4 transform = glm::translate(glm::vec3(0.0f, -1.0f, 0.0f));
+transform           = glm::rotate(glm::pi<float>() / 6.0f, glm::vec3(0.0f, 0.0f, 1.0f)) * transform;
 ~~~
 
 ![Translation followed by rotation.](images/e9-otr.png)
 
-If we did rotation first, followed by translation, we would get a different transformation:
+Note the side on which we apply these: when we want to apply another transformation, we apply it on the left-hand side. This is because we transform vectors using the vector on the right-hand side.
+
+For instance, if we wanted to transform a vector `v` by A, then B, then C, we'd write
+
+```
+transformedVector = C * (B * (A * v));
+```
+
+which is the same as
+
+```
+transform         = C * B * A;
+transformedVector = transform * v;
+```
+
+The order of operations matters here: if we did rotation first, followed by translation, we would get a different transformation:
 
 ~~~ cpp
-    transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
-    transform.rotate(nv_pi / 6.0f, nvmath::vec3f(0.0f, 0.0f, 1.0f));
+glm::mat4 transform = glm::rotate(glm::pi<float>() / 6.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+transform           = glm::translate(glm::vec3(0.0f, -1.0f, 0.0f)) * transform;
 ~~~
 
 ![Rotation followed by translation.](images/e9-ort.png)
-
 
 We'll start with the more technical side of this chapter -- modifying the GLSL code to support arbitrary invertible transformations -- and then set up the transformations for the instances.
 
@@ -2305,6 +2346,37 @@ with
     
     There are many other ways to interpret this: for instance, one could interpret vertex positions as [contravariant vectors](https://en.wikipedia.org/wiki/Covariance_and_contravariance_of_vectors#Contravariant_transformation) and normals as [covariant vectors](https://en.wikipedia.org/wiki/Covariance_and_contravariance_of_vectors#Covariant_transformation). These also have an interpretation in terms of geometric algebra, which Nathan Reed writes about [here](http://reedbeta.com/blog/normals-inverse-transpose-part-1/).
 
+!!! Tip Other Conventions
+    I like to use column vectors for points, because multiplying them by matrices
+    on the left reminds me of C++'s function calls.
+
+    ~~~cpp
+    transformedVector1 = C * B * A * v;
+    transformedVector2 = transformC(transformB(transformA(v)));
+    ~~~
+
+    Other applications will sometimes represent points using row vectors, which
+    means they'll transpose all their matrices and apply them on the right instead
+    of the left.
+
+    Whichever convention your app uses, the most important thing is to be clear
+    about it (usually by using comments and descriptive variable names): whether
+    points are row vectors or column vectors, whether your coordinate system is
+    left-handed or right-handed, and whether the +Y or +Z axis points up. It's
+    also important to be careful about whether vectors are points, directions,
+    or normals, since they transform differently.
+
+    This is like documenting the inputs to a function: when a function describes
+    what values it uses for its inputs, other people (including possibly yourself
+    if you re-read your code later) can quickly determine how they should call it.
+
+    It also makes finding bugs easier: if a comment says a shader takes a
+    world-to-object transform, but we're giving it an object-to-world transform,
+    then we can quickly spot the bug and fix it. (Sometimes it's tempting to try
+    to fix a matrix transform bug by flipping signs and permuting axes until the
+    test case works, but this tends to be slow since there are 48 possible
+    combinations -- 6 XYZ permutations x 2 X signs x 2 Y signs x 2 Z signs -- and
+    there's a good chance one's codebase winds up with 2 sign flips instead of 0.)
 
 ## Including New Headers
 
@@ -2356,13 +2428,13 @@ with
     for(int y = -10; y <= 10; y++)
     {
       // Create a 4 x 4 matrix and initialize it to the identity transform
-      nvmath::mat4f transform(1);
+      glm::mat4 transform = glm::identity<glm::mat4>();
       
 ~~~ cpp
       VkAccelerationStructureInstanceKHR instance{};
       instance.accelerationStructureReference = raytracingBuilder.getBlasDeviceAddress(0);  // The address of the BLAS in `blases` that this instance points to
 ~~~ cpp highlight
-      instance.transform           = nvvk::toTransformMatrixKHR(transform);
+      instance.transform = nvvk::toTransformMatrixKHR(transform);
 ~~~ cpp
       instance.instanceCustomIndex = 0;  // 24 bits accessible to ray shaders via rayQueryGetIntersectionInstanceCustomIndexEXT
       // Used for a shader offset index, accessible via rayQueryGetIntersectionInstanceShaderBindingTableRecordOffsetEXT
@@ -2374,25 +2446,16 @@ with
   }
 ~~~
 
-!!! Tip
-    The `nvmath::mat4f transform(1)` constructor is the same as creating the matrix,
-    then setting it to the identity. That is, it's equivalent to this code:
-    ```
-    nvmath::mat4f transform;
-    transform.identity();
-    ```
+Note that in the code above, we also call `nvvk::toTransformMatrixKHR(transform)`; this function takes a 4 x 4 matrix and returns the first 3 rows in a `VkTransformMatrixKHR` struct.
 
-You can now build and run the program -- but it'll run a bit slowly, since we have 21 x 21 = 441 copies of the Cornell box stacked on top of each other! (Overlapping bounding boxes are not good for ray tracing performance, because the traversal engine must consider each instance instead of only a few.)
+You can now build and run the program -- but it'll run slowly, since we have 21 x 21 = 441 copies of the Cornell box stacked on top of each other! (Overlapping bounding boxes are not good for ray tracing performance, because the traversal engine must consider each instance instead of only a few.)
 
 ![441 stacked instances of the Cornell Box.](images/e9-i.png)
-
-Note that in the code above, we've added an `nvmath::mat4f transform` variable. We'll use the `nvmath::mat4f` class to compute transformation matrices. We also call `nvvk::toTransformMatrixKHR(transform)`; this function takes a 4 x 4 matrix and returns the first 3 rows in a `VkTransformMatrixKHR` struct.
 
 Let's modify the transformation matrix to position each instance. First, translate each instance down by 1 unit, so that all the boxes are centered on $(0, 0, 0)$:
 
 ~~~ cpp
-      nvmath::mat4f transform(1);
-      transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
+      glm::mat4 transform = glm::translate(glm::vec3(0.0f, -1.0f, 0.0f));
 ~~~
 
 ![441 stacked instances of the Cornell Box, translated down 1 unit.](images/e9-t.png)
@@ -2400,9 +2463,8 @@ Let's modify the transformation matrix to position each instance. First, transla
 Then randomly rotate each instance between -0.5 and 0.5 radians around the +x axis, by adding a `rotate` operation before the `translate` operation, as described in Section [Combining Operations] above:
 
 ~~~ cpp
-      nvmath::mat4f transform(1);
-      transform.rotate(uniformDist(randomEngine), nvmath::vec3f(1.0f, 0.0f, 0.0f));
-      transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
+      glm::mat4 transform = glm::translate(glm::vec3(0.0f, -1.0f, 0.0f));
+      transform           = glm::rotate(uniformDist(randomEngine), glm::vec3(1.0f, 0.0f, 0.0f)) * transform;
 ~~~
 
 ![441 instances of the Cornell Box with random +x axis rotations.](images/e9-tr.png)
@@ -2410,10 +2472,9 @@ Then randomly rotate each instance between -0.5 and 0.5 radians around the +x ax
 Then randomly rotate each instance between -0.5 and 0.5 radians around the +y axis:
 
 ~~~ cpp
-      nvmath::mat4f transform(1);
-      transform.rotate(uniformDist(randomEngine), nvmath::vec3f(0.0f, 1.0f, 0.0f));
-      transform.rotate(uniformDist(randomEngine), nvmath::vec3f(1.0f, 0.0f, 0.0f));
-      transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
+      glm::mat4 transform = glm::translate(glm::vec3(0.0f, -1.0f, 0.0f));
+      transform           = glm::rotate(uniformDist(randomEngine), glm::vec3(1.0f, 0.0f, 0.0f)) * transform;
+      transform           = glm::rotate(uniformDist(randomEngine), glm::vec3(0.0f, 1.0f, 0.0f)) * transform;
 ~~~
 
 Now we can see that there's a lot of geometry that we're path tracing!
@@ -2423,24 +2484,22 @@ Now we can see that there's a lot of geometry that we're path tracing!
 If we translated each instance now, we would get this:
 
 ~~~ cpp
-      nvmath::mat4f transform(1);
-      transform.translate(nvmath::vec3f(float(x), float(y), 0.0f));
-      transform.rotate(uniformDist(randomEngine), nvmath::vec3f(0.0f, 1.0f, 0.0f));
-      transform.rotate(uniformDist(randomEngine), nvmath::vec3f(1.0f, 0.0f, 0.0f));
-      transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
+      glm::mat4 transform = glm::translate(glm::vec3(0.0f, -1.0f, 0.0f));
+      transform           = glm::rotate(uniformDist(randomEngine), glm::vec3(1.0f, 0.0f, 0.0f)) * transform;
+      transform           = glm::rotate(uniformDist(randomEngine), glm::vec3(0.0f, 1.0f, 0.0f)) * transform;
+      transform           = glm::translate(glm::vec3(float(x), float(y), 0.0f)) * transform;
 ~~~
 
 ![441 instances centered at $(x, y, 0)$, but without scaling beforehand.](images/e9-trrt.png)
 
-Instead of doing that, scale each instance by a factor of 1/2.7x. Then translate the instance with index `(x, y)` to be centered at $(x, y, 0)$:
+Instead of doing that, scale each instance by a factor of 1/2.7. Then translate the instance with index `(x, y)` to be centered at $(x, y, 0)$:
 
 ~~~ cpp
-      nvmath::mat4f transform(1);
-      transform.translate(nvmath::vec3f(float(x), float(y), 0.0f));
-      transform.scale(1.0f / 2.7f);
-      transform.rotate(uniformDist(randomEngine), nvmath::vec3f(0.0f, 1.0f, 0.0f));
-      transform.rotate(uniformDist(randomEngine), nvmath::vec3f(1.0f, 0.0f, 0.0f));
-      transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
+      glm::mat4 transform = glm::translate(glm::vec3(0.0f, -1.0f, 0.0f));
+      transform           = glm::rotate(uniformDist(randomEngine), glm::vec3(1.0f, 0.0f, 0.0f)) * transform;
+      transform           = glm::rotate(uniformDist(randomEngine), glm::vec3(0.0f, 1.0f, 0.0f)) * transform;
+      transform           = glm::scale(glm::vec3(1.0f / 2.7f)) * transform;
+      transform           = glm::translate(glm::vec3(float(x), float(y), 0.0f)) * transform;
 ~~~
 
 ![441 instances with scaling before translation.](images/e9-trrst.png)

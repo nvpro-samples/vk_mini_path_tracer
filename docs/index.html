@@ -178,7 +178,7 @@ Then open the `build_all` folder and run either `clone_all.bat` (Windows) or
 **If you want to clone as few repositories as possible**, open a command line,
 and run the following commands to clone the repositories you need:
 ~~~~~
-git clone --recursive --shallow-submodules https://github.com/nvpro-samples/nvpro_core.git
+git clone https://github.com/nvpro-samples/nvpro_core.git
 git clone https://github.com/nvpro-samples/vk_mini_path_tracer.git
 ~~~~~
 
@@ -261,7 +261,7 @@ int main(int argc, const char** argv)
 {
   // Create the Vulkan context, consisting of an instance, device, physical device, and queues.
   nvvk::ContextCreateInfo deviceInfo;  // One can modify this to load different extensions or pick the Vulkan core version
-  nvvk::Context           context;     // Encapsulates device state in a single object
+  nvvk::Context context;               // Encapsulates device state in a single object
   context.init(deviceInfo);            // Initialize the context
   context.deinit();                    // Don't forget to clean up at the end of the program!
 }
@@ -2221,7 +2221,7 @@ After adding the `VK_KHR_RAY_QUERY_EXTENSION_NAME` (`VK_KHR_ray_query`) extensio
   deviceInfo.instanceCreateInfoExt                       = &validationInfo;
 #ifdef _WIN32
   _putenv_s("DEBUG_PRINTF_TO_STDOUT", "1");
-#else  // If not _WIN32
+#else   // If not _WIN32
   static char putenvString[] = "DEBUG_PRINTF_TO_STDOUT=1";
   putenv(putenvString);
 #endif  // _WIN32
@@ -2885,8 +2885,8 @@ descriptor in set 0, binding 0").
 ~~~ cpp
   // Write a single descriptor in the descriptor set.
   VkDescriptorBufferInfo descriptorBufferInfo{};
-  descriptorBufferInfo.buffer          = buffer.buffer;    // The VkBuffer object
-  descriptorBufferInfo.range           = bufferSizeBytes;  // The length of memory to bind; offset is 0.
+  descriptorBufferInfo.buffer = buffer.buffer;    // The VkBuffer object
+  descriptorBufferInfo.range  = bufferSizeBytes;  // The length of memory to bind; offset is 0.
   VkWriteDescriptorSet writeDescriptor = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
 ~~~
 
@@ -3558,13 +3558,13 @@ This object says:
 ~~~ cpp
     // Specify where the builder can find the vertices and indices for triangles, and their formats:
     VkAccelerationStructureGeometryTrianglesDataKHR triangles = nvvk::make<VkAccelerationStructureGeometryTrianglesDataKHR>();
-    triangles.vertexFormat                                    = VK_FORMAT_R32G32B32_SFLOAT;
-    triangles.vertexData.deviceAddress                        = vertexBufferAddress;
-    triangles.vertexStride                                    = 3 * sizeof(float);
-    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size() / 3 - 1);
-    triangles.indexType                                       = VK_INDEX_TYPE_UINT32;
-    triangles.indexData.deviceAddress                         = indexBufferAddress;
-    triangles.transformData.deviceAddress                     = 0;  // No transform
+    triangles.vertexFormat                = VK_FORMAT_R32G32B32_SFLOAT;
+    triangles.vertexData.deviceAddress    = vertexBufferAddress;
+    triangles.vertexStride                = 3 * sizeof(float);
+    triangles.maxVertex                   = static_cast<uint32_t>(objVertices.size() / 3 - 1);
+    triangles.indexType                   = VK_INDEX_TYPE_UINT32;
+    triangles.indexData.deviceAddress     = indexBufferAddress;
+    triangles.transformData.deviceAddress = 0;  // No transform
 ~~~
 
 !!! Tip The `VkFormat` Enum

@@ -76,8 +76,8 @@ int main(int argc, const char** argv)
 
   // Write a single descriptor in the descriptor set.
   VkDescriptorBufferInfo descriptorBufferInfo{};
-  descriptorBufferInfo.buffer          = buffer.buffer;    // The VkBuffer object
-  descriptorBufferInfo.range           = bufferSizeBytes;  // The length of memory to bind; offset is 0.
+  descriptorBufferInfo.buffer = buffer.buffer;    // The VkBuffer object
+  descriptorBufferInfo.range  = bufferSizeBytes;  // The length of memory to bind; offset is 0.
   VkWriteDescriptorSet writeDescriptor = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
   vkUpdateDescriptorSets(context,              // The context
                          1, &writeDescriptor,  // An array of VkWriteDescriptorSet objects

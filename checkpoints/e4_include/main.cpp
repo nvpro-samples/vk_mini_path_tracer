@@ -134,13 +134,13 @@ int main(int argc, const char** argv)
     VkDeviceAddress indexBufferAddress  = GetBufferDeviceAddress(context, indexBuffer.buffer);
     // Specify where the builder can find the vertices and indices for triangles, and their formats:
     VkAccelerationStructureGeometryTrianglesDataKHR triangles = nvvk::make<VkAccelerationStructureGeometryTrianglesDataKHR>();
-    triangles.vertexFormat                                    = VK_FORMAT_R32G32B32_SFLOAT;
-    triangles.vertexData.deviceAddress                        = vertexBufferAddress;
-    triangles.vertexStride                                    = 3 * sizeof(float);
-    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size() / 3 - 1);
-    triangles.indexType                                       = VK_INDEX_TYPE_UINT32;
-    triangles.indexData.deviceAddress                         = indexBufferAddress;
-    triangles.transformData.deviceAddress                     = 0;  // No transform
+    triangles.vertexFormat                = VK_FORMAT_R32G32B32_SFLOAT;
+    triangles.vertexData.deviceAddress    = vertexBufferAddress;
+    triangles.vertexStride                = 3 * sizeof(float);
+    triangles.maxVertex                   = static_cast<uint32_t>(objVertices.size() / 3 - 1);
+    triangles.indexType                   = VK_INDEX_TYPE_UINT32;
+    triangles.indexData.deviceAddress     = indexBufferAddress;
+    triangles.transformData.deviceAddress = 0;  // No transform
     // Create a VkAccelerationStructureGeometryKHR object that says it handles opaque triangles and points to the above:
     VkAccelerationStructureGeometryKHR geometry = nvvk::make<VkAccelerationStructureGeometryKHR>();
     geometry.geometry.triangles                 = triangles;

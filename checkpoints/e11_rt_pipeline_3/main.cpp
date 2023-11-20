@@ -7,6 +7,8 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include <nvh/fileoperations.hpp>  // For nvh::loadFile
 #include <nvvk/context_vk.hpp>
 #include <nvvk/descriptorsets_vk.hpp>  // For nvvk::DescriptorSetContainer
@@ -238,7 +240,7 @@ int main(int argc, const char** argv)
     // Here's how to do that:
     const VkPipelineStageFlags srcStages = nvvk::makeAccessMaskPipelineStageFlags(srcAccesses);
     const VkPipelineStageFlags dstStages = nvvk::makeAccessMaskPipelineStageFlags(dstImageAccesses | dstImageLinearAccesses);
-    VkImageMemoryBarrier       imageBarriers[2];
+    VkImageMemoryBarrier imageBarriers[2];
     // Image memory barrier for `image` from UNDEFINED to GENERAL layout:
     imageBarriers[0] = nvvk::makeImageMemoryBarrier(image.image,                    // The VkImage
                                                     srcAccesses, dstImageAccesses,  // Source and destination access masks
@@ -270,13 +272,13 @@ int main(int argc, const char** argv)
     VkDeviceAddress indexBufferAddress  = GetBufferDeviceAddress(context, indexBuffer.buffer);
     // Specify where the builder can find the vertices and indices for triangles, and their formats:
     VkAccelerationStructureGeometryTrianglesDataKHR triangles = nvvk::make<VkAccelerationStructureGeometryTrianglesDataKHR>();
-    triangles.vertexFormat                                    = VK_FORMAT_R32G32B32_SFLOAT;
-    triangles.vertexData.deviceAddress                        = vertexBufferAddress;
-    triangles.vertexStride                                    = 3 * sizeof(float);
-    triangles.maxVertex                                       = static_cast<uint32_t>(objVertices.size() / 3 - 1);
-    triangles.indexType                                       = VK_INDEX_TYPE_UINT32;
-    triangles.indexData.deviceAddress                         = indexBufferAddress;
-    triangles.transformData.deviceAddress                     = 0;  // No transform
+    triangles.vertexFormat                = VK_FORMAT_R32G32B32_SFLOAT;
+    triangles.vertexData.deviceAddress    = vertexBufferAddress;
+    triangles.vertexStride                = 3 * sizeof(float);
+    triangles.maxVertex                   = static_cast<uint32_t>(objVertices.size() / 3 - 1);
+    triangles.indexType                   = VK_INDEX_TYPE_UINT32;
+    triangles.indexData.deviceAddress     = indexBufferAddress;
+    triangles.transformData.deviceAddress = 0;  // No transform
     // Create a VkAccelerationStructureGeometryKHR object that says it handles opaque triangles and points to the above:
     VkAccelerationStructureGeometryKHR geometry = nvvk::make<VkAccelerationStructureGeometryKHR>();
     geometry.geometry.triangles                 = triangles;
@@ -307,15 +309,14 @@ int main(int argc, const char** argv)
   {
     for(int y = -10; y <= 10; y++)
     {
-      nvmath::mat4f transform(1);
-      transform.translate(nvmath::vec3f(float(x), float(y), 0.0f));
-      transform.scale(1.0f / 2.7f);
-      transform.rotate(uniformDist(randomEngine), nvmath::vec3f(0.0f, 1.0f, 0.0f));
-      transform.rotate(uniformDist(randomEngine), nvmath::vec3f(1.0f, 0.0f, 0.0f));
-      transform.translate(nvmath::vec3f(0.0f, -1.0f, 0.0f));
+      glm::mat4 transform = glm::translate(glm::vec3(0.0f, -1.0f, 0.0f));
+      transform           = glm::rotate(uniformDist(randomEngine), glm::vec3(1.0f, 0.0f, 0.0f)) * transform;
+      transform           = glm::rotate(uniformDist(randomEngine), glm::vec3(0.0f, 1.0f, 0.0f)) * transform;
+      transform           = glm::scale(glm::vec3(1.0f / 2.7f)) * transform;
+      transform           = glm::translate(glm::vec3(float(x), float(y), 0.0f)) * transform;
 
       VkAccelerationStructureInstanceKHR instance;
-      instance.transform           = nvvk::toTransformMatrixKHR(transform);
+      instance.transform = nvvk::toTransformMatrixKHR(transform);
       instance.instanceCustomIndex = 0;  // 24 bits accessible to ray shaders via rayQueryGetIntersectionInstanceCustomIndexEXT
       // The address of the BLAS in `blases` that this instance points to
       instance.accelerationStructureReference = raytracingBuilder.getBlasDeviceAddress(0);
