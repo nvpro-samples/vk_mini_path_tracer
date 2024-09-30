@@ -3,7 +3,7 @@
 #include <cassert>
 
 #include <nvvk/context_vk.hpp>
-#include <nvvk/structs_vk.hpp>  // For nvvk::make
+#include <utils/structs_vk.hpp>  // For utils::make
 
 int main(int argc, const char** argv)
 {
@@ -13,9 +13,9 @@ int main(int argc, const char** argv)
   deviceInfo.apiMinor = 2;
   // Required by KHR_acceleration_structure; allows work to be offloaded onto background threads and parallelized
   deviceInfo.addDeviceExtension(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
-  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures = nvvk::make<VkPhysicalDeviceAccelerationStructureFeaturesKHR>();
+  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures = utils::make<VkPhysicalDeviceAccelerationStructureFeaturesKHR>();
   deviceInfo.addDeviceExtension(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, false, &asFeatures);
-  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures = nvvk::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
+  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures = utils::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
   deviceInfo.addDeviceExtension(VK_KHR_RAY_QUERY_EXTENSION_NAME, false, &rayQueryFeatures);
 
   nvvk::Context context;     // Encapsulates device state in a single object

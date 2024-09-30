@@ -28,6 +28,8 @@ endif()
 _add_package_VulkanSDK()
 _add_nvpro_core_lib()
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 #####################################################################################
 # Add chapters
 add_subdirectory(_edit) # Empty starting project

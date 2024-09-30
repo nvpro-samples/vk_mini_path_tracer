@@ -651,7 +651,7 @@ with
   descriptorBufferInfo.range  = bufferSizeBytes;  // The length of memory to bind; offset is 0.
   writeDescriptorSets[0]      = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
   // 1
-  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = nvvk::make<VkWriteDescriptorSetAccelerationStructureKHR>();
+  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = utils::make<VkWriteDescriptorSetAccelerationStructureKHR>();
   VkAccelerationStructureKHR tlasCopy = raytracingBuilder.getAccelerationStructure();  // So that we can take its address
   descriptorAS.accelerationStructureCount = 1;
   descriptorAS.pAccelerationStructures    = &tlasCopy;
@@ -680,7 +680,7 @@ with
   writeDescriptorSets[0] = descriptorSetContainer.makeWrite(0 /*set index*/, BINDING_IMAGEDATA /*binding*/, &descriptorBufferInfo);
   // Top-level acceleration structure (TLAS)
 ~~~ cpp
-  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = nvvk::make<VkWriteDescriptorSetAccelerationStructureKHR>();
+  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = utils::make<VkWriteDescriptorSetAccelerationStructureKHR>();
   VkAccelerationStructureKHR tlasCopy = raytracingBuilder.getAccelerationStructure();  // So that we can take its address
   descriptorAS.accelerationStructureCount = 1;
   descriptorAS.pAccelerationStructures    = &tlasCopy;
@@ -1185,7 +1185,7 @@ with the following loop over 32 sample batches:
       // so the CPU can read the data.") To do this, we use a memory barrier.
       // This is one of the most complex parts of Vulkan, so don't worry if this is
       // confusing! We'll talk about pipeline barriers more in the extras.
-      VkMemoryBarrier memoryBarrier = nvvk::make<VkMemoryBarrier>();
+      VkMemoryBarrier memoryBarrier = utils::make<VkMemoryBarrier>();
       memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;  // Make shader writes
       memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;     // Readable by the CPU
       vkCmdPipelineBarrier(cmdBuffer,                              // The command buffer
@@ -1379,7 +1379,7 @@ In `main.cpp`, remove the following code:
 ~~~ cpp
   // Create a buffer
   VkDeviceSize bufferSizeBytes = uint64_t(pushConstants.render_width) * uint64_t(pushConstants.render_height) * 3 * sizeof(float);
-  VkBufferCreateInfo bufferCreateInfo = nvvk::make<VkBufferCreateInfo>();
+  VkBufferCreateInfo bufferCreateInfo = utils::make<VkBufferCreateInfo>();
   bufferCreateInfo.size               = bufferSizeBytes;
   bufferCreateInfo.usage              = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
   // VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT means that the CPU can read this buffer's memory.
@@ -1406,7 +1406,7 @@ We've included comments to describe what each line does.
   // implementation-dependent way (and this layout of memory can depend on
   // what the image is being used for), and be shared across multiple queues.
   // Here's how we specify the image we'll use:
-  VkImageCreateInfo imageCreateInfo = nvvk::make<VkImageCreateInfo>();
+  VkImageCreateInfo imageCreateInfo = utils::make<VkImageCreateInfo>();
   imageCreateInfo.imageType         = VK_IMAGE_TYPE_2D;
   // RGB32 images aren't usually supported, so we change this to a RGBA32 image.
   imageCreateInfo.format = VK_FORMAT_R32G32B32A32_SFLOAT;
@@ -1435,14 +1435,14 @@ We've included comments to describe what each line does.
   // When we create a descriptor for the image, we'll also need an image view
   // that the descriptor will point to. This specifies what part of the image
   // the descriptor views, and how the descriptor views it.
-  VkImageViewCreateInfo imageViewCreateInfo = nvvk::make<VkImageViewCreateInfo>();
+  VkImageViewCreateInfo imageViewCreateInfo = utils::make<VkImageViewCreateInfo>();
   imageViewCreateInfo.image                 = image.image;
   imageViewCreateInfo.viewType              = VK_IMAGE_VIEW_TYPE_2D;
   imageViewCreateInfo.format                = imageCreateInfo.format;
   // We could use imageViewCreateInfo.components to make the components of the
   // image appear to be "swizzled", but we don't want to do that. Luckily,
   // all values are set to VK_COMPONENT_SWIZZLE_IDENTITY, which means
-  // "don't change anything", by nvvk::make or zero initialization.
+  // "don't change anything", by utils::make or zero initialization.
   // This says that the ImageView views the color part of the image (since
   // images can contain depth or stencil aspects):
   imageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1631,7 +1631,7 @@ Replace the code
       // so the CPU can read the data.") To do this, we use a memory barrier.
       // This is one of the most complex parts of Vulkan, so don't worry if this is
       // confusing! We'll talk about pipeline barriers more in the extras.
-      VkMemoryBarrier memoryBarrier = nvvk::make<VkMemoryBarrier>();
+      VkMemoryBarrier memoryBarrier = utils::make<VkMemoryBarrier>();
       memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;  // Make shader writes
       memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;     // Readable by the CPU
       vkCmdPipelineBarrier(cmdBuffer,                              // The command buffer
@@ -1691,7 +1691,7 @@ transition ensures that the copied data is visible and available to the CPU.)
       // Add a command that says "Make it so that memory writes by transfers
       // are available to read from the CPU." (In other words, "Flush the GPU caches
       // so the CPU can read the data.") To do this, we use a memory barrier.
-      VkMemoryBarrier memoryBarrier = nvvk::make<VkMemoryBarrier>();
+      VkMemoryBarrier memoryBarrier = utils::make<VkMemoryBarrier>();
       memoryBarrier.srcAccessMask   = VK_ACCESS_TRANSFER_WRITE_BIT;  // Make transfer writes
       memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;       // Readable by the CPU
       vkCmdPipelineBarrier(cmdBuffer,                                // The command buffer
@@ -3400,14 +3400,14 @@ We'll need to use the `VK_KHR_ray_tracing_pipeline` extension and will remove th
 To do this, replace
 
 ~~~ cpp
-  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures = nvvk::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
+  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures = utils::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
   deviceInfo.addDeviceExtension(VK_KHR_RAY_QUERY_EXTENSION_NAME, false, &rayQueryFeatures);
 ~~~
 
 in `main.cpp` with
 
 ~~~ cpp
-  VkPhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeatures = nvvk::make<VkPhysicalDeviceRayTracingPipelineFeaturesKHR>();
+  VkPhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeatures = utils::make<VkPhysicalDeviceRayTracingPipelineFeaturesKHR>();
   deviceInfo.addDeviceExtension(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, false, &rtPipelineFeatures);
 ~~~
 
@@ -3454,8 +3454,8 @@ the SBT stride in this way, add the following code:
   // physical device properties and ray tracing pipeline properties.
   // This gives us information about shader binding tables.
   VkPhysicalDeviceRayTracingPipelinePropertiesKHR rtPipelineProperties =
-      nvvk::make<VkPhysicalDeviceRayTracingPipelinePropertiesKHR>();
-  VkPhysicalDeviceProperties2 physicalDeviceProperties = nvvk::make<VkPhysicalDeviceProperties2>();
+      utils::make<VkPhysicalDeviceRayTracingPipelinePropertiesKHR>();
+  VkPhysicalDeviceProperties2 physicalDeviceProperties = utils::make<VkPhysicalDeviceProperties2>();
   physicalDeviceProperties.pNext                       = &rtPipelineProperties;
   vkGetPhysicalDeviceProperties2(context.m_physicalDevice, &physicalDeviceProperties);
   const VkDeviceSize sbtHeaderSize      = rtPipelineProperties.shaderGroupHandleSize;
@@ -3549,13 +3549,13 @@ To do this, replace the previous code for creating the compute pipeline:
   debugUtil.setObjectName(rayTraceModule, "rayTraceModule");
 
   // Describes the entrypoint and the stage to use for this shader module in the pipeline
-  VkPipelineShaderStageCreateInfo shaderStageCreateInfo = nvvk::make<VkPipelineShaderStageCreateInfo>();
+  VkPipelineShaderStageCreateInfo shaderStageCreateInfo = utils::make<VkPipelineShaderStageCreateInfo>();
   shaderStageCreateInfo.stage                           = VK_SHADER_STAGE_COMPUTE_BIT;
   shaderStageCreateInfo.module                          = rayTraceModule;
   shaderStageCreateInfo.pName                           = "main";
 
   // Create the compute pipeline
-  VkComputePipelineCreateInfo pipelineCreateInfo = nvvk::make<VkComputePipelineCreateInfo>();
+  VkComputePipelineCreateInfo pipelineCreateInfo = utils::make<VkComputePipelineCreateInfo>();
   pipelineCreateInfo.stage                       = shaderStageCreateInfo;
   pipelineCreateInfo.layout                      = descriptorSetContainer.getPipeLayout();
   // Don't modify flags, basePipelineHandle, or basePipelineIndex
@@ -3589,7 +3589,7 @@ with the following:
     std::array<VkPipelineShaderStageCreateInfo, 1> stages;  // Pointers to shaders
 
     // Stage 0 will be the raygen shader.
-    stages[0]        = nvvk::make<VkPipelineShaderStageCreateInfo>();
+    stages[0]        = utils::make<VkPipelineShaderStageCreateInfo>();
     stages[0].stage  = VK_SHADER_STAGE_RAYGEN_BIT_KHR;  // Kind of shader
     stages[0].module = rayGenModule;                    // Contains the shader
     stages[0].pName  = "main";                          // Name of the entry point
@@ -3616,12 +3616,12 @@ with the following:
     // We lay out our shader binding table like this:
     // RAY GEN REGION
     // Group 0 - points to Stage 0
-    groups[0]               = nvvk::make<VkRayTracingShaderGroupCreateInfoKHR>();
+    groups[0]               = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
     groups[0].type          = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
     groups[0].generalShader = 0;  // Index of ray gen, miss, or callable in `stages`
 
     // Now, describe the ray tracing pipeline, ike creating a compute pipeline:
-    VkRayTracingPipelineCreateInfoKHR pipelineCreateInfo = nvvk::make<VkRayTracingPipelineCreateInfoKHR>();
+    VkRayTracingPipelineCreateInfoKHR pipelineCreateInfo = utils::make<VkRayTracingPipelineCreateInfoKHR>();
     pipelineCreateInfo.flags                             = 0;  // No flags to set
     pipelineCreateInfo.stageCount                        = static_cast<uint32_t>(stages.size());
     pipelineCreateInfo.pStages                           = stages.data();
@@ -4171,7 +4171,7 @@ Then modify the code for the `VkPipelineShaderStageCreateInfo` structs to list a
     std::array<VkPipelineShaderStageCreateInfo, 2 + NUM_C_HIT_SHADERS> stages;  // Pointers to shaders
 
     // Stage 0 will be the raygen shader.
-    stages[0]        = nvvk::make<VkPipelineShaderStageCreateInfo>();
+    stages[0]        = utils::make<VkPipelineShaderStageCreateInfo>();
     stages[0].stage  = VK_SHADER_STAGE_RAYGEN_BIT_KHR;  // Kind of shader
     stages[0].module = modules[0];                      // Contains the shader
     stages[0].pName  = "main";                          // Name of the entry point
@@ -4197,18 +4197,18 @@ Then add two groups for the miss and closest hit shader to the SBT:
     // We lay out our shader binding table like this:
     // RAY GEN REGION
     // Group 0 - points to Stage 0
-    groups[0]               = nvvk::make<VkRayTracingShaderGroupCreateInfoKHR>();
+    groups[0]               = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
     groups[0].type          = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
     groups[0].generalShader = 0;  // Index of ray gen, miss, or callable in `stages`
 ~~~ cpp highlight
     // MISS SHADER REGION
     // Group 1 - points to Stage 1
-    groups[1]               = nvvk::make<VkRayTracingShaderGroupCreateInfoKHR>();
+    groups[1]               = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
     groups[1].type          = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
     groups[1].generalShader = 1;  // Index of ray gen, miss, or callable in `stages`
     // CLOSEST-HIT REGION
     // Group 2 - uses Stage 2 as its closest-hit shader
-    groups[2]                  = nvvk::make<VkRayTracingShaderGroupCreateInfoKHR>();
+    groups[2]                  = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
     groups[2].type             = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
     groups[2].closestHitShader = 2;  // Index of closest hit in `stages`
 ~~~
@@ -4339,7 +4339,7 @@ Finally, add each new shader group to the array of groups:
     for(int closestHitShaderIdx = 0; closestHitShaderIdx < NUM_C_HIT_SHADERS; closestHitShaderIdx++)
     {
       const int moduleIdx                = 2 + closestHitShaderIdx;
-      groups[moduleIdx]                  = nvvk::make<VkRayTracingShaderGroupCreateInfoKHR>();
+      groups[moduleIdx]                  = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
       groups[moduleIdx].type             = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
       groups[moduleIdx].closestHitShader = moduleIdx;  // Index of closest-hit in `stages`
     }

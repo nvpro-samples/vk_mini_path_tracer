@@ -17,7 +17,7 @@
 #include <nvvk/raytraceKHR_vk.hpp>        // For nvvk::RaytracingBuilderKHR
 #include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
 #include <nvvk/shaders_vk.hpp>            // For nvvk::createShaderModule
-#include <nvvk/structs_vk.hpp>            // For nvvk::make
+#include <utils/structs_vk.hpp>           // For utils::make
 
 #include "common.h"
 
@@ -27,13 +27,13 @@ const uint32_t render_height = 600;
 
 VkCommandBuffer AllocateAndBeginOneTimeCommandBuffer(VkDevice device, VkCommandPool cmdPool)
 {
-  VkCommandBufferAllocateInfo cmdAllocInfo = nvvk::make<VkCommandBufferAllocateInfo>();
+  VkCommandBufferAllocateInfo cmdAllocInfo = utils::make<VkCommandBufferAllocateInfo>();
   cmdAllocInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
   cmdAllocInfo.commandPool                 = cmdPool;
   cmdAllocInfo.commandBufferCount          = 1;
   VkCommandBuffer cmdBuffer;
   NVVK_CHECK(vkAllocateCommandBuffers(device, &cmdAllocInfo, &cmdBuffer));
-  VkCommandBufferBeginInfo beginInfo = nvvk::make<VkCommandBufferBeginInfo>();
+  VkCommandBufferBeginInfo beginInfo = utils::make<VkCommandBufferBeginInfo>();
   beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
   NVVK_CHECK(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
   return cmdBuffer;
@@ -42,7 +42,7 @@ VkCommandBuffer AllocateAndBeginOneTimeCommandBuffer(VkDevice device, VkCommandP
 void EndSubmitWaitAndFreeCommandBuffer(VkDevice device, VkQueue queue, VkCommandPool cmdPool, VkCommandBuffer& cmdBuffer)
 {
   NVVK_CHECK(vkEndCommandBuffer(cmdBuffer));
-  VkSubmitInfo submitInfo       = nvvk::make<VkSubmitInfo>();
+  VkSubmitInfo submitInfo       = utils::make<VkSubmitInfo>();
   submitInfo.commandBufferCount = 1;
   submitInfo.pCommandBuffers    = &cmdBuffer;
   NVVK_CHECK(vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE));
@@ -52,7 +52,7 @@ void EndSubmitWaitAndFreeCommandBuffer(VkDevice device, VkQueue queue, VkCommand
 
 VkDeviceAddress GetBufferDeviceAddress(VkDevice device, VkBuffer buffer)
 {
-  VkBufferDeviceAddressInfo addressInfo = nvvk::make<VkBufferDeviceAddressInfo>();
+  VkBufferDeviceAddressInfo addressInfo = utils::make<VkBufferDeviceAddressInfo>();
   addressInfo.buffer                    = buffer;
   return vkGetBufferDeviceAddress(device, &addressInfo);
 }
@@ -65,9 +65,9 @@ int main(int argc, const char** argv)
   deviceInfo.apiMinor = 2;
   // Required by KHR_acceleration_structure; allows work to be offloaded onto background threads and parallelized
   deviceInfo.addDeviceExtension(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
-  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures = nvvk::make<VkPhysicalDeviceAccelerationStructureFeaturesKHR>();
+  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures = utils::make<VkPhysicalDeviceAccelerationStructureFeaturesKHR>();
   deviceInfo.addDeviceExtension(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, false, &asFeatures);
-  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures = nvvk::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
+  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures = utils::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
   deviceInfo.addDeviceExtension(VK_KHR_RAY_QUERY_EXTENSION_NAME, false, &rayQueryFeatures);
 
   nvvk::Context context;     // Encapsulates device state in a single object
@@ -88,7 +88,7 @@ int main(int argc, const char** argv)
   // implementation-dependent way (and this layout of memory can depend on
   // what the image is being used for), and be shared across multiple queues.
   // Here's how we specify the image we'll use:
-  VkImageCreateInfo imageCreateInfo = nvvk::make<VkImageCreateInfo>();
+  VkImageCreateInfo imageCreateInfo = utils::make<VkImageCreateInfo>();
   imageCreateInfo.imageType         = VK_IMAGE_TYPE_2D;
   // RGB32 images aren't usually supported, so we change this to a RGBA32 image.
   imageCreateInfo.format = VK_FORMAT_R32G32B32A32_SFLOAT;
@@ -118,7 +118,7 @@ int main(int argc, const char** argv)
   // When we create a descriptor for the image, we'll also need an image view
   // that the descriptor will point to. This specifies what part of the image
   // the descriptor views, and how the descriptor views it.
-  VkImageViewCreateInfo imageViewCreateInfo = nvvk::make<VkImageViewCreateInfo>();
+  VkImageViewCreateInfo imageViewCreateInfo = utils::make<VkImageViewCreateInfo>();
   imageViewCreateInfo.image                 = image.image;
   imageViewCreateInfo.viewType              = VK_IMAGE_VIEW_TYPE_2D;
   imageViewCreateInfo.format                = imageCreateInfo.format;
@@ -173,7 +173,7 @@ int main(int argc, const char** argv)
   }
 
   // Create the command pool
-  VkCommandPoolCreateInfo cmdPoolInfo = nvvk::make<VkCommandPoolCreateInfo>();
+  VkCommandPoolCreateInfo cmdPoolInfo = utils::make<VkCommandPoolCreateInfo>();
   cmdPoolInfo.queueFamilyIndex        = context.m_queueGCT;
   VkCommandPool cmdPool;
   NVVK_CHECK(vkCreateCommandPool(context, &cmdPoolInfo, nullptr, &cmdPool));
@@ -240,7 +240,7 @@ int main(int argc, const char** argv)
     VkDeviceAddress vertexBufferAddress = GetBufferDeviceAddress(context, vertexBuffer.buffer);
     VkDeviceAddress indexBufferAddress  = GetBufferDeviceAddress(context, indexBuffer.buffer);
     // Specify where the builder can find the vertices and indices for triangles, and their formats:
-    VkAccelerationStructureGeometryTrianglesDataKHR triangles = nvvk::make<VkAccelerationStructureGeometryTrianglesDataKHR>();
+    VkAccelerationStructureGeometryTrianglesDataKHR triangles = utils::make<VkAccelerationStructureGeometryTrianglesDataKHR>();
     triangles.vertexFormat                = VK_FORMAT_R32G32B32_SFLOAT;
     triangles.vertexData.deviceAddress    = vertexBufferAddress;
     triangles.vertexStride                = 3 * sizeof(float);
@@ -249,7 +249,7 @@ int main(int argc, const char** argv)
     triangles.indexData.deviceAddress     = indexBufferAddress;
     triangles.transformData.deviceAddress = 0;  // No transform
     // Create a VkAccelerationStructureGeometryKHR object that says it handles opaque triangles and points to the above:
-    VkAccelerationStructureGeometryKHR geometry = nvvk::make<VkAccelerationStructureGeometryKHR>();
+    VkAccelerationStructureGeometryKHR geometry = utils::make<VkAccelerationStructureGeometryKHR>();
     geometry.geometry.triangles                 = triangles;
     geometry.geometryType                       = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
     geometry.flags                              = VK_GEOMETRY_OPAQUE_BIT_KHR;
@@ -330,7 +330,7 @@ int main(int argc, const char** argv)
   descriptorImageInfo.imageView   = imageView;                // How the image should be accessed
   writeDescriptorSets[0] = descriptorSetContainer.makeWrite(0 /*set index*/, BINDING_IMAGEDATA /*binding*/, &descriptorImageInfo);
   // Top-level acceleration structure (TLAS)
-  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = nvvk::make<VkWriteDescriptorSetAccelerationStructureKHR>();
+  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = utils::make<VkWriteDescriptorSetAccelerationStructureKHR>();
   VkAccelerationStructureKHR tlasCopy = raytracingBuilder.getAccelerationStructure();  // So that we can take its address
   descriptorAS.accelerationStructureCount = 1;
   descriptorAS.pAccelerationStructures    = &tlasCopy;
@@ -356,13 +356,13 @@ int main(int argc, const char** argv)
   debugUtil.setObjectName(rayTraceModule, "rayTraceModule");
 
   // Describes the entrypoint and the stage to use for this shader module in the pipeline
-  VkPipelineShaderStageCreateInfo shaderStageCreateInfo = nvvk::make<VkPipelineShaderStageCreateInfo>();
+  VkPipelineShaderStageCreateInfo shaderStageCreateInfo = utils::make<VkPipelineShaderStageCreateInfo>();
   shaderStageCreateInfo.stage                           = VK_SHADER_STAGE_COMPUTE_BIT;
   shaderStageCreateInfo.module                          = rayTraceModule;
   shaderStageCreateInfo.pName                           = "main";
 
   // Create the compute pipeline
-  VkComputePipelineCreateInfo pipelineCreateInfo = nvvk::make<VkComputePipelineCreateInfo>();
+  VkComputePipelineCreateInfo pipelineCreateInfo = utils::make<VkComputePipelineCreateInfo>();
   pipelineCreateInfo.stage                       = shaderStageCreateInfo;
   pipelineCreateInfo.layout                      = descriptorSetContainer.getPipeLayout();
   // Don't modify flags, basePipelineHandle, or basePipelineIndex
@@ -447,7 +447,7 @@ int main(int argc, const char** argv)
       // Add a command that says "Make it so that memory writes by transfers
       // are available to read from the CPU." (In other words, "Flush the GPU caches
       // so the CPU can read the data.") To do this, we use a memory barrier.
-      VkMemoryBarrier memoryBarrier = nvvk::make<VkMemoryBarrier>();
+      VkMemoryBarrier memoryBarrier = utils::make<VkMemoryBarrier>();
       memoryBarrier.srcAccessMask   = VK_ACCESS_TRANSFER_WRITE_BIT;  // Make transfer writes
       memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;       // Readable by the CPU
       vkCmdPipelineBarrier(cmdBuffer,                                // The command buffer
