@@ -1,9 +1,8 @@
-// Copyright 2020-2021 NVIDIA Corporation
+// Copyright 2020-2024 NVIDIA Corporation
 // SPDX-License-Identifier: Apache-2.0
 
 #include <nvvk/context_vk.hpp>
 #include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
-#include <utils/structs_vk.hpp>           // For utils::make
 
 static const uint64_t render_width  = 800;
 static const uint64_t render_height = 600;
@@ -16,25 +15,23 @@ int main(int argc, const char** argv)
   deviceInfo.apiMinor = 2;
   // Required by KHR_acceleration_structure; allows work to be offloaded onto background threads and parallelized
   deviceInfo.addDeviceExtension(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
-  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures = utils::make<VkPhysicalDeviceAccelerationStructureFeaturesKHR>();
+  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR};
   deviceInfo.addDeviceExtension(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, false, &asFeatures);
-  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures = utils::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
+  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR};
   deviceInfo.addDeviceExtension(VK_KHR_RAY_QUERY_EXTENSION_NAME, false, &rayQueryFeatures);
 
   nvvk::Context context;     // Encapsulates device state in a single object
   context.init(deviceInfo);  // Initialize the context
-  // Device must support acceleration structures and ray queries:
-  assert(asFeatures.accelerationStructure == VK_TRUE && rayQueryFeatures.rayQuery == VK_TRUE);
 
   // Create the allocator
   nvvk::ResourceAllocatorDedicated allocator;
   allocator.init(context, context.m_physicalDevice);
 
   // Create a buffer
-  VkDeviceSize       bufferSizeBytes  = render_width * render_height * 3 * sizeof(float);
-  VkBufferCreateInfo bufferCreateInfo = utils::make<VkBufferCreateInfo>();
-  bufferCreateInfo.size               = bufferSizeBytes;
-  bufferCreateInfo.usage              = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+  VkDeviceSize       bufferSizeBytes = render_width * render_height * 3 * sizeof(float);
+  VkBufferCreateInfo bufferCreateInfo{.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+                                      .size  = bufferSizeBytes,
+                                      .usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT};
   // VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT means that the CPU can read this buffer's memory.
   // VK_MEMORY_PROPERTY_HOST_CACHED_BIT means that the CPU caches this memory.
   // VK_MEMORY_PROPERTY_HOST_COHERENT_BIT means that the CPU side of cache management

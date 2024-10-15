@@ -497,7 +497,7 @@ static const uint64_t render_height    = 600;
 ~~~
 [The C++ definition of the color buffer resolution.]
 
-<br/>
+<br>
 
 ~~~ glsl
   // The resolution of the buffer, which in this case is a hardcoded vector
@@ -514,7 +514,7 @@ static const uint32_t workgroup_height = 8;
 ~~~
 [The C++ definition of the workgroup size.]
 
-<br/>
+<br>
 
 ~~~ glsl
 layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
@@ -538,7 +538,7 @@ writeDescriptorSets[3] = descriptorSetContainer.makeWrite(0, 3, &indexDescriptor
 ~~~
 [Specifying binding locations in C++ using the second argument of `nvvk::DescriptorSetContainer::makeWrite`.]
 
-<br/>
+<br>
 
 ~~~ glsl highlight
 layout(binding = 0, set = 0, scalar) buffer storageBuffer
@@ -646,26 +646,21 @@ with
 
 ~~~ cpp
   // 0
-  VkDescriptorBufferInfo descriptorBufferInfo{};
-  descriptorBufferInfo.buffer = buffer.buffer;    // The VkBuffer object
-  descriptorBufferInfo.range  = bufferSizeBytes;  // The length of memory to bind; offset is 0.
-  writeDescriptorSets[0]      = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
+  VkDescriptorBufferInfo descriptorBufferInfo{.buffer = buffer.buffer,    // The VkBuffer object
+                                              .range  = bufferSizeBytes};  // The length of memory to bind; offset is 0.
+  writeDescriptorSets[0] = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
   // 1
-  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = utils::make<VkWriteDescriptorSetAccelerationStructureKHR>();
   VkAccelerationStructureKHR tlasCopy = raytracingBuilder.getAccelerationStructure();  // So that we can take its address
-  descriptorAS.accelerationStructureCount = 1;
-  descriptorAS.pAccelerationStructures    = &tlasCopy;
-  writeDescriptorSets[1]                  = descriptorSetContainer.makeWrite(0, 1, &descriptorAS);
+  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR,
+                                                            .accelerationStructureCount = 1,
+                                                            .pAccelerationStructures    = &tlasCopy};
+  writeDescriptorSets[1] = descriptorSetContainer.makeWrite(0, 1, &descriptorAS);
   // 2
-  VkDescriptorBufferInfo vertexDescriptorBufferInfo{};
-  vertexDescriptorBufferInfo.buffer = vertexBuffer.buffer;
-  vertexDescriptorBufferInfo.range  = VK_WHOLE_SIZE;
-  writeDescriptorSets[2]            = descriptorSetContainer.makeWrite(0, 2, &vertexDescriptorBufferInfo);
+  VkDescriptorBufferInfo vertexDescriptorBufferInfo{.buffer = vertexBuffer.buffer, .range = VK_WHOLE_SIZE};
+  writeDescriptorSets[2] = descriptorSetContainer.makeWrite(0, 2, &vertexDescriptorBufferInfo);
   // 3
-  VkDescriptorBufferInfo indexDescriptorBufferInfo{};
-  indexDescriptorBufferInfo.buffer = indexBuffer.buffer;
-  indexDescriptorBufferInfo.range  = VK_WHOLE_SIZE;
-  writeDescriptorSets[3]           = descriptorSetContainer.makeWrite(0, 3, &indexDescriptorBufferInfo);
+  VkDescriptorBufferInfo indexDescriptorBufferInfo{.buffer = indexBuffer.buffer, .range = VK_WHOLE_SIZE};
+  writeDescriptorSets[3] = descriptorSetContainer.makeWrite(0, 3, &indexDescriptorBufferInfo);
 ~~~
 
 with
@@ -673,33 +668,28 @@ with
 ~~~ cpp highlight
   // Color buffer
 ~~~ cpp
-  VkDescriptorBufferInfo descriptorBufferInfo{};
-  descriptorBufferInfo.buffer = buffer.buffer;    // The VkBuffer object
-  descriptorBufferInfo.range  = bufferSizeBytes;  // The length of memory to bind; offset is 0.
+  VkDescriptorBufferInfo descriptorBufferInfo{.buffer = buffer.buffer,    // The VkBuffer object
+                                              .range  = bufferSizeBytes};  // The length of memory to bind; offset is 0.
 ~~~ cpp highlight
   writeDescriptorSets[0] = descriptorSetContainer.makeWrite(0 /*set index*/, BINDING_IMAGEDATA /*binding*/, &descriptorBufferInfo);
   // Top-level acceleration structure (TLAS)
 ~~~ cpp
-  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = utils::make<VkWriteDescriptorSetAccelerationStructureKHR>();
   VkAccelerationStructureKHR tlasCopy = raytracingBuilder.getAccelerationStructure();  // So that we can take its address
-  descriptorAS.accelerationStructureCount = 1;
-  descriptorAS.pAccelerationStructures    = &tlasCopy;
+  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR,
+                                                            .accelerationStructureCount = 1,
+                                                            .pAccelerationStructures    = &tlasCopy};
 ~~~ cpp highlight
-  writeDescriptorSets[1]                  = descriptorSetContainer.makeWrite(0, BINDING_TLAS, &descriptorAS);
+  writeDescriptorSets[1] = descriptorSetContainer.makeWrite(0, BINDING_TLAS, &descriptorAS);
   // Vertex buffer
 ~~~ cpp
-  VkDescriptorBufferInfo vertexDescriptorBufferInfo{};
-  vertexDescriptorBufferInfo.buffer = vertexBuffer.buffer;
-  vertexDescriptorBufferInfo.range  = VK_WHOLE_SIZE;
+  VkDescriptorBufferInfo vertexDescriptorBufferInfo{.buffer = vertexBuffer.buffer, .range = VK_WHOLE_SIZE};
 ~~~ cpp highlight
   writeDescriptorSets[2] = descriptorSetContainer.makeWrite(0, BINDING_VERTICES, &vertexDescriptorBufferInfo);
   // Index buffer
 ~~~ cpp
-  VkDescriptorBufferInfo indexDescriptorBufferInfo{};
-  indexDescriptorBufferInfo.buffer = indexBuffer.buffer;
-  indexDescriptorBufferInfo.range  = VK_WHOLE_SIZE;
+  VkDescriptorBufferInfo indexDescriptorBufferInfo{.buffer = indexBuffer.buffer, .range = VK_WHOLE_SIZE};
 ~~~ cpp highlight
-  writeDescriptorSets[3]           = descriptorSetContainer.makeWrite(0, BINDING_INDICES, &indexDescriptorBufferInfo);
+  writeDescriptorSets[3] = descriptorSetContainer.makeWrite(0, BINDING_INDICES, &indexDescriptorBufferInfo);
 ~~~
 
 ; replace
@@ -953,10 +943,9 @@ with the following:
 ~~~ cpp
   // Create a push constant range describing the amount of data for the push constants.
   static_assert(sizeof(PushConstants) % 4 == 0, "Push constant size must be a multiple of 4 per the Vulkan spec!");
-  VkPushConstantRange pushConstantRange;
-  pushConstantRange.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
-  pushConstantRange.offset     = 0;
-  pushConstantRange.size       = sizeof(PushConstants);
+  VkPushConstantRange pushConstantRange{.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT,  //
+                                        .offset     = 0,                            //
+                                        .size       = sizeof(PushConstants)};
   // Create a pipeline layout from the descriptor set layout and push constant range:
   descriptorSetContainer.initPipeLayout(1,                    // Number of push constant ranges
                                         &pushConstantRange);  // Pointer to push constant ranges
@@ -1185,15 +1174,15 @@ with the following loop over 32 sample batches:
       // so the CPU can read the data.") To do this, we use a memory barrier.
       // This is one of the most complex parts of Vulkan, so don't worry if this is
       // confusing! We'll talk about pipeline barriers more in the extras.
-      VkMemoryBarrier memoryBarrier = utils::make<VkMemoryBarrier>();
-      memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;  // Make shader writes
-      memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;     // Readable by the CPU
-      vkCmdPipelineBarrier(cmdBuffer,                              // The command buffer
-                           VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,   // From the compute shader
-                           VK_PIPELINE_STAGE_HOST_BIT,             // To the CPU
-                           0,                                      // No special flags
-                           1, &memoryBarrier,                      // An array of memory barriers
-                           0, nullptr, 0, nullptr);                // No other barriers
+      VkMemoryBarrier memoryBarrier{.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+                                    .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,  // Make shader writes
+                                    .dstAccessMask = VK_ACCESS_HOST_READ_BIT};    // Readable by the CPU
+      vkCmdPipelineBarrier(cmdBuffer,                                             // The command buffer
+                           VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,                  // From the compute shader
+                           VK_PIPELINE_STAGE_HOST_BIT,                            // To the CPU
+                           0,                                                     // No special flags
+                           1, &memoryBarrier,                                     // An array of memory barriers
+                           0, nullptr, 0, nullptr);                               // No other barriers
     }
 
     // End and submit the command buffer, then wait for it to finish:
@@ -1379,9 +1368,9 @@ In `main.cpp`, remove the following code:
 ~~~ cpp
   // Create a buffer
   VkDeviceSize bufferSizeBytes = uint64_t(pushConstants.render_width) * uint64_t(pushConstants.render_height) * 3 * sizeof(float);
-  VkBufferCreateInfo bufferCreateInfo = utils::make<VkBufferCreateInfo>();
-  bufferCreateInfo.size               = bufferSizeBytes;
-  bufferCreateInfo.usage              = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+  VkBufferCreateInfo bufferCreateInfo{.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+                                      .size  = bufferSizeBytes,
+                                      .usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT};
   // VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT means that the CPU can read this buffer's memory.
   // VK_MEMORY_PROPERTY_HOST_CACHED_BIT means that the CPU caches this memory.
   // VK_MEMORY_PROPERTY_HOST_COHERENT_BIT means that the CPU side of cache management
@@ -1406,51 +1395,53 @@ We've included comments to describe what each line does.
   // implementation-dependent way (and this layout of memory can depend on
   // what the image is being used for), and be shared across multiple queues.
   // Here's how we specify the image we'll use:
-  VkImageCreateInfo imageCreateInfo = utils::make<VkImageCreateInfo>();
-  imageCreateInfo.imageType         = VK_IMAGE_TYPE_2D;
-  // RGB32 images aren't usually supported, so we change this to a RGBA32 image.
-  imageCreateInfo.format = VK_FORMAT_R32G32B32A32_SFLOAT;
-  // Defines the size of the image:
-  imageCreateInfo.extent = {render_width, render_height, 1};
-  // The image is an array of length 1, and each element contains only 1 mip:
-  imageCreateInfo.mipLevels   = 1;
-  imageCreateInfo.arrayLayers = 1;
-  // We aren't using MSAA (i.e. the image only contains 1 sample per pixel -
-  // note that this isn't the same use of the word "sample" as in ray tracing):
-  imageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-  // The driver controls the tiling of the image for performance:
-  imageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-  // This image is read and written on the GPU, and data can be transferred
-  // from it:
-  imageCreateInfo.usage = VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
-  // Image is only used by one queue:
-  imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-  // The image must be in either VK_IMAGE_LAYOUT_UNDEFINED or VK_IMAGE_LAYOUT_PREINITIALIZED
-  // according to the specification; we'll transition the layout shortly,
-  // in the same command buffer used to upload the vertex and index buffers:
-  imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+  VkImageCreateInfo imageCreateInfo =  //
+      {.sType     = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+       .imageType = VK_IMAGE_TYPE_2D,
+       // RGB32 images aren't usually supported, so we change this to a RGBA32 image.
+       .format = VK_FORMAT_R32G32B32A32_SFLOAT,
+       // Defines the size of the image:
+       .extent = {render_width, render_height, 1},
+       // The image is an array of length 1, and each element contains only 1 mip:
+       .mipLevels   = 1,
+       .arrayLayers = 1,
+       // We aren't using MSAA (i.e. the image only contains 1 sample per pixel -
+       // note that this isn't the same use of the word "sample" as in ray tracing):
+       .samples = VK_SAMPLE_COUNT_1_BIT,
+       // The driver controls the tiling of the image for performance:
+       .tiling = VK_IMAGE_TILING_OPTIMAL,
+       // This image is read and written on the GPU, and data can be transferred
+       // from it:
+       .usage = VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+       // Image is only used by one queue:
+       .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+       // The image must be in either VK_IMAGE_LAYOUT_UNDEFINED or VK_IMAGE_LAYOUT_PREINITIALIZED
+       // according to the specification; we'll transition the layout shortly,
+       // in the same command buffer used to upload the vertex and index buffers:
+       .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED};
   nvvk::Image image             = allocator.createImage(imageCreateInfo);
 
   // Create an image view for the entire image
   // When we create a descriptor for the image, we'll also need an image view
   // that the descriptor will point to. This specifies what part of the image
   // the descriptor views, and how the descriptor views it.
-  VkImageViewCreateInfo imageViewCreateInfo = utils::make<VkImageViewCreateInfo>();
-  imageViewCreateInfo.image                 = image.image;
-  imageViewCreateInfo.viewType              = VK_IMAGE_VIEW_TYPE_2D;
-  imageViewCreateInfo.format                = imageCreateInfo.format;
-  // We could use imageViewCreateInfo.components to make the components of the
-  // image appear to be "swizzled", but we don't want to do that. Luckily,
-  // all values are set to VK_COMPONENT_SWIZZLE_IDENTITY, which means
-  // "don't change anything", by utils::make or zero initialization.
-  // This says that the ImageView views the color part of the image (since
-  // images can contain depth or stencil aspects):
-  imageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-  // This says that we only look at array layer 0 and mip level 0:
-  imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
-  imageViewCreateInfo.subresourceRange.layerCount     = 1;
-  imageViewCreateInfo.subresourceRange.baseMipLevel   = 0;
-  imageViewCreateInfo.subresourceRange.levelCount     = 1;
+  VkImageViewCreateInfo imageViewCreateInfo =  //
+      {.sType    = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+       .image    = image.image,
+       .viewType = VK_IMAGE_VIEW_TYPE_2D,
+       .format   = imageCreateInfo.format,
+       // We could use imageViewCreateInfo.components to make the components of the
+       // image appear to be "swizzled", but we don't want to do that. Luckily,
+       // all values are set to VK_COMPONENT_SWIZZLE_IDENTITY, which means
+       // "don't change anything", by zero initialization.
+       // This says that the ImageView views the color part of the image (since
+       // images can contain depth or stencil aspects):
+       .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                            // This says that we only look at mip level and array layer 0:
+                            .baseMipLevel   = 0,
+                            .levelCount     = 1,
+                            .baseArrayLayer = 0,
+                            .layerCount     = 1}};
   VkImageView imageView;
   NVVK_CHECK(vkCreateImageView(context, &imageViewCreateInfo, nullptr, &imageView));
 
@@ -1631,15 +1622,15 @@ Replace the code
       // so the CPU can read the data.") To do this, we use a memory barrier.
       // This is one of the most complex parts of Vulkan, so don't worry if this is
       // confusing! We'll talk about pipeline barriers more in the extras.
-      VkMemoryBarrier memoryBarrier = utils::make<VkMemoryBarrier>();
-      memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;  // Make shader writes
-      memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;     // Readable by the CPU
-      vkCmdPipelineBarrier(cmdBuffer,                              // The command buffer
-                           VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,   // From the compute shader
-                           VK_PIPELINE_STAGE_HOST_BIT,             // To the CPU
-                           0,                                      // No special flags
-                           1, &memoryBarrier,                      // An array of memory barriers
-                           0, nullptr, 0, nullptr);
+      VkMemoryBarrier memoryBarrier{.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+                                    .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,  // Make shader writes
+                                    .dstAccessMask = VK_ACCESS_HOST_READ_BIT};    // Readable by the CPU
+      vkCmdPipelineBarrier(cmdBuffer,                                             // The command buffer
+                           VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,                  // From the compute shader
+                           VK_PIPELINE_STAGE_HOST_BIT,                            // To the CPU
+                           0,                                                     // No special flags
+                           1, &memoryBarrier,                                     // An array of memory barriers
+                           0, nullptr, 0, nullptr);                               // No other barriers
 ~~~
 
 with the following (the first transition ensures that the ray tracing results
@@ -1668,18 +1659,17 @@ transition ensures that the copied data is visible and available to the CPU.)
       // Now, copy the image (which has layout TRANSFER_SRC_OPTIMAL) to imageLinear
       // (which has layout TRANSFER_DST_OPTIMAL).
       {
-        VkImageCopy region;
-        // We copy the image aspect, layer 0, mip 0:
-        region.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
-        region.srcSubresource.baseArrayLayer = 0;
-        region.srcSubresource.layerCount     = 1;
-        region.srcSubresource.mipLevel       = 0;
-        // (0, 0, 0) in the first image corresponds to (0, 0, 0) in the second image:
-        region.srcOffset      = {0, 0, 0};
-        region.dstSubresource = region.srcSubresource;
-        region.dstOffset      = {0, 0, 0};
-        // Copy the entire image:
-        region.extent = {render_width, render_height, 1};
+        // We copy image color, mip 0, layer 0:
+        VkImageCopy region{.srcSubresource = {.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT,  //
+                                              .mipLevel       = 0,                          //
+                                              .baseArrayLayer = 0,                          //
+                                              .layerCount     = 1},
+                           // (0, 0, 0) in the first image corresponds to (0, 0, 0) in the second image:
+                           .srcOffset      = {0, 0, 0},
+                           .dstSubresource = region.srcSubresource,
+                           .dstOffset      = {0, 0, 0},
+                           // Copy the entire image:
+                           .extent = {render_width, render_height, 1}};
         vkCmdCopyImage(cmdBuffer,                             // Command buffer
                        image.image,                           // Source image
                        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,  // Source image layout
@@ -1691,15 +1681,15 @@ transition ensures that the copied data is visible and available to the CPU.)
       // Add a command that says "Make it so that memory writes by transfers
       // are available to read from the CPU." (In other words, "Flush the GPU caches
       // so the CPU can read the data.") To do this, we use a memory barrier.
-      VkMemoryBarrier memoryBarrier = utils::make<VkMemoryBarrier>();
-      memoryBarrier.srcAccessMask   = VK_ACCESS_TRANSFER_WRITE_BIT;  // Make transfer writes
-      memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;       // Readable by the CPU
-      vkCmdPipelineBarrier(cmdBuffer,                                // The command buffer
-                           VK_PIPELINE_STAGE_TRANSFER_BIT,           // From transfers
-                           VK_PIPELINE_STAGE_HOST_BIT,               // To the CPU
-                           0,                                        // No special flags
-                           1, &memoryBarrier,                        // An array of memory barriers
-                           0, nullptr, 0, nullptr); 
+      VkMemoryBarrier memoryBarrier{.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+                                    .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,  // Make transfer writes
+                                    .dstAccessMask = VK_ACCESS_HOST_READ_BIT};      // Readable by the CPU
+      vkCmdPipelineBarrier(cmdBuffer,                                               // The command buffer
+                           VK_PIPELINE_STAGE_TRANSFER_BIT,                          // From transfers
+                           VK_PIPELINE_STAGE_HOST_BIT,                              // To the CPU
+                           0,                                                       // No special flags
+                           1, &memoryBarrier,                                       // An array of memory barriers
+                           0, nullptr, 0, nullptr);                                 // No other barriers
 ~~~
 
 ## Mapping, Reading, and Unmapping
@@ -3400,22 +3390,15 @@ We'll need to use the `VK_KHR_ray_tracing_pipeline` extension and will remove th
 To do this, replace
 
 ~~~ cpp
-  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures = utils::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
+  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR};
   deviceInfo.addDeviceExtension(VK_KHR_RAY_QUERY_EXTENSION_NAME, false, &rayQueryFeatures);
 ~~~
 
 in `main.cpp` with
 
 ~~~ cpp
-  VkPhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeatures = utils::make<VkPhysicalDeviceRayTracingPipelineFeaturesKHR>();
+  VkPhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR};
   deviceInfo.addDeviceExtension(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, false, &rtPipelineFeatures);
-~~~
-
-We'll also need to check that the device supports ray tracing.
-
-~~~ cpp
-  // Device must support acceleration structures and ray tracing pipelines:
-  assert(asFeatures.accelerationStructure == VK_TRUE && rtPipelineFeatures.rayTracingPipeline == VK_TRUE);
 ~~~
 
 ### Calculating SBT Stride
@@ -3453,15 +3436,13 @@ the SBT stride in this way, add the following code:
   // VkPhysicalDeviceRayTracingPipelinePropertiesKHR object to get both
   // physical device properties and ray tracing pipeline properties.
   // This gives us information about shader binding tables.
-  VkPhysicalDeviceRayTracingPipelinePropertiesKHR rtPipelineProperties =
-      utils::make<VkPhysicalDeviceRayTracingPipelinePropertiesKHR>();
-  VkPhysicalDeviceProperties2 physicalDeviceProperties = utils::make<VkPhysicalDeviceProperties2>();
-  physicalDeviceProperties.pNext                       = &rtPipelineProperties;
+  VkPhysicalDeviceRayTracingPipelinePropertiesKHR rtPipelineProperties{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR};
+  VkPhysicalDeviceProperties2 physicalDeviceProperties{.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
+                                                       .pNext = &rtPipelineProperties};
   vkGetPhysicalDeviceProperties2(context.m_physicalDevice, &physicalDeviceProperties);
   const VkDeviceSize sbtHeaderSize      = rtPipelineProperties.shaderGroupHandleSize;
   const VkDeviceSize sbtBaseAlignment   = rtPipelineProperties.shaderGroupBaseAlignment;
   const VkDeviceSize sbtHandleAlignment = rtPipelineProperties.shaderGroupHandleAlignment;
-
   // Compute the stride between shader binding table (SBT) records.
   // This must be:
   // - Greater than rtPipelineProperties.shaderGroupHandleSize (since a record
@@ -3527,7 +3508,9 @@ the compute shader. Change this to the ray generation shader:
 Also change `pushConstantRange.stageFlags` to list the flag for the ray generation shader stage:
 
 ~~~ cpp
-  pushConstantRange.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
+  VkPushConstantRange pushConstantRange{.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR,  //
+                                        .offset     = 0,                               //
+                                        .size       = sizeof(PushConstants)};
 ~~~
 
 ### Creating the Ray Tracing Pipeline and SBTs
@@ -3549,15 +3532,15 @@ To do this, replace the previous code for creating the compute pipeline:
   debugUtil.setObjectName(rayTraceModule, "rayTraceModule");
 
   // Describes the entrypoint and the stage to use for this shader module in the pipeline
-  VkPipelineShaderStageCreateInfo shaderStageCreateInfo = utils::make<VkPipelineShaderStageCreateInfo>();
-  shaderStageCreateInfo.stage                           = VK_SHADER_STAGE_COMPUTE_BIT;
-  shaderStageCreateInfo.module                          = rayTraceModule;
-  shaderStageCreateInfo.pName                           = "main";
+  VkPipelineShaderStageCreateInfo shaderStageCreateInfo{.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+                                                        .stage  = VK_SHADER_STAGE_COMPUTE_BIT,
+                                                        .module = rayTraceModule,
+                                                        .pName  = "main"};
 
   // Create the compute pipeline
-  VkComputePipelineCreateInfo pipelineCreateInfo = utils::make<VkComputePipelineCreateInfo>();
-  pipelineCreateInfo.stage                       = shaderStageCreateInfo;
-  pipelineCreateInfo.layout                      = descriptorSetContainer.getPipeLayout();
+  VkComputePipelineCreateInfo pipelineCreateInfo{.sType  = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
+                                                 .stage  = shaderStageCreateInfo,
+                                                 .layout = descriptorSetContainer.getPipeLayout()};
   // Don't modify flags, basePipelineHandle, or basePipelineIndex
   VkPipeline computePipeline;
   NVVK_CHECK(vkCreateComputePipelines(context,                 // Device
@@ -3589,10 +3572,10 @@ with the following:
     std::array<VkPipelineShaderStageCreateInfo, 1> stages;  // Pointers to shaders
 
     // Stage 0 will be the raygen shader.
-    stages[0]        = utils::make<VkPipelineShaderStageCreateInfo>();
-    stages[0].stage  = VK_SHADER_STAGE_RAYGEN_BIT_KHR;  // Kind of shader
-    stages[0].module = rayGenModule;                    // Contains the shader
-    stages[0].pName  = "main";                          // Name of the entry point
+    stages[0] = {.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+                 .stage  = VK_SHADER_STAGE_RAYGEN_BIT_KHR,  // Kind of shader
+                 .module = rayGenModule,                    // Contains the shader
+                 .pName  = "main"};                          // Name of the entry point
 
     // Then we make groups point to the shader stages. Each group can point to
     // one or two shader stages depending on the type, by specifying the index
@@ -3616,19 +3599,23 @@ with the following:
     // We lay out our shader binding table like this:
     // RAY GEN REGION
     // Group 0 - points to Stage 0
-    groups[0]               = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
-    groups[0].type          = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
-    groups[0].generalShader = 0;  // Index of ray gen, miss, or callable in `stages`
+    groups[0] = {.sType              = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR,
+                 .type               = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR,
+                 .generalShader      = 0,                      // Index of ray gen, miss, or callable in `stages`
+                 .closestHitShader   = VK_SHADER_UNUSED_KHR,   // No closest hit shader
+                 .anyHitShader       = VK_SHADER_UNUSED_KHR,   // No any-hit shader
+                 .intersectionShader = VK_SHADER_UNUSED_KHR};  // No intersection shader
 
     // Now, describe the ray tracing pipeline, ike creating a compute pipeline:
-    VkRayTracingPipelineCreateInfoKHR pipelineCreateInfo = utils::make<VkRayTracingPipelineCreateInfoKHR>();
-    pipelineCreateInfo.flags                             = 0;  // No flags to set
-    pipelineCreateInfo.stageCount                        = static_cast<uint32_t>(stages.size());
-    pipelineCreateInfo.pStages                           = stages.data();
-    pipelineCreateInfo.groupCount                        = static_cast<uint32_t>(groups.size());
-    pipelineCreateInfo.pGroups                           = groups.data();
-    pipelineCreateInfo.maxPipelineRayRecursionDepth      = 1;  // Depth of call tree
-    pipelineCreateInfo.layout                            = descriptorSetContainer.getPipeLayout();
+    VkRayTracingPipelineCreateInfoKHR pipelineCreateInfo =  //
+        {.sType                        = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR,
+         .flags                        = 0,  // No flags to set
+         .stageCount                   = static_cast<uint32_t>(stages.size()),
+         .pStages                      = stages.data(),
+         .groupCount                   = static_cast<uint32_t>(groups.size()),
+         .pGroups                      = groups.data(),
+         .maxPipelineRayRecursionDepth = 1,  // Depth of call tree
+         .layout                       = descriptorSetContainer.getPipeLayout()};
     NVVK_CHECK(vkCreateRayTracingPipelinesKHR(context,                 // Device
                                               VK_NULL_HANDLE,          // Deferred operation or VK_NULL_HANDLE
                                               VK_NULL_HANDLE,          // Pipeline cache or VK_NULL_HANDLE
@@ -4171,10 +4158,10 @@ Then modify the code for the `VkPipelineShaderStageCreateInfo` structs to list a
     std::array<VkPipelineShaderStageCreateInfo, 2 + NUM_C_HIT_SHADERS> stages;  // Pointers to shaders
 
     // Stage 0 will be the raygen shader.
-    stages[0]        = utils::make<VkPipelineShaderStageCreateInfo>();
-    stages[0].stage  = VK_SHADER_STAGE_RAYGEN_BIT_KHR;  // Kind of shader
-    stages[0].module = modules[0];                      // Contains the shader
-    stages[0].pName  = "main";                          // Name of the entry point
+    stages[0] = {.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+                 .stage  = VK_SHADER_STAGE_RAYGEN_BIT_KHR,  // Kind of shader
+                 .module = modules[0],                      // Contains the shader
+                 .pName  = "main"};                          // Name of the entry point
     // Stage 1 will be the miss shader.
     stages[1]        = stages[0];
     stages[1].stage  = VK_SHADER_STAGE_MISS_BIT_KHR;  // Kind of shader
@@ -4197,20 +4184,29 @@ Then add two groups for the miss and closest hit shader to the SBT:
     // We lay out our shader binding table like this:
     // RAY GEN REGION
     // Group 0 - points to Stage 0
-    groups[0]               = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
-    groups[0].type          = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
-    groups[0].generalShader = 0;  // Index of ray gen, miss, or callable in `stages`
+    groups[0] = {.sType              = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR,
+                 .type               = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR,
+                 .generalShader      = 0,                      // Index of ray gen, miss, or callable in `stages`
+                 .closestHitShader   = VK_SHADER_UNUSED_KHR,   // No closest hit shader
+                 .anyHitShader       = VK_SHADER_UNUSED_KHR,   // No any-hit shader
+                 .intersectionShader = VK_SHADER_UNUSED_KHR};  // No intersection shader
 ~~~ cpp highlight
     // MISS SHADER REGION
     // Group 1 - points to Stage 1
-    groups[1]               = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
-    groups[1].type          = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
-    groups[1].generalShader = 1;  // Index of ray gen, miss, or callable in `stages`
+    groups[1] = {.sType              = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR,
+                 .type               = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR,
+                 .generalShader      = 1,                      // Index of ray gen, miss, or callable in `stages`
+                 .closestHitShader   = VK_SHADER_UNUSED_KHR,   // No closest hit shader
+                 .anyHitShader       = VK_SHADER_UNUSED_KHR,   // No any-hit shader
+                 .intersectionShader = VK_SHADER_UNUSED_KHR};  // No intersection shader
     // CLOSEST-HIT REGION
     // Group 2 - uses Stage 2 as its closest-hit shader
-    groups[2]                  = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
-    groups[2].type             = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
-    groups[2].closestHitShader = 2;  // Index of closest hit in `stages`
+    groups[2] = {.sType              = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR,
+                 .type               = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR,
+                 .generalShader      = VK_SHADER_UNUSED_KHR,   // No  ray gen, miss, or callable shader
+                 .closestHitShader   = 2,                      // Index of closest hit in `stages`
+                 .anyHitShader       = VK_SHADER_UNUSED_KHR,   // No any-hit shader
+                 .intersectionShader = VK_SHADER_UNUSED_KHR};  // No intersection shader
 ~~~
 
 Then modify the `VkStridedDeviceAddressRegionKHR` code to point to the new regions
@@ -4336,12 +4332,15 @@ Finally, add each new shader group to the array of groups:
     // CLOSEST-HIT REGION
 ~~~ cpp highlight
     // Group N - uses Stage N as its closest-hit shader
-    for(int closestHitShaderIdx = 0; closestHitShaderIdx < NUM_C_HIT_SHADERS; closestHitShaderIdx++)
+    for(uint32_t closestHitShaderIdx = 0; closestHitShaderIdx < NUM_C_HIT_SHADERS; closestHitShaderIdx++)
     {
-      const int moduleIdx                = 2 + closestHitShaderIdx;
-      groups[moduleIdx]                  = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
-      groups[moduleIdx].type             = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
-      groups[moduleIdx].closestHitShader = moduleIdx;  // Index of closest-hit in `stages`
+      const uint32_t moduleIdx = 2 + closestHitShaderIdx;
+      groups[moduleIdx]        = {.sType              = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR,
+                                  .type               = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR,
+                                  .generalShader      = VK_SHADER_UNUSED_KHR,   // No ray gen, miss, or callable shader
+                                  .closestHitShader   = moduleIdx,              // Index of closest-hit in `stages`
+                                  .anyHitShader       = VK_SHADER_UNUSED_KHR,   // No any-hit shader
+                                  .intersectionShader = VK_SHADER_UNUSED_KHR};  // No intersection shader
     }
 ~~~
 

@@ -1,4 +1,4 @@
-// Copyright 2020-2023 NVIDIA Corporation
+// Copyright 2020-2024 NVIDIA Corporation
 // SPDX-License-Identifier: Apache-2.0
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
@@ -8,7 +8,6 @@
 #include <nvvk/error_vk.hpp>              // For NVVK_CHECK
 #include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
 #include <nvvk/shaders_vk.hpp>            // For nvvk::createShaderModule
-#include <utils/structs_vk.hpp>           // For utils::make
 
 static const uint64_t render_width     = 800;
 static const uint64_t render_height    = 600;
@@ -23,19 +22,19 @@ int main(int argc, const char** argv)
   deviceInfo.apiMinor = 2;
   // Required by KHR_acceleration_structure; allows work to be offloaded onto background threads and parallelized
   deviceInfo.addDeviceExtension(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
-  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures = utils::make<VkPhysicalDeviceAccelerationStructureFeaturesKHR>();
+  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR};
   deviceInfo.addDeviceExtension(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, false, &asFeatures);
-  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures = utils::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
+  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR};
   deviceInfo.addDeviceExtension(VK_KHR_RAY_QUERY_EXTENSION_NAME, false, &rayQueryFeatures);
 
   // Add the required device extensions for Debug Printf. If this is confusing,
   // don't worry; we'll remove this in the next chapter.
   deviceInfo.addDeviceExtension(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
-  VkValidationFeaturesEXT      validationInfo            = utils::make<VkValidationFeaturesEXT>();
   VkValidationFeatureEnableEXT validationFeatureToEnable = VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT;
-  validationInfo.enabledValidationFeatureCount           = 1;
-  validationInfo.pEnabledValidationFeatures              = &validationFeatureToEnable;
-  deviceInfo.instanceCreateInfoExt                       = &validationInfo;
+  VkValidationFeaturesEXT      validationInfo{.sType = VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT,
+                                              .enabledValidationFeatureCount = 1,
+                                              .pEnabledValidationFeatures    = &validationFeatureToEnable};
+  deviceInfo.instanceCreateInfoExt = &validationInfo;
 #ifdef _WIN32
   _putenv_s("DEBUG_PRINTF_TO_STDOUT", "1");
 #else   // If not _WIN32
@@ -45,18 +44,16 @@ int main(int argc, const char** argv)
 
   nvvk::Context context;     // Encapsulates device state in a single object
   context.init(deviceInfo);  // Initialize the context
-  // Device must support acceleration structures and ray queries:
-  assert(asFeatures.accelerationStructure == VK_TRUE && rayQueryFeatures.rayQuery == VK_TRUE);
 
   // Create the allocator
   nvvk::ResourceAllocatorDedicated allocator;
   allocator.init(context, context.m_physicalDevice);
 
   // Create a buffer
-  VkDeviceSize       bufferSizeBytes  = render_width * render_height * 3 * sizeof(float);
-  VkBufferCreateInfo bufferCreateInfo = utils::make<VkBufferCreateInfo>();
-  bufferCreateInfo.size               = bufferSizeBytes;
-  bufferCreateInfo.usage              = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+  VkDeviceSize       bufferSizeBytes = render_width * render_height * 3 * sizeof(float);
+  VkBufferCreateInfo bufferCreateInfo{.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+                                      .size  = bufferSizeBytes,
+                                      .usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT};
   // VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT means that the CPU can read this buffer's memory.
   // VK_MEMORY_PROPERTY_HOST_CACHED_BIT means that the CPU caches this memory.
   // VK_MEMORY_PROPERTY_HOST_COHERENT_BIT means that the CPU side of cache management
@@ -71,9 +68,9 @@ int main(int argc, const char** argv)
                                           exePath + PROJECT_RELDIRECTORY "../..", exePath + PROJECT_NAME};
 
   // Create the command pool
-  VkCommandPoolCreateInfo cmdPoolInfo = utils::make<VkCommandPoolCreateInfo>();
-  cmdPoolInfo.queueFamilyIndex        = context.m_queueGCT;
-  VkCommandPool cmdPool;
+  VkCommandPoolCreateInfo cmdPoolInfo{.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,  //
+                                      .queueFamilyIndex = context.m_queueGCT};
+  VkCommandPool           cmdPool;
   NVVK_CHECK(vkCreateCommandPool(context, &cmdPoolInfo, nullptr, &cmdPool));
 
   // Shader loading and pipeline creation
@@ -81,23 +78,23 @@ int main(int argc, const char** argv)
       nvvk::createShaderModule(context, nvh::loadFile("shaders/raytrace.comp.glsl.spv", true, searchPaths));
 
   // Describes the entrypoint and the stage to use for this shader module in the pipeline
-  VkPipelineShaderStageCreateInfo shaderStageCreateInfo = utils::make<VkPipelineShaderStageCreateInfo>();
-  shaderStageCreateInfo.stage                           = VK_SHADER_STAGE_COMPUTE_BIT;
-  shaderStageCreateInfo.module                          = rayTraceModule;
-  shaderStageCreateInfo.pName                           = "main";
+  VkPipelineShaderStageCreateInfo shaderStageCreateInfo{.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+                                                        .stage  = VK_SHADER_STAGE_COMPUTE_BIT,
+                                                        .module = rayTraceModule,
+                                                        .pName  = "main"};
 
   // For the moment, create an empty pipeline layout. You can ignore this code
   // for now; we'll replace it in the next chapter.
-  VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = utils::make<VkPipelineLayoutCreateInfo>();
-  pipelineLayoutCreateInfo.setLayoutCount             = 0;
-  pipelineLayoutCreateInfo.pushConstantRangeCount     = 0;
-  VkPipelineLayout pipelineLayout;
+  VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo{.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,  //
+                                                      .setLayoutCount         = 0,                             //
+                                                      .pushConstantRangeCount = 0};
+  VkPipelineLayout           pipelineLayout;
   NVVK_CHECK(vkCreatePipelineLayout(context, &pipelineLayoutCreateInfo, nullptr, &pipelineLayout));
 
   // Create the compute pipeline
-  VkComputePipelineCreateInfo pipelineCreateInfo = utils::make<VkComputePipelineCreateInfo>();
-  pipelineCreateInfo.stage                       = shaderStageCreateInfo;
-  pipelineCreateInfo.layout                      = pipelineLayout;
+  VkComputePipelineCreateInfo pipelineCreateInfo{.sType  = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,  //
+                                                 .stage  = shaderStageCreateInfo,                           //
+                                                 .layout = pipelineLayout};
   // Don't modify flags, basePipelineHandle, or basePipelineIndex
   VkPipeline computePipeline;
   NVVK_CHECK(vkCreateComputePipelines(context,                 // Device
@@ -107,16 +104,16 @@ int main(int argc, const char** argv)
                                       &computePipeline));      // Output
 
   // Allocate a command buffer
-  VkCommandBufferAllocateInfo cmdAllocInfo = utils::make<VkCommandBufferAllocateInfo>();
-  cmdAllocInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  cmdAllocInfo.commandPool                 = cmdPool;
-  cmdAllocInfo.commandBufferCount          = 1;
-  VkCommandBuffer cmdBuffer;
+  VkCommandBufferAllocateInfo cmdAllocInfo{.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                                           .commandPool        = cmdPool,
+                                           .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+                                           .commandBufferCount = 1};
+  VkCommandBuffer             cmdBuffer;
   NVVK_CHECK(vkAllocateCommandBuffers(context, &cmdAllocInfo, &cmdBuffer));
 
   // Begin recording
-  VkCommandBufferBeginInfo beginInfo = utils::make<VkCommandBufferBeginInfo>();
-  beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+  VkCommandBufferBeginInfo beginInfo{.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+                                     .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT};
   NVVK_CHECK(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
 
   // Bind the compute shader pipeline
@@ -130,23 +127,23 @@ int main(int argc, const char** argv)
   // so the CPU can read the data.") To do this, we use a memory barrier.
   // This is one of the most complex parts of Vulkan, so don't worry if this is
   // confusing! We'll talk about pipeline barriers more in the extras.
-  VkMemoryBarrier memoryBarrier = utils::make<VkMemoryBarrier>();
-  memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;  // Make shader writes
-  memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;     // Readable by the CPU
-  vkCmdPipelineBarrier(cmdBuffer,                              // The command buffer
-                       VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,   // From the compute shader
-                       VK_PIPELINE_STAGE_HOST_BIT,             // To the CPU
-                       0,                                      // No special flags
-                       1, &memoryBarrier,                      // An array of memory barriers
-                       0, nullptr, 0, nullptr);                // No other barriers
+  VkMemoryBarrier memoryBarrier{.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+                                .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,  // Make shader writes
+                                .dstAccessMask = VK_ACCESS_HOST_READ_BIT};    // Readable by the CPU
+  vkCmdPipelineBarrier(cmdBuffer,                                             // The command buffer
+                       VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,                  // From the compute shader
+                       VK_PIPELINE_STAGE_HOST_BIT,                            // To the CPU
+                       0,                                                     // No special flags
+                       1, &memoryBarrier,                                     // An array of memory barriers
+                       0, nullptr, 0, nullptr);                               // No other barriers
 
   // End recording
   NVVK_CHECK(vkEndCommandBuffer(cmdBuffer));
 
   // Submit the command buffer
-  VkSubmitInfo submitInfo       = utils::make<VkSubmitInfo>();
-  submitInfo.commandBufferCount = 1;
-  submitInfo.pCommandBuffers    = &cmdBuffer;
+  VkSubmitInfo submitInfo{.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO,  //
+                          .commandBufferCount = 1,                              //
+                          .pCommandBuffers    = &cmdBuffer};
   NVVK_CHECK(vkQueueSubmit(context.m_queueGCT, 1, &submitInfo, VK_NULL_HANDLE));
 
   // Wait for the GPU to finish

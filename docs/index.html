@@ -35,7 +35,7 @@ details inside the helpers and Vulkan itself.
 
 The final program uses less than 300 lines of C++ and less than 250 lines of GLSL shader code, including comments. You can find it [here](https://github.com/nvpro-samples/vk_mini_path_tracer/tree/main/vk_mini_path_tracer).
 
-Here are all the Vulkan functions, and NVVK and functions and objects, that we'll use in the main tutorial:
+Here are all the Vulkan functions, and NVVK functions and objects, that we'll use in the main tutorial:
 
 Vulkan Functions               |                                |                          
 -------------------------------|--------------------------------|-------------------------------
@@ -582,20 +582,6 @@ In this chapter, we'll show how to:
     make sure you have the latest driver installed as described in Section [Install Dependencies],
     and that your system has a ray tracing-capable GPU such as an RTX GPU. You can also contact the author at nbickford@nvidia.com, or create a [GitHub issue](https://github.com/nvpro-samples/vk_mini_path_tracer/issues).
 
-## Including Additional Headers
-
-We'll start by including `<cassert>` and `utils/structs_vk.hpp`.
-`utils/structs_vk.hpp` includes `utils::make`, a small utility for [initializing
-Vulkan structures](#deviceextensionsandvulkanobjects/fourwaysofsettingstypeforvulkanstructures).
-
-Replace the single `#include` directive in your project with the following:
-~~~ cpp
-#include <cassert>
-
-#include <nvvk/context_vk.hpp>
-#include <utils/structs_vk.hpp>  // For utils::make
-~~~
-
 ## Setting a Vulkan API Version
 
 Like most APIs, Vulkan is expected to slowly change over the years, adding new
@@ -605,7 +591,7 @@ device extensions, and extensible structures.
 
 You might have noticed that the output of last chapter's project said that
 we were only requesting Vulkan version `1.1.0`. As of this writing, the current
-`major.minor` version of Vulkan is `1.2`. Each new `major.minor` version of Vulkan
+`major.minor` version of Vulkan is `1.3`. Each new `major.minor` version of Vulkan
 includes a set of extensions by default, meaning that we don't have to request
 them if we successfully request the version.
 
@@ -627,7 +613,7 @@ Vulkan Version:
  - requesting: 1.2.0
 ~~~
 
-## Four Ways of Setting `sType` for Vulkan Structures
+## Three Ways to Initialize Vulkan Structures
 
 Vulkan structures often include `sType` members, which the application needs
 to set to the structure's [`VkStructureType`](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkStructureType.html).
@@ -635,38 +621,80 @@ to set to the structure's [`VkStructureType`](https://www.khronos.org/registry/v
 !!! Tip Why do we need to set `sType`?
     Vulkan often refers to objects using `void` pointers. To determine
     the type of a Vulkan object that a `void *` points to, Vulkan looks at the
-    first 32 bits of the structure, which contain `sType`, a structure type enum.
+    first 32 bits of the structure, which contain `sType`, the structure type number.
 
-Writing out the `sType` for each Vulkan object can be tedious. There are several
-ways we can make this shorter:
+Initializing Vulkan structures can be tedious, especially if the variable name
+repeats over several lines. Here's an example:
+
+~~~ cpp
+VkCommandBufferAllocateInfo cmdAllocInfo;
+cmdAllocInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+cmdAllocInfo.commandPool        = cmdPool;
+cmdAllocInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARU;
+cmdAllocInfo.commandBufferCount = 1;
+~~~
+
+There are several ways we can make this shorter:
 
 ### Using Uniform Initialization
 
-Combine a declaration with setting its `sType` in a single line, like this:
+Combine a declaration and set its `sType` in a single line, like this:
 
 ~~~ cpp
-  VkPhysicalDeviceRayQueryFeaturesKHR rtFeatures = {VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR};
+VkCommandBufferAllocateInfo rtFeatures{VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
 ~~~
 
-### Using `utils::make`
+The rest of the struct members are automatically set to 0.
 
-`utils::make` is a helper function that creates a Vulkan structure and sets
-its `sType`. For instance, that line could be replaced by the following:
+We can also use uniform initialization to set multiple struct members at once,
+by listing the value of each struct member in order. But since uniform
+initialization doesn't list the member names, it can be a bit confusing to read
+unless one has the definition of the struct to compare against:
 
 ~~~ cpp
-  VkPhysicalDeviceRayQueryFeaturesKHR rtFeatures = utils::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
+VkCommandBufferAllocateInfo rtFeatures{VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO, nullptr, cmdPool,
+                                       VK_COMMAND_BUFFER_LEVEL_PRIMARY, 1};
 ~~~
 
-The file can be generated from the `vulkan.xml` file within the Vulkan SDK and a provided lua script in
-the `/utils` directory of this sample.
+### Using Designated Initialization
 
-### Using `utils::make` + `auto`
+In C99, C++20, and later language versions, you can initialize a struct by
+listing each member you want to set and its value. Members you don't list are
+set to 0 -- so, for example, this code sets `cmdAllocInfo.sType` and sets the
+rest of the struct's members to 0:
 
-When using `utils::make`, your compiler can also infer the type of `rtFeatures`:
-
+~~~ cpp
+VkCommandBufferAllocateInfo rtFeatures{.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
 ~~~
-  auto rtFeatures = utils::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
+
+And this code sets multiple struct members:
+
+~~~ cpp
+VkCommandBufferAllocateInfo cmdAllocInfo{.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                                         .commandPool        = cmdPool,
+                                         .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+                                         .commandBufferCount = 1};
 ~~~
+
+Notice that since designated initialization lists the member names, it's clearer
+now which members are set to which values!
+
+Designated initializers can even be used to initialize nested structures! So we
+could initialize a struct that appears later on like this:
+
+~~~ cpp
+VkAccelerationStructureGeometryTrianglesDataKHR triangles{
+    .sType         = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR,
+    .vertexFormat  = VK_FORMAT_R32G32B32_SFLOAT,
+    .vertexData    = {.deviceAddress = vertexBufferAddress},
+    ...
+    .indexData     = {.deviceAddress = indexBufferAddress},
+    .transformData = {.deviceAddress = 0}
+};
+~~~
+
+For the rest of the tutorial, we'll use a combination of uniform and designated
+initialization.
 
 ### Using Vulkan-Hpp
 
@@ -682,11 +710,7 @@ not be familiar with the aspects of C++ the Vulkan-Hpp library uses, this
 tutorial uses the Vulkan C API.
 
 If you're interested in Vulkan-Hpp, we encourage you to check out Andreas Süßenbach's
-introduction to it at https://developer.nvidia.com/blog/preferring-compile-time-errors-over-runtime-errors-with-vulkan-hpp/,
-as well as the [NVIDIA Vulkan Ray Tracing Tutorial](https://github.com/nvpro-samples/vk_raytracing_tutorial_KHR)
-and other `nvpro-samples` that use Vulkan-Hpp, such as [`vk_shaded_gltfscene`](https://github.com/nvpro-samples/vk_shaded_gltfscene), [`vk_denoise`](https://github.com/nvpro-samples/vk_denoise), and [`gl_vk_raytrace_interop`](https://github.com/nvpro-samples/gl_vk_raytrace_interop).
-
-For the rest of the tutorial, we'll use `utils::make` with the full type.
+introduction to it at https://developer.nvidia.com/blog/preferring-compile-time-errors-over-runtime-errors-with-vulkan-hpp.
 
 ## Requesting Device Extensions
 
@@ -766,7 +790,7 @@ features the GPU supports, and tell us which ones it supports through
 Add the following code after the last `addDeviceExtension` call:
 
 ~~~ cpp
-  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures = utils::make<VkPhysicalDeviceAccelerationStructureFeaturesKHR>();
+  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR};
   deviceInfo.addDeviceExtension(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, false, &asFeatures);
 ~~~
 
@@ -782,7 +806,7 @@ Add the following code after the last `addDeviceExtension` call:
 </p>
 
 ~~~ cpp
-  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures = utils::make<VkPhysicalDeviceRayQueryFeaturesKHR>();
+  VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR};
   deviceInfo.addDeviceExtension(VK_KHR_RAY_QUERY_EXTENSION_NAME, false, &rayQueryFeatures);
 ~~~
 
@@ -803,19 +827,6 @@ to determine what acceleration structure or ray query functionality your GPU and
 ![This device supports acceleration structures, replaying captures of
 acceleration structures, and updating acceleration structure descriptors after
 binding a descriptor set (see Section [Descriptors]).](images/2-rtFeatures.png)
-
-This tutorial requires a device that supports ray queries and acceleration structures, which are supported by all
-RTX GPUs. Let's check to make sure this is the case!
-
-Add the following after the `context.init` call:
-
-~~~ cpp
-  // Device must support acceleration structures and ray queries:
-  assert(asFeatures.accelerationStructure == VK_TRUE && rayQueryFeatures.rayQuery == VK_TRUE);
-~~~
-
-`VK_TRUE` is an alias for 1 (which is `true` when cast to a boolean). `VK_FALSE` is
-an alias for 0, which is `false`.
 
 Finally, if you run this application on a system where only one GPU supports
 acceleration structures and ray queries, you'll also notice that the list of compatible devices changed.
@@ -908,8 +919,6 @@ Add the following line to the list of `#include` directives at the top of
 ~~~ cpp
 #include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
 ~~~
-
-You can also remove the `#include <cassert>` line now if you want.
 
 ## Memory Allocation in Vulkan
 
@@ -1018,9 +1027,9 @@ After calling `allocator.init`, compute the size of the buffer and create the bu
 ~~~ cpp
   // Create a buffer
   VkDeviceSize bufferSizeBytes = render_width * render_height * 3 * sizeof(float);
-  VkBufferCreateInfo bufferCreateInfo = utils::make<VkBufferCreateInfo>();
-  bufferCreateInfo.size               = bufferSizeBytes;
-  bufferCreateInfo.usage              = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+  VkBufferCreateInfo bufferCreateInfo{.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+                                      .size  = bufferSizeBytes,
+                                      .usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT};
   // VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT means that the CPU can read this buffer's memory.
   // VK_MEMORY_PROPERTY_HOST_CACHED_BIT means that the CPU caches this memory.
   // VK_MEMORY_PROPERTY_HOST_COHERENT_BIT means that the CPU side of cache management
@@ -1173,9 +1182,9 @@ create a command pool. Add the following code after calling `allocator.createBuf
 
 ~~~cpp
   // Create the command pool
-  VkCommandPoolCreateInfo cmdPoolInfo = utils::make<VkCommandPoolCreateInfo>();
-  cmdPoolInfo.queueFamilyIndex        = context.m_queueGCT;
-  VkCommandPool cmdPool;
+  VkCommandPoolCreateInfo cmdPoolInfo{.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,  //
+                                      .queueFamilyIndex = context.m_queueGCT};
+  VkCommandPool           cmdPool;
   NVVK_CHECK(vkCreateCommandPool(context, &cmdPoolInfo, nullptr, &cmdPool));
 ~~~
 
@@ -1199,11 +1208,11 @@ that other command buffers can include), but we only need one primary-level
 
 ~~~cpp
   // Allocate a command buffer
-  VkCommandBufferAllocateInfo cmdAllocInfo = utils::make<VkCommandBufferAllocateInfo>();
-  cmdAllocInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  cmdAllocInfo.commandPool                 = cmdPool;
-  cmdAllocInfo.commandBufferCount          = 1;
-  VkCommandBuffer cmdBuffer;
+  VkCommandBufferAllocateInfo cmdAllocInfo{.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                                           .commandPool        = cmdPool,
+                                           .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+                                           .commandBufferCount = 1};
+  VkCommandBuffer             cmdBuffer;
   NVVK_CHECK(vkAllocateCommandBuffers(context, &cmdAllocInfo, &cmdBuffer));
 ~~~
 
@@ -1213,8 +1222,8 @@ it twice without rerecording it.
 
 ~~~cpp
   // Begin recording
-  VkCommandBufferBeginInfo beginInfo = utils::make<VkCommandBufferBeginInfo>();
-  beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+  VkCommandBufferBeginInfo beginInfo{.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+                                     .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT};
   NVVK_CHECK(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
 ~~~
 
@@ -1295,15 +1304,15 @@ Add the following code after the `vkCmdFillBuffer` call:
   // Add a command that says "Make it so that memory writes by the vkCmdFillBuffer call
   // are available to read from the CPU." (In other words, "Flush the GPU caches
   // so the CPU can read the data.") To do this, we use a memory barrier.
-  VkMemoryBarrier memoryBarrier = utils::make<VkMemoryBarrier>();
-  memoryBarrier.srcAccessMask   = VK_ACCESS_TRANSFER_WRITE_BIT;  // Make transfer writes
-  memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;       // Readable by the CPU
-  vkCmdPipelineBarrier(cmdBuffer,                                // The command buffer
-                       VK_PIPELINE_STAGE_TRANSFER_BIT,           // From the transfer stage
-                       VK_PIPELINE_STAGE_HOST_BIT,               // To the CPU
-                       0,                                        // No special flags
-                       1, &memoryBarrier,                        // An array of memory barriers
-                       0, nullptr, 0, nullptr);                  // No other barriers
+  VkMemoryBarrier memoryBarrier{.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+                                .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,  // Make transfer writes
+                                .dstAccessMask = VK_ACCESS_HOST_READ_BIT};      // Readable by the CPU
+  vkCmdPipelineBarrier(cmdBuffer,                                               // The command buffer
+                       VK_PIPELINE_STAGE_TRANSFER_BIT,                          // From the transfer stage
+                       VK_PIPELINE_STAGE_HOST_BIT,                              // To the CPU
+                       0,                                                       // No special flags
+                       1, &memoryBarrier,                                       // An array of memory barriers
+                       0, nullptr, 0, nullptr);                                 // No other barriers
 ~~~
 
 Interested readers can read on further to learn more about pipeline barriers.
@@ -1543,9 +1552,9 @@ We could submit multiple command buffers at once, but here we'll only submit one
 
 ~~~ cpp
   // Submit the command buffer
-  VkSubmitInfo submitInfo       = utils::make<VkSubmitInfo>();
-  submitInfo.commandBufferCount = 1;
-  submitInfo.pCommandBuffers    = &cmdBuffer;
+  VkSubmitInfo submitInfo{.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO,  //
+                          .commandBufferCount = 1,                              //
+                          .pCommandBuffers    = &cmdBuffer};
   NVVK_CHECK(vkQueueSubmit(context.m_queueGCT, 1, &submitInfo, VK_NULL_HANDLE));
 ~~~
 
@@ -1650,7 +1659,7 @@ the first four floating-point elements of the buffer:
 
 ~~~ cpp
   float* fltData = reinterpret_cast<float*>(data);
-  printf("First four elements: %f, %f, %f, %f\n", fltData[0], fltData[1], fltData[2], fltData[3]);
+  printf("First three elements: %f, %f, %f\n", fltData[0], fltData[1], fltData[2]);
 ~~~
 
 In their place, add the following line:
@@ -1706,7 +1715,7 @@ be run on the GPU -- to render an image, instead of using `vkCmdFillBuffer`!
     (The HDR file format doesn't specify an exact color space; it was designed
     before sRGB and the underlying Rec. 709 standard were introduced.)
 
-<!-- Chapter 5 -->
+<!-- Chapter 6 -->
 # Compute Shaders
 
 **Shaders** are like functions that a GPU can run. They provide one way to program
@@ -2139,7 +2148,6 @@ the project. (However, one does need to re-run CMake in order for it to detect n
     
     Tools such as [SMOL-V](https://github.com/aras-p/smol-v) can make SPIR-V
     smaller and more compressible.
-    <!-- Is SMOL-V still functional with modern SPIR-V? -->
 
 ## Including Additional Headers
 
@@ -2189,7 +2197,6 @@ Your entire include section should now look like this:
 #include <nvvk/error_vk.hpp>              // For NVVK_CHECK
 #include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
 #include <nvvk/shaders_vk.hpp>            // For nvvk::createShaderModule
-#include <utils/structs_vk.hpp>           // For utils::make
 ~~~
 
 ## Defining the Work Group Width and Height
@@ -2217,11 +2224,11 @@ After adding the `VK_KHR_RAY_QUERY_EXTENSION_NAME` (`VK_KHR_ray_query`) extensio
   // Add the required device extensions for Debug Printf. If this is confusing,
   // don't worry; we'll remove this in the next chapter.
   deviceInfo.addDeviceExtension(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
-  VkValidationFeaturesEXT      validationInfo            = utils::make<VkValidationFeaturesEXT>();
   VkValidationFeatureEnableEXT validationFeatureToEnable = VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT;
-  validationInfo.enabledValidationFeatureCount           = 1;
-  validationInfo.pEnabledValidationFeatures              = &validationFeatureToEnable;
-  deviceInfo.instanceCreateInfoExt                       = &validationInfo;
+  VkValidationFeaturesEXT      validationInfo{.sType = VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT,
+                                              .enabledValidationFeatureCount = 1,
+                                              .pEnabledValidationFeatures    = &validationFeatureToEnable};
+  deviceInfo.instanceCreateInfoExt = &validationInfo;
 #ifdef _WIN32
   _putenv_s("DEBUG_PRINTF_TO_STDOUT", "1");
 #else   // If not _WIN32
@@ -2266,10 +2273,10 @@ To tell the compute pipeline which entry point to use (and that this is a comput
 
 ~~~ cpp
   // Describes the entrypoint and the stage to use for this shader module in the pipeline
-  VkPipelineShaderStageCreateInfo shaderStageCreateInfo = utils::make<VkPipelineShaderStageCreateInfo>();
-  shaderStageCreateInfo.stage                           = VK_SHADER_STAGE_COMPUTE_BIT;
-  shaderStageCreateInfo.module                          = rayTraceModule;
-  shaderStageCreateInfo.pName                           = "main";
+  VkPipelineShaderStageCreateInfo shaderStageCreateInfo{.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+                                                        .stage  = VK_SHADER_STAGE_COMPUTE_BIT,
+                                                        .module = rayTraceModule,
+                                                        .pName  = "main"};
 ~~~
 
 ## An Empty Pipeline Layout
@@ -2285,9 +2292,9 @@ Here's how to create an empty pipeline layout. You don't have to worry about wha
 ~~~ cpp
   // For the moment, create an empty pipeline layout. You can ignore this code
   // for now; we'll replace it in the next chapter.
-  VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = utils::make<VkPipelineLayoutCreateInfo>();
-  pipelineLayoutCreateInfo.setLayoutCount             = 0;
-  pipelineLayoutCreateInfo.pushConstantRangeCount     = 0;
+  VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo{.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,  //
+                                                      .setLayoutCount         = 0,                             //
+                                                      .pushConstantRangeCount = 0};
   VkPipelineLayout pipelineLayout;
   NVVK_CHECK(vkCreatePipelineLayout(context, &pipelineLayoutCreateInfo, VK_NULL_HANDLE, &pipelineLayout));
 ~~~
@@ -2313,9 +2320,9 @@ Add code to fill out this structure as follows:
 
 ~~~ cpp
   // Create the compute pipeline
-  VkComputePipelineCreateInfo pipelineCreateInfo = utils::make<VkComputePipelineCreateInfo>();
-  pipelineCreateInfo.stage                       = shaderStageCreateInfo;
-  pipelineCreateInfo.layout                      = pipelineLayout;
+  VkComputePipelineCreateInfo pipelineCreateInfo{.sType  = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,  //
+                                                 .stage  = shaderStageCreateInfo,                           //
+                                                 .layout = pipelineLayout};
   // Don't modify flags, basePipelineHandle, or basePipelineIndex
 ~~~
 
@@ -2367,19 +2374,19 @@ Since we changed from a transfer operation (`vkCmdFillBuffer`) to a shader, we n
 ~~~ cpp
   // are available to read from the CPU." (In other words, "Flush the GPU caches
   // so the CPU can read the data.") To do this, we use a memory barrier.
-  VkMemoryBarrier memoryBarrier = utils::make<VkMemoryBarrier>();
+  VkMemoryBarrier memoryBarrier{.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
 ~~~ cpp highlight
-  memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;  // Make shader writes
+                                .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,  // Make shader writes
 ~~~ cpp
-  memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;     // Readable by the CPU
-  vkCmdPipelineBarrier(cmdBuffer,                              // The command buffer
+                                .dstAccessMask = VK_ACCESS_HOST_READ_BIT};    // Readable by the CPU
+  vkCmdPipelineBarrier(cmdBuffer,                                             // The command buffer
 ~~~ cpp highlight
-                       VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,   // From the compute shader
+                       VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,                  // From the compute shader
 ~~~ cpp
-                       VK_PIPELINE_STAGE_HOST_BIT,             // To the CPU
-                       0,                                      // No special flags
-                       1, &memoryBarrier,                      // An array of memory barriers
-                       0, nullptr, 0, nullptr);                // No other barriers
+                       VK_PIPELINE_STAGE_HOST_BIT,                            // To the CPU
+                       0,                                                     // No special flags
+                       1, &memoryBarrier,                                     // An array of memory barriers
+                       0, nullptr, 0, nullptr);                               // No other barriers
 ~~~
 
 This pipeline barrier will remain the same throughout the rest of this page.
@@ -2816,11 +2823,11 @@ We won't use Debug Printf for the remainder of the tutorial, so
   // Add the required device extensions for Debug Printf. If this is confusing,
   // don't worry; we'll remove this in the next chapter.
   deviceInfo.addDeviceExtension(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
-  VkValidationFeaturesEXT      validationInfo            = utils::make<VkValidationFeaturesEXT>();
   VkValidationFeatureEnableEXT validationFeatureToEnable = VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT;
-  validationInfo.enabledValidationFeatureCount           = 1;
-  validationInfo.pEnabledValidationFeatures              = &validationFeatureToEnable;
-  deviceInfo.instanceCreateInfoExt                       = &validationInfo;
+  VkValidationFeaturesEXT      validationInfo{.sType = VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT,
+                                              .enabledValidationFeatureCount = 1,
+                                              .pEnabledValidationFeatures    = &validationFeatureToEnable};
+  deviceInfo.instanceCreateInfoExt = &validationInfo;
 #ifdef _WIN32
   _putenv_s("DEBUG_PRINTF_TO_STDOUT", "1");
 #else  // If not _WIN32
@@ -2887,9 +2894,8 @@ descriptor in set 0, binding 0").
 
 ~~~ cpp
   // Write a single descriptor in the descriptor set.
-  VkDescriptorBufferInfo descriptorBufferInfo{};
-  descriptorBufferInfo.buffer = buffer.buffer;    // The VkBuffer object
-  descriptorBufferInfo.range  = bufferSizeBytes;  // The length of memory to bind; offset is 0.
+  VkDescriptorBufferInfo descriptorBufferInfo{.buffer = buffer.buffer,     // The VkBuffer object
+                                              .range  = bufferSizeBytes};  // The length of memory to bind; offset is 0.
   VkWriteDescriptorSet writeDescriptor = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
 ~~~
 
@@ -2913,18 +2919,20 @@ descriptor sets when this function writes to them.
 ~~~ cpp
   // For the moment, create an empty pipeline layout. You can ignore this code
   // for now; we'll replace it in the next chapter.
-  VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = utils::make<VkPipelineLayoutCreateInfo>();
-  pipelineLayoutCreateInfo.setLayoutCount             = 0;
-  pipelineLayoutCreateInfo.pushConstantRangeCount     = 0;
+  VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo{.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,  //
+                                                      .setLayoutCount         = 0,                             //
+                                                      .pushConstantRangeCount = 0};
   VkPipelineLayout pipelineLayout;
   NVVK_CHECK(vkCreatePipelineLayout(context, &pipelineLayoutCreateInfo, VK_NULL_HANDLE, &pipelineLayout));
 ~~~
 
-Then change the line that sets `pipelineCreateInfo.layout` to use `descriptorSetContainer`'s pipeline layout
-as follows. This is the final arrow in our object graph.
+Then change the code that creates `pipelineCreateInfo` as follows.
+This is the final arrow in our object graph.
 
 ~~~ cpp
-  pipelineCreateInfo.layout                      = descriptorSetContainer.getPipeLayout();
+  VkComputePipelineCreateInfo pipelineCreateInfo{.sType  = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
+                                                 .stage  = shaderStageCreateInfo,
+                                                 .layout = descriptorSetContainer.getPipeLayout()};
 ~~~
 
 ## Binding the Descriptor Set and Dispatching
@@ -3090,6 +3098,7 @@ the lines of code to add:
 
 ~~~ cpp highlight
 #include <array>
+#include <cassert>
 ~~~ cpp
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
@@ -3107,7 +3116,6 @@ the lines of code to add:
 ~~~ cpp
 #include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
 #include <nvvk/shaders_vk.hpp>            // For nvvk::createShaderModule
-#include <utils/structs_vk.hpp>           // For utils::make
 ~~~
 
 ## Refactoring Command Buffers
@@ -3123,14 +3131,14 @@ First, let's create a function to allocate a command buffer from a command pool,
 ~~~ cpp
 VkCommandBuffer AllocateAndBeginOneTimeCommandBuffer(VkDevice device, VkCommandPool cmdPool)
 {
-  VkCommandBufferAllocateInfo cmdAllocInfo = utils::make<VkCommandBufferAllocateInfo>();
-  cmdAllocInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  cmdAllocInfo.commandPool                 = cmdPool;
-  cmdAllocInfo.commandBufferCount          = 1;
-  VkCommandBuffer cmdBuffer;
+  VkCommandBufferAllocateInfo cmdAllocInfo{.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                                           .commandPool        = cmdPool,
+                                           .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+                                           .commandBufferCount = 1};
+  VkCommandBuffer             cmdBuffer;
   NVVK_CHECK(vkAllocateCommandBuffers(device, &cmdAllocInfo, &cmdBuffer));
-  VkCommandBufferBeginInfo beginInfo = utils::make<VkCommandBufferBeginInfo>();
-  beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+  VkCommandBufferBeginInfo beginInfo{.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+                                     .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT};
   NVVK_CHECK(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
   return cmdBuffer;
 }
@@ -3140,16 +3148,16 @@ Now, inside `main()`, delete this code:
 
 ~~~ cpp
   // Allocate a command buffer
-  VkCommandBufferAllocateInfo cmdAllocInfo = utils::make<VkCommandBufferAllocateInfo>();
-  cmdAllocInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  cmdAllocInfo.commandPool                 = cmdPool;
-  cmdAllocInfo.commandBufferCount          = 1;
-  VkCommandBuffer cmdBuffer;
+  VkCommandBufferAllocateInfo cmdAllocInfo{.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                                           .commandPool        = cmdPool,
+                                           .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+                                           .commandBufferCount = 1};
+  VkCommandBuffer             cmdBuffer;
   NVVK_CHECK(vkAllocateCommandBuffers(context, &cmdAllocInfo, &cmdBuffer));
 
   // Begin recording
-  VkCommandBufferBeginInfo beginInfo = utils::make<VkCommandBufferBeginInfo>();
-  beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+  VkCommandBufferBeginInfo beginInfo{.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+                                     .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT};
   NVVK_CHECK(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
 ~~~
 
@@ -3168,9 +3176,7 @@ following code before `main()`:
 void EndSubmitWaitAndFreeCommandBuffer(VkDevice device, VkQueue queue, VkCommandPool cmdPool, VkCommandBuffer& cmdBuffer)
 {
   NVVK_CHECK(vkEndCommandBuffer(cmdBuffer));
-  VkSubmitInfo submitInfo       = utils::make<VkSubmitInfo>();
-  submitInfo.commandBufferCount = 1;
-  submitInfo.pCommandBuffers    = &cmdBuffer;
+  VkSubmitInfo submitInfo{.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO, .commandBufferCount = 1, .pCommandBuffers = &cmdBuffer};
   NVVK_CHECK(vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE));
   NVVK_CHECK(vkQueueWaitIdle(queue));
   vkFreeCommandBuffers(device, cmdPool, 1, &cmdBuffer);
@@ -3184,9 +3190,9 @@ Then, inside `main()`, delete this code:
   NVVK_CHECK(vkEndCommandBuffer(cmdBuffer));
 
   // Submit the command buffer
-  VkSubmitInfo submitInfo       = utils::make<VkSubmitInfo>();
-  submitInfo.commandBufferCount = 1;
-  submitInfo.pCommandBuffers    = &cmdBuffer;
+  VkSubmitInfo submitInfo{.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO,  //
+                          .commandBufferCount = 1,                              //
+                          .pCommandBuffers    = &cmdBuffer};
   NVVK_CHECK(vkQueueSubmit(context.m_queueGCT, 1, &submitInfo, VK_NULL_HANDLE));
 
   // Wait for the GPU to finish
@@ -3516,8 +3522,7 @@ Add the following function after `EndSubmitWaitAndFreeCommandBuffer`:
 ~~~ cpp
 VkDeviceAddress GetBufferDeviceAddress(VkDevice device, VkBuffer buffer)
 {
-  VkBufferDeviceAddressInfo addressInfo = utils::make<VkBufferDeviceAddressInfo>();
-  addressInfo.buffer                    = buffer;
+  VkBufferDeviceAddressInfo addressInfo{.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO, .buffer = buffer};
   return vkGetBufferDeviceAddress(device, &addressInfo);
 }
 ~~~
@@ -3560,14 +3565,16 @@ This object says:
 
 ~~~ cpp
     // Specify where the builder can find the vertices and indices for triangles, and their formats:
-    VkAccelerationStructureGeometryTrianglesDataKHR triangles = utils::make<VkAccelerationStructureGeometryTrianglesDataKHR>();
-    triangles.vertexFormat                = VK_FORMAT_R32G32B32_SFLOAT;
-    triangles.vertexData.deviceAddress    = vertexBufferAddress;
-    triangles.vertexStride                = 3 * sizeof(float);
-    triangles.maxVertex                   = static_cast<uint32_t>(objVertices.size() / 3 - 1);
-    triangles.indexType                   = VK_INDEX_TYPE_UINT32;
-    triangles.indexData.deviceAddress     = indexBufferAddress;
-    triangles.transformData.deviceAddress = 0;  // No transform
+    VkAccelerationStructureGeometryTrianglesDataKHR triangles{
+        .sType         = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR,
+        .vertexFormat  = VK_FORMAT_R32G32B32_SFLOAT,
+        .vertexData    = {.deviceAddress = vertexBufferAddress},
+        .vertexStride  = 3 * sizeof(float),
+        .maxVertex     = static_cast<uint32_t>(objVertices.size() / 3 - 1),
+        .indexType     = VK_INDEX_TYPE_UINT32,
+        .indexData     = {.deviceAddress = indexBufferAddress},
+        .transformData = {.deviceAddress = 0}  // No transform
+    };
 ~~~
 
 !!! Tip The `VkFormat` Enum
@@ -3582,10 +3589,10 @@ This object says:
 
 ~~~ cpp
     // Create a VkAccelerationStructureGeometryKHR object that says it handles opaque triangles and points to the above:
-    VkAccelerationStructureGeometryKHR geometry = utils::make<VkAccelerationStructureGeometryKHR>();
-    geometry.geometry.triangles                 = triangles;
-    geometry.geometryType                       = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
-    geometry.flags                              = VK_GEOMETRY_OPAQUE_BIT_KHR;
+    VkAccelerationStructureGeometryKHR geometry{.sType        = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR,
+                                                .geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR,
+                                                .geometry     = {.triangles = triangles},
+                                                .flags        = VK_GEOMETRY_OPAQUE_BIT_KHR};
     blas.asGeometry.push_back(geometry);
 ~~~
 
@@ -3595,11 +3602,12 @@ As mentioned above, we don't use any of the features of this structure; the only
 
 ~~~ cpp
     // Create offset info that allows us to say how many triangles and vertices to read
-    VkAccelerationStructureBuildRangeInfoKHR offsetInfo;
-    offsetInfo.firstVertex     = 0;
-    offsetInfo.primitiveCount  = static_cast<uint32_t>(objIndices.size() / 3);  // Number of triangles
-    offsetInfo.primitiveOffset = 0;
-    offsetInfo.transformOffset = 0;
+    VkAccelerationStructureBuildRangeInfoKHR offsetInfo{
+        .primitiveCount  = static_cast<uint32_t>(objIndices.size() / 3),  // Number of triangles
+        .primitiveOffset = 0,  // Offset added when looking up triangles
+        .firstVertex     = 0,  // Offset added when looking up vertices in the vertex buffer
+        .transformOffset = 0   // Offset added when looking up transformation matrices, if we used them
+    };
     blas.asBuildOffsetInfo.push_back(offsetInfo);
     blases.push_back(blas);
   }
@@ -3721,9 +3729,8 @@ We also must make this descriptor in the descriptor set point to the TLAS.  Find
 
 ~~~ cpp
   // Write a single descriptor in the descriptor set.
-  VkDescriptorBufferInfo descriptorBufferInfo{};
-  descriptorBufferInfo.buffer          = buffer.buffer;    // The VkBuffer object
-  descriptorBufferInfo.range           = bufferSizeBytes;  // The length of memory to bind; offset is 0.
+  VkDescriptorBufferInfo descriptorBufferInfo{.buffer = buffer.buffer,    // The VkBuffer object
+                                              .range  = bufferSizeBytes};  // The length of memory to bind; offset is 0.
   VkWriteDescriptorSet writeDescriptor = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
   vkUpdateDescriptorSets(context,              // The context
                          1, &writeDescriptor,  // An array of VkWriteDescriptorSet objects
@@ -3736,16 +3743,15 @@ And replace it with this code:
   // Write values into the descriptor set.
   std::array<VkWriteDescriptorSet, 2> writeDescriptorSets;
   // 0
-  VkDescriptorBufferInfo descriptorBufferInfo{};
-  descriptorBufferInfo.buffer = buffer.buffer;    // The VkBuffer object
-  descriptorBufferInfo.range  = bufferSizeBytes;  // The length of memory to bind; offset is 0.
-  writeDescriptorSets[0]      = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
+  VkDescriptorBufferInfo descriptorBufferInfo{.buffer = buffer.buffer,    // The VkBuffer object
+                                              .range  = bufferSizeBytes};  // The length of memory to bind; offset is 0.
+  writeDescriptorSets[0] = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
   // 1
-  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = utils::make<VkWriteDescriptorSetAccelerationStructureKHR>();
   VkAccelerationStructureKHR tlasCopy = raytracingBuilder.getAccelerationStructure();  // So that we can take its address
-  descriptorAS.accelerationStructureCount = 1;
-  descriptorAS.pAccelerationStructures    = &tlasCopy;
-  writeDescriptorSets[1]                  = descriptorSetContainer.makeWrite(0, 1, &descriptorAS);
+  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR,
+                                                            .accelerationStructureCount = 1,
+                                                            .pAccelerationStructures    = &tlasCopy};
+  writeDescriptorSets[1] = descriptorSetContainer.makeWrite(0, 1, &descriptorAS);
   vkUpdateDescriptorSets(context,                                            // The context
                          static_cast<uint32_t>(writeDescriptorSets.size()),  // Number of VkWriteDescriptorSet objects
                          writeDescriptorSets.data(),                         // Pointer to VkWriteDescriptorSet objects
@@ -3755,7 +3761,7 @@ And replace it with this code:
 This creates an array of `VkWriteDescriptorSet`s, instead of a single `VkWriteDescriptorSet` for passing to `vkUpdateDescriptorSets`.
 
 !!! Tip What Is `std::array`?
-    `std::array` is part of the C++ specification. An `std::array` is a sized array:
+    `std::array` is part of the C++ standard library. An `std::array` is a sized array:
     ~~~ cpp
     std::array<VkWriteDescriptorSet, 2> writeDescriptorSets;
     ~~~
@@ -4369,27 +4375,22 @@ and then add two new descriptor sets to the end:
   std::array<VkWriteDescriptorSet, 4> writeDescriptorSets;
 ~~~ cpp
   // 0
-  VkDescriptorBufferInfo descriptorBufferInfo{};
-  descriptorBufferInfo.buffer = buffer.buffer;    // The VkBuffer object
-  descriptorBufferInfo.range  = bufferSizeBytes;  // The length of memory to bind; offset is 0.
-  writeDescriptorSets[0]      = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
+  VkDescriptorBufferInfo descriptorBufferInfo{.buffer = buffer.buffer,    // The VkBuffer object
+                                              .range  = bufferSizeBytes};  // The length of memory to bind; offset is 0.
+  writeDescriptorSets[0] = descriptorSetContainer.makeWrite(0 /*set index*/, 0 /*binding*/, &descriptorBufferInfo);
   // 1
-  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = utils::make<VkWriteDescriptorSetAccelerationStructureKHR>();
   VkAccelerationStructureKHR tlasCopy = raytracingBuilder.getAccelerationStructure();  // So that we can take its address
-  descriptorAS.accelerationStructureCount = 1;
-  descriptorAS.pAccelerationStructures    = &tlasCopy;
-  writeDescriptorSets[1]                  = descriptorSetContainer.makeWrite(0, 1, &descriptorAS);
+  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR,
+                                                            .accelerationStructureCount = 1,
+                                                            .pAccelerationStructures    = &tlasCopy};
+  writeDescriptorSets[1] = descriptorSetContainer.makeWrite(0, 1, &descriptorAS);
 ~~~ cpp highlight
   // 2
-  VkDescriptorBufferInfo vertexDescriptorBufferInfo{};
-  vertexDescriptorBufferInfo.buffer = vertexBuffer.buffer;
-  vertexDescriptorBufferInfo.range  = VK_WHOLE_SIZE;
-  writeDescriptorSets[2]            = descriptorSetContainer.makeWrite(0, 2, &vertexDescriptorBufferInfo);
+  VkDescriptorBufferInfo vertexDescriptorBufferInfo{.buffer = vertexBuffer.buffer, .range = VK_WHOLE_SIZE};
+  writeDescriptorSets[2] = descriptorSetContainer.makeWrite(0, 2, &vertexDescriptorBufferInfo);
   // 3
-  VkDescriptorBufferInfo indexDescriptorBufferInfo{};
-  indexDescriptorBufferInfo.buffer = indexBuffer.buffer;
-  indexDescriptorBufferInfo.range  = VK_WHOLE_SIZE;
-  writeDescriptorSets[3]           = descriptorSetContainer.makeWrite(0, 3, &indexDescriptorBufferInfo);
+  VkDescriptorBufferInfo indexDescriptorBufferInfo{.buffer = indexBuffer.buffer, .range = VK_WHOLE_SIZE};
+  writeDescriptorSets[3] = descriptorSetContainer.makeWrite(0, 3, &indexDescriptorBufferInfo);
 ~~~ cpp
   vkUpdateDescriptorSets(context,                                            // The context
                         static_cast<uint32_t>(writeDescriptorSets.size()),  // Number of VkWriteDescriptorSet objects

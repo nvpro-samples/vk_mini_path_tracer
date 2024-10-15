@@ -1,4 +1,4 @@
-// Copyright 2020-2021 NVIDIA Corporation
+// Copyright 2020-2024 NVIDIA Corporation
 // SPDX-License-Identifier: Apache-2.0
 #include <array>
 #include <random>
@@ -17,7 +17,6 @@
 #include <nvvk/raytraceKHR_vk.hpp>        // For nvvk::RaytracingBuilderKHR
 #include <nvvk/resourceallocator_vk.hpp>  // For NVVK memory allocators
 #include <nvvk/shaders_vk.hpp>            // For nvvk::createShaderModule
-#include <utils/structs_vk.hpp>           // For utils::make
 
 #include "common.h"
 
@@ -27,14 +26,14 @@ const uint32_t render_height = 600;
 
 VkCommandBuffer AllocateAndBeginOneTimeCommandBuffer(VkDevice device, VkCommandPool cmdPool)
 {
-  VkCommandBufferAllocateInfo cmdAllocInfo = utils::make<VkCommandBufferAllocateInfo>();
-  cmdAllocInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  cmdAllocInfo.commandPool                 = cmdPool;
-  cmdAllocInfo.commandBufferCount          = 1;
-  VkCommandBuffer cmdBuffer;
+  VkCommandBufferAllocateInfo cmdAllocInfo{.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                                           .commandPool        = cmdPool,
+                                           .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+                                           .commandBufferCount = 1};
+  VkCommandBuffer             cmdBuffer;
   NVVK_CHECK(vkAllocateCommandBuffers(device, &cmdAllocInfo, &cmdBuffer));
-  VkCommandBufferBeginInfo beginInfo = utils::make<VkCommandBufferBeginInfo>();
-  beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+  VkCommandBufferBeginInfo beginInfo{.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+                                     .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT};
   NVVK_CHECK(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
   return cmdBuffer;
 }
@@ -42,9 +41,7 @@ VkCommandBuffer AllocateAndBeginOneTimeCommandBuffer(VkDevice device, VkCommandP
 void EndSubmitWaitAndFreeCommandBuffer(VkDevice device, VkQueue queue, VkCommandPool cmdPool, VkCommandBuffer& cmdBuffer)
 {
   NVVK_CHECK(vkEndCommandBuffer(cmdBuffer));
-  VkSubmitInfo submitInfo       = utils::make<VkSubmitInfo>();
-  submitInfo.commandBufferCount = 1;
-  submitInfo.pCommandBuffers    = &cmdBuffer;
+  VkSubmitInfo submitInfo{.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO, .commandBufferCount = 1, .pCommandBuffers = &cmdBuffer};
   NVVK_CHECK(vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE));
   NVVK_CHECK(vkQueueWaitIdle(queue));
   vkFreeCommandBuffers(device, cmdPool, 1, &cmdBuffer);
@@ -52,8 +49,7 @@ void EndSubmitWaitAndFreeCommandBuffer(VkDevice device, VkQueue queue, VkCommand
 
 VkDeviceAddress GetBufferDeviceAddress(VkDevice device, VkBuffer buffer)
 {
-  VkBufferDeviceAddressInfo addressInfo = utils::make<VkBufferDeviceAddressInfo>();
-  addressInfo.buffer                    = buffer;
+  VkBufferDeviceAddressInfo addressInfo{.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO, .buffer = buffer};
   return vkGetBufferDeviceAddress(device, &addressInfo);
 }
 
@@ -65,26 +61,22 @@ int main(int argc, const char** argv)
   deviceInfo.apiMinor = 2;
   // Required by KHR_acceleration_structure; allows work to be offloaded onto background threads and parallelized
   deviceInfo.addDeviceExtension(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
-  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures = utils::make<VkPhysicalDeviceAccelerationStructureFeaturesKHR>();
+  VkPhysicalDeviceAccelerationStructureFeaturesKHR asFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR};
   deviceInfo.addDeviceExtension(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, false, &asFeatures);
-  VkPhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeatures =
-      utils::make<VkPhysicalDeviceRayTracingPipelineFeaturesKHR>();
+  VkPhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR};
   deviceInfo.addDeviceExtension(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, false, &rtPipelineFeatures);
 
   nvvk::Context context;     // Encapsulates device state in a single object
   context.init(deviceInfo);  // Initialize the context
-  // Device must support acceleration structures and ray tracing pipelines:
-  assert(asFeatures.accelerationStructure == VK_TRUE && rtPipelineFeatures.rayTracingPipeline == VK_TRUE);
 
   // Get the properties of ray tracing pipelines on this device. We do this by
   // using vkGetPhysicalDeviceProperties2, and extending this by chaining on a
   // VkPhysicalDeviceRayTracingPipelinePropertiesKHR object to get both
   // physical device properties and ray tracing pipeline properties.
   // This gives us information about shader binding tables.
-  VkPhysicalDeviceRayTracingPipelinePropertiesKHR rtPipelineProperties =
-      utils::make<VkPhysicalDeviceRayTracingPipelinePropertiesKHR>();
-  VkPhysicalDeviceProperties2 physicalDeviceProperties = utils::make<VkPhysicalDeviceProperties2>();
-  physicalDeviceProperties.pNext                       = &rtPipelineProperties;
+  VkPhysicalDeviceRayTracingPipelinePropertiesKHR rtPipelineProperties{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR};
+  VkPhysicalDeviceProperties2 physicalDeviceProperties{.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
+                                                       .pNext = &rtPipelineProperties};
   vkGetPhysicalDeviceProperties2(context.m_physicalDevice, &physicalDeviceProperties);
   const VkDeviceSize sbtHeaderSize      = rtPipelineProperties.shaderGroupHandleSize;
   const VkDeviceSize sbtBaseAlignment   = rtPipelineProperties.shaderGroupBaseAlignment;
@@ -120,52 +112,54 @@ int main(int argc, const char** argv)
   // implementation-dependent way (and this layout of memory can depend on
   // what the image is being used for), and be shared across multiple queues.
   // Here's how we specify the image we'll use:
-  VkImageCreateInfo imageCreateInfo = utils::make<VkImageCreateInfo>();
-  imageCreateInfo.imageType         = VK_IMAGE_TYPE_2D;
-  // RGB32 images aren't usually supported, so we change this to a RGBA32 image.
-  imageCreateInfo.format = VK_FORMAT_R32G32B32A32_SFLOAT;
-  // Defines the size of the image:
-  imageCreateInfo.extent = {render_width, render_height, 1};
-  // The image is an array of length 1, and each element contains only 1 mip:
-  imageCreateInfo.mipLevels   = 1;
-  imageCreateInfo.arrayLayers = 1;
-  // We aren't using MSAA (i.e. the image only contains 1 sample per pixel -
-  // note that this isn't the same use of the word "sample" as in ray tracing):
-  imageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-  // The driver controls the tiling of the image for performance:
-  imageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-  // This image is read and written on the GPU, and data can be transferred
-  // from it:
-  imageCreateInfo.usage = VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
-  // Image is only used by one queue:
-  imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-  // The image must be in either VK_IMAGE_LAYOUT_UNDEFINED or VK_IMAGE_LAYOUT_PREINITIALIZED
-  // according to the specification; we'll transition the layout shortly,
-  // in the same command buffer used to upload the vertex and index buffers:
-  imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-  nvvk::Image image             = allocator.createImage(imageCreateInfo);
+  VkImageCreateInfo imageCreateInfo =  //
+      {.sType     = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+       .imageType = VK_IMAGE_TYPE_2D,
+       // RGB32 images aren't usually supported, so we change this to a RGBA32 image.
+       .format = VK_FORMAT_R32G32B32A32_SFLOAT,
+       // Defines the size of the image:
+       .extent = {render_width, render_height, 1},
+       // The image is an array of length 1, and each element contains only 1 mip:
+       .mipLevels   = 1,
+       .arrayLayers = 1,
+       // We aren't using MSAA (i.e. the image only contains 1 sample per pixel -
+       // note that this isn't the same use of the word "sample" as in ray tracing):
+       .samples = VK_SAMPLE_COUNT_1_BIT,
+       // The driver controls the tiling of the image for performance:
+       .tiling = VK_IMAGE_TILING_OPTIMAL,
+       // This image is read and written on the GPU, and data can be transferred
+       // from it:
+       .usage = VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+       // Image is only used by one queue:
+       .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+       // The image must be in either VK_IMAGE_LAYOUT_UNDEFINED or VK_IMAGE_LAYOUT_PREINITIALIZED
+       // according to the specification; we'll transition the layout shortly,
+       // in the same command buffer used to upload the vertex and index buffers:
+       .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED};
+  nvvk::Image image = allocator.createImage(imageCreateInfo);
   debugUtil.setObjectName(image.image, "image");
 
   // Create an image view for the entire image
   // When we create a descriptor for the image, we'll also need an image view
   // that the descriptor will point to. This specifies what part of the image
   // the descriptor views, and how the descriptor views it.
-  VkImageViewCreateInfo imageViewCreateInfo = utils::make<VkImageViewCreateInfo>();
-  imageViewCreateInfo.image                 = image.image;
-  imageViewCreateInfo.viewType              = VK_IMAGE_VIEW_TYPE_2D;
-  imageViewCreateInfo.format                = imageCreateInfo.format;
-  // We could use imageViewCreateInfo.components to make the components of the
-  // image appear to be "swizzled", but we don't want to do that. Luckily,
-  // all values are set to VK_COMPONENT_SWIZZLE_IDENTITY, which means
-  // "don't change anything", by nvvk::make or zero initialization.
-  // This says that the ImageView views the color part of the image (since
-  // images can contain depth or stencil aspects):
-  imageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-  // This says that we only look at array layer 0 and mip level 0:
-  imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
-  imageViewCreateInfo.subresourceRange.layerCount     = 1;
-  imageViewCreateInfo.subresourceRange.baseMipLevel   = 0;
-  imageViewCreateInfo.subresourceRange.levelCount     = 1;
+  VkImageViewCreateInfo imageViewCreateInfo =  //
+      {.sType    = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+       .image    = image.image,
+       .viewType = VK_IMAGE_VIEW_TYPE_2D,
+       .format   = imageCreateInfo.format,
+       // We could use imageViewCreateInfo.components to make the components of the
+       // image appear to be "swizzled", but we don't want to do that. Luckily,
+       // all values are set to VK_COMPONENT_SWIZZLE_IDENTITY, which means
+       // "don't change anything", by zero initialization.
+       // This says that the ImageView views the color part of the image (since
+       // images can contain depth or stencil aspects):
+       .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                            // This says that we only look at mip level and array layer 0:
+                            .baseMipLevel   = 0,
+                            .levelCount     = 1,
+                            .baseArrayLayer = 0,
+                            .layerCount     = 1}};
   VkImageView imageView;
   NVVK_CHECK(vkCreateImageView(context, &imageViewCreateInfo, nullptr, &imageView));
   debugUtil.setObjectName(imageView, "imageView");
@@ -205,9 +199,9 @@ int main(int argc, const char** argv)
   }
 
   // Create the command pool
-  VkCommandPoolCreateInfo cmdPoolInfo = utils::make<VkCommandPoolCreateInfo>();
-  cmdPoolInfo.queueFamilyIndex        = context.m_queueGCT;
-  VkCommandPool cmdPool;
+  VkCommandPoolCreateInfo cmdPoolInfo{.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,  //
+                                      .queueFamilyIndex = context.m_queueGCT};
+  VkCommandPool           cmdPool;
   NVVK_CHECK(vkCreateCommandPool(context, &cmdPoolInfo, nullptr, &cmdPool));
   debugUtil.setObjectName(cmdPool, "cmdPool");
 
@@ -272,26 +266,29 @@ int main(int argc, const char** argv)
     VkDeviceAddress vertexBufferAddress = GetBufferDeviceAddress(context, vertexBuffer.buffer);
     VkDeviceAddress indexBufferAddress  = GetBufferDeviceAddress(context, indexBuffer.buffer);
     // Specify where the builder can find the vertices and indices for triangles, and their formats:
-    VkAccelerationStructureGeometryTrianglesDataKHR triangles = utils::make<VkAccelerationStructureGeometryTrianglesDataKHR>();
-    triangles.vertexFormat                = VK_FORMAT_R32G32B32_SFLOAT;
-    triangles.vertexData.deviceAddress    = vertexBufferAddress;
-    triangles.vertexStride                = 3 * sizeof(float);
-    triangles.maxVertex                   = static_cast<uint32_t>(objVertices.size() / 3 - 1);
-    triangles.indexType                   = VK_INDEX_TYPE_UINT32;
-    triangles.indexData.deviceAddress     = indexBufferAddress;
-    triangles.transformData.deviceAddress = 0;  // No transform
+    VkAccelerationStructureGeometryTrianglesDataKHR triangles{
+        .sType         = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR,
+        .vertexFormat  = VK_FORMAT_R32G32B32_SFLOAT,
+        .vertexData    = {.deviceAddress = vertexBufferAddress},
+        .vertexStride  = 3 * sizeof(float),
+        .maxVertex     = static_cast<uint32_t>(objVertices.size() / 3 - 1),
+        .indexType     = VK_INDEX_TYPE_UINT32,
+        .indexData     = {.deviceAddress = indexBufferAddress},
+        .transformData = {.deviceAddress = 0}  // No transform
+    };
     // Create a VkAccelerationStructureGeometryKHR object that says it handles opaque triangles and points to the above:
-    VkAccelerationStructureGeometryKHR geometry = utils::make<VkAccelerationStructureGeometryKHR>();
-    geometry.geometry.triangles                 = triangles;
-    geometry.geometryType                       = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
-    geometry.flags                              = VK_GEOMETRY_OPAQUE_BIT_KHR;
+    VkAccelerationStructureGeometryKHR geometry{.sType        = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR,
+                                                .geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR,
+                                                .geometry     = {.triangles = triangles},
+                                                .flags        = VK_GEOMETRY_OPAQUE_BIT_KHR};
     blas.asGeometry.push_back(geometry);
     // Create offset info that allows us to say how many triangles and vertices to read
-    VkAccelerationStructureBuildRangeInfoKHR offsetInfo;
-    offsetInfo.firstVertex     = 0;
-    offsetInfo.primitiveCount  = static_cast<uint32_t>(objIndices.size() / 3);  // Number of triangles
-    offsetInfo.primitiveOffset = 0;
-    offsetInfo.transformOffset = 0;
+    VkAccelerationStructureBuildRangeInfoKHR offsetInfo{
+        .primitiveCount  = static_cast<uint32_t>(objIndices.size() / 3),  // Number of triangles
+        .primitiveOffset = 0,                                             // Offset added when looking up triangles
+        .firstVertex     = 0,  // Offset added when looking up vertices in the vertex buffer
+        .transformOffset = 0   // Offset added when looking up transformation matrices, if we used them
+    };
     blas.asBuildOffsetInfo.push_back(offsetInfo);
     blases.push_back(blas);
   }
@@ -316,7 +313,7 @@ int main(int argc, const char** argv)
       transform           = glm::scale(glm::vec3(1.0f / 2.7f)) * transform;
       transform           = glm::translate(glm::vec3(float(x), float(y), 0.0f)) * transform;
 
-      VkAccelerationStructureInstanceKHR instance;
+      VkAccelerationStructureInstanceKHR instance{};
       instance.transform = nvvk::toTransformMatrixKHR(transform);
       instance.instanceCustomIndex = 0;  // 24 bits accessible to ray shaders via rayQueryGetIntersectionInstanceCustomIndexEXT
       // The address of the BLAS in `blases` that this instance points to
@@ -346,10 +343,9 @@ int main(int argc, const char** argv)
   descriptorSetContainer.initPool(1);
   // Create a push constant range describing the amount of data for the push constants.
   static_assert(sizeof(PushConstants) % 4 == 0, "Push constant size must be a multiple of 4 per the Vulkan spec!");
-  VkPushConstantRange pushConstantRange;
-  pushConstantRange.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
-  pushConstantRange.offset     = 0;
-  pushConstantRange.size       = sizeof(PushConstants);
+  VkPushConstantRange pushConstantRange{.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR,  //
+                                        .offset     = 0,                               //
+                                        .size       = sizeof(PushConstants)};
   // Create a pipeline layout from the descriptor set layout and push constant range:
   descriptorSetContainer.initPipeLayout(1,                    // Number of push constant ranges
                                         &pushConstantRange);  // Pointer to push constant ranges
@@ -357,26 +353,21 @@ int main(int argc, const char** argv)
   // Write values into the descriptor set.
   std::array<VkWriteDescriptorSet, 4> writeDescriptorSets;
   // Color image
-  VkDescriptorImageInfo descriptorImageInfo{};
-  descriptorImageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL;  // The image's layout
-  descriptorImageInfo.imageView   = imageView;                // How the image should be accessed
+  VkDescriptorImageInfo descriptorImageInfo{.imageView   = imageView,  // How the image should be accessed
+                                            .imageLayout = VK_IMAGE_LAYOUT_GENERAL};  // The image's layout
   writeDescriptorSets[0] = descriptorSetContainer.makeWrite(0 /*set index*/, BINDING_IMAGEDATA /*binding*/, &descriptorImageInfo);
   // Top-level acceleration structure (TLAS)
-  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS = utils::make<VkWriteDescriptorSetAccelerationStructureKHR>();
   VkAccelerationStructureKHR tlasCopy = raytracingBuilder.getAccelerationStructure();  // So that we can take its address
-  descriptorAS.accelerationStructureCount = 1;
-  descriptorAS.pAccelerationStructures    = &tlasCopy;
-  writeDescriptorSets[1]                  = descriptorSetContainer.makeWrite(0, BINDING_TLAS, &descriptorAS);
+  VkWriteDescriptorSetAccelerationStructureKHR descriptorAS{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR,
+                                                            .accelerationStructureCount = 1,
+                                                            .pAccelerationStructures    = &tlasCopy};
+  writeDescriptorSets[1] = descriptorSetContainer.makeWrite(0, BINDING_TLAS, &descriptorAS);
   // Vertex buffer
-  VkDescriptorBufferInfo vertexDescriptorBufferInfo{};
-  vertexDescriptorBufferInfo.buffer = vertexBuffer.buffer;
-  vertexDescriptorBufferInfo.range  = VK_WHOLE_SIZE;
+  VkDescriptorBufferInfo vertexDescriptorBufferInfo{.buffer = vertexBuffer.buffer, .range = VK_WHOLE_SIZE};
   writeDescriptorSets[2] = descriptorSetContainer.makeWrite(0, BINDING_VERTICES, &vertexDescriptorBufferInfo);
   // Index buffer
-  VkDescriptorBufferInfo indexDescriptorBufferInfo{};
-  indexDescriptorBufferInfo.buffer = indexBuffer.buffer;
-  indexDescriptorBufferInfo.range  = VK_WHOLE_SIZE;
-  writeDescriptorSets[3]           = descriptorSetContainer.makeWrite(0, BINDING_INDICES, &indexDescriptorBufferInfo);
+  VkDescriptorBufferInfo indexDescriptorBufferInfo{.buffer = indexBuffer.buffer, .range = VK_WHOLE_SIZE};
+  writeDescriptorSets[3] = descriptorSetContainer.makeWrite(0, BINDING_INDICES, &indexDescriptorBufferInfo);
   vkUpdateDescriptorSets(context,                                            // The context
                          static_cast<uint32_t>(writeDescriptorSets.size()),  // Number of VkWriteDescriptorSet objects
                          writeDescriptorSets.data(),                         // Pointer to VkWriteDescriptorSet objects
@@ -413,10 +404,10 @@ int main(int argc, const char** argv)
     std::array<VkPipelineShaderStageCreateInfo, 2 + NUM_C_HIT_SHADERS> stages;  // Pointers to shaders
 
     // Stage 0 will be the raygen shader.
-    stages[0]        = utils::make<VkPipelineShaderStageCreateInfo>();
-    stages[0].stage  = VK_SHADER_STAGE_RAYGEN_BIT_KHR;  // Kind of shader
-    stages[0].module = modules[0];                      // Contains the shader
-    stages[0].pName  = "main";                          // Name of the entry point
+    stages[0] = {.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+                 .stage  = VK_SHADER_STAGE_RAYGEN_BIT_KHR,  // Kind of shader
+                 .module = modules[0],                      // Contains the shader
+                 .pName  = "main"};                          // Name of the entry point
     // Stage 1 will be the miss shader.
     stages[1]        = stages[0];
     stages[1].stage  = VK_SHADER_STAGE_MISS_BIT_KHR;  // Kind of shader
@@ -452,33 +443,43 @@ int main(int argc, const char** argv)
     // We lay out our shader binding table like this:
     // RAY GEN REGION
     // Group 0 - points to Stage 0
-    groups[0]               = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
-    groups[0].type          = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
-    groups[0].generalShader = 0;  // Index of ray gen, miss, or callable in `stages`
+    groups[0] = {.sType              = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR,
+                 .type               = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR,
+                 .generalShader      = 0,                      // Index of ray gen, miss, or callable in `stages`
+                 .closestHitShader   = VK_SHADER_UNUSED_KHR,   // No closest hit shader
+                 .anyHitShader       = VK_SHADER_UNUSED_KHR,   // No any-hit shader
+                 .intersectionShader = VK_SHADER_UNUSED_KHR};  // No intersection shader
     // MISS SHADER REGION
     // Group 1 - points to Stage 1
-    groups[1]               = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
-    groups[1].type          = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
-    groups[1].generalShader = 1;  // Index of ray gen, miss, or callable in `stages`
+    groups[1] = {.sType              = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR,
+                 .type               = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR,
+                 .generalShader      = 1,                      // Index of ray gen, miss, or callable in `stages`
+                 .closestHitShader   = VK_SHADER_UNUSED_KHR,   // No closest hit shader
+                 .anyHitShader       = VK_SHADER_UNUSED_KHR,   // No any-hit shader
+                 .intersectionShader = VK_SHADER_UNUSED_KHR};  // No intersection shader
     // CLOSEST-HIT REGION
     // Group N - uses Stage N as its closest-hit shader
-    for(int closestHitShaderIdx = 0; closestHitShaderIdx < NUM_C_HIT_SHADERS; closestHitShaderIdx++)
+    for(uint32_t closestHitShaderIdx = 0; closestHitShaderIdx < NUM_C_HIT_SHADERS; closestHitShaderIdx++)
     {
-      const int moduleIdx                = 2 + closestHitShaderIdx;
-      groups[moduleIdx]                  = utils::make<VkRayTracingShaderGroupCreateInfoKHR>();
-      groups[moduleIdx].type             = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
-      groups[moduleIdx].closestHitShader = moduleIdx;  // Index of closest-hit in `stages`
+      const uint32_t moduleIdx = 2 + closestHitShaderIdx;
+      groups[moduleIdx]        = {.sType              = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR,
+                                  .type               = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR,
+                                  .generalShader      = VK_SHADER_UNUSED_KHR,   // No ray gen, miss, or callable shader
+                                  .closestHitShader   = moduleIdx,              // Index of closest-hit in `stages`
+                                  .anyHitShader       = VK_SHADER_UNUSED_KHR,   // No any-hit shader
+                                  .intersectionShader = VK_SHADER_UNUSED_KHR};  // No intersection shader
     }
 
     // Now, describe the ray tracing pipeline, ike creating a compute pipeline:
-    VkRayTracingPipelineCreateInfoKHR pipelineCreateInfo = utils::make<VkRayTracingPipelineCreateInfoKHR>();
-    pipelineCreateInfo.flags                             = 0;  // No flags to set
-    pipelineCreateInfo.stageCount                        = static_cast<uint32_t>(stages.size());
-    pipelineCreateInfo.pStages                           = stages.data();
-    pipelineCreateInfo.groupCount                        = static_cast<uint32_t>(groups.size());
-    pipelineCreateInfo.pGroups                           = groups.data();
-    pipelineCreateInfo.maxPipelineRayRecursionDepth      = 1;  // Depth of call tree
-    pipelineCreateInfo.layout                            = descriptorSetContainer.getPipeLayout();
+    VkRayTracingPipelineCreateInfoKHR pipelineCreateInfo =  //
+        {.sType                        = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR,
+         .flags                        = 0,  // No flags to set
+         .stageCount                   = static_cast<uint32_t>(stages.size()),
+         .pStages                      = stages.data(),
+         .groupCount                   = static_cast<uint32_t>(groups.size()),
+         .pGroups                      = groups.data(),
+         .maxPipelineRayRecursionDepth = 1,  // Depth of call tree
+         .layout                       = descriptorSetContainer.getPipeLayout()};
     NVVK_CHECK(vkCreateRayTracingPipelinesKHR(context,                 // Device
                                               VK_NULL_HANDLE,          // Deferred operation or VK_NULL_HANDLE
                                               VK_NULL_HANDLE,          // Pipeline cache or VK_NULL_HANDLE
@@ -598,18 +599,17 @@ int main(int argc, const char** argv)
       // Now, copy the image (which has layout TRANSFER_SRC_OPTIMAL) to imageLinear
       // (which has layout TRANSFER_DST_OPTIMAL).
       {
-        VkImageCopy region;
-        // We copy the image aspect, layer 0, mip 0:
-        region.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
-        region.srcSubresource.baseArrayLayer = 0;
-        region.srcSubresource.layerCount     = 1;
-        region.srcSubresource.mipLevel       = 0;
-        // (0, 0, 0) in the first image corresponds to (0, 0, 0) in the second image:
-        region.srcOffset      = {0, 0, 0};
-        region.dstSubresource = region.srcSubresource;
-        region.dstOffset      = {0, 0, 0};
-        // Copy the entire image:
-        region.extent = {render_width, render_height, 1};
+        // We copy image color, mip 0, layer 0:
+        VkImageCopy region{.srcSubresource = {.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT,  //
+                                              .mipLevel       = 0,                          //
+                                              .baseArrayLayer = 0,                          //
+                                              .layerCount     = 1},
+                           // (0, 0, 0) in the first image corresponds to (0, 0, 0) in the second image:
+                           .srcOffset      = {0, 0, 0},
+                           .dstSubresource = region.srcSubresource,
+                           .dstOffset      = {0, 0, 0},
+                           // Copy the entire image:
+                           .extent = {render_width, render_height, 1}};
         vkCmdCopyImage(cmdBuffer,                             // Command buffer
                        image.image,                           // Source image
                        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,  // Source image layout
@@ -621,15 +621,15 @@ int main(int argc, const char** argv)
       // Add a command that says "Make it so that memory writes by transfers
       // are available to read from the CPU." (In other words, "Flush the GPU caches
       // so the CPU can read the data.") To do this, we use a memory barrier.
-      VkMemoryBarrier memoryBarrier = utils::make<VkMemoryBarrier>();
-      memoryBarrier.srcAccessMask   = VK_ACCESS_TRANSFER_WRITE_BIT;  // Make transfer writes
-      memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;       // Readable by the CPU
-      vkCmdPipelineBarrier(cmdBuffer,                                // The command buffer
-                           VK_PIPELINE_STAGE_TRANSFER_BIT,           // From transfers
-                           VK_PIPELINE_STAGE_HOST_BIT,               // To the CPU
-                           0,                                        // No special flags
-                           1, &memoryBarrier,                        // An array of memory barriers
-                           0, nullptr, 0, nullptr);                  // No other barriers
+      VkMemoryBarrier memoryBarrier{.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+                                    .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,  // Make transfer writes
+                                    .dstAccessMask = VK_ACCESS_HOST_READ_BIT};      // Readable by the CPU
+      vkCmdPipelineBarrier(cmdBuffer,                                               // The command buffer
+                           VK_PIPELINE_STAGE_TRANSFER_BIT,                          // From transfers
+                           VK_PIPELINE_STAGE_HOST_BIT,                              // To the CPU
+                           0,                                                       // No special flags
+                           1, &memoryBarrier,                                       // An array of memory barriers
+                           0, nullptr, 0, nullptr);                                 // No other barriers
     }
 
     // End and submit the command buffer, then wait for it to finish:
